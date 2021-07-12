@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">ControldeFlotas</string>
+
+    <!--Pantalla de Login-->
+    <string name="controlFlotas">CONTROL DE FLOTAS</string>
+    <string name="usuario">Usuario: </string>
+    <string name="contraseña">Contraseña: </string>
+    <string name="login">Login</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!--Pantalla de Maps / Menú flotante-->
+    <string name="titulo">Control de Flotas</string>
+    <string name="flota">Flota Arco</string>
+    <string name="vehiculos">Vehículos</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <!--Pantalla de Diálogo Datos-->
+    <string name="detalle">Detalle</string>
+    <string name="cancel">Cancelar</string>
+    <string name="direccion">Dirección: </string>
+    <string name="fecha">Fecha y hora: </string>
+    <string name="velocidad">Velocidad: </string>
+    <string name="distancia">Distancia: </string>
+    <string name="altitud">Altitud: </string>
+    <string name="rpm">Rpm: </string>
+    <string name="temperatura">Temperatura: </string>
+    <string name="presion">Presión: </string>
+</resources>
