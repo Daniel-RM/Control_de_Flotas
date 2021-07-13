@@ -33,21 +33,15 @@ public class DialogoDatos {
 
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        //String fecha = currentDate.toString();
         String fecha = format.format(currentDate);
 
-        TextView tvVelocidadTitle, tvDistanciaTitle, tvAltitudTitle, tvRpmTitle, tvTemperaturaTitle, tvPresionTitle, tvMatricula, tvDireccion, tvFechaHora, tvVelocidad, tvDistancia, tvAltitud, tvRpm, tvTemperatura, tvPresion;
+        TextView  tvMatricula, tvDireccion, tvFechaHora, tvVelocidad, tvDistancia, tvAltitud, tvRpm, tvTemperatura, tvPresion;
         Button btnDetalle, btnCancel;
 
         tvMatricula = dialogo.findViewById(R.id.tvMatricula);
         tvDireccion = dialogo.findViewById(R.id.tvDireccion);
         tvFechaHora = dialogo.findViewById(R.id.tvFechaHora);
-        tvVelocidadTitle = dialogo.findViewById(R.id.tvVelocidadTitle);
-        tvDistanciaTitle = dialogo.findViewById(R.id.tvDistanciaTitle);
-        tvAltitudTitle = dialogo.findViewById(R.id.tvAltitudTitle);
-        tvRpmTitle = dialogo.findViewById(R.id.tvRpmTitle);
-        tvTemperaturaTitle = dialogo.findViewById(R.id.tvTemperaturaTitle);
-        tvPresionTitle = dialogo.findViewById(R.id.tvPresionTitle);
+
 
         tvVelocidad = dialogo.findViewById(R.id.tvVelocidad);
         tvDistancia = dialogo.findViewById(R.id.tvDistancia);
@@ -59,16 +53,6 @@ public class DialogoDatos {
         btnDetalle = dialogo.findViewById(R.id.btnDetalle);
         btnCancel = dialogo.findViewById(R.id.btnCancel);
 
-
-        /*tvMatricula.setText("3709LNS");
-        tvDireccion.setText("Autopista Vasco-Aragonesa");
-        tvFechaHora.setText(fecha);
-        tvVelocidad.setText("120 Km/h");
-        tvDistancia.setText("112 kms.");
-        tvAltitud.setText("504m");
-        tvRpm.setText("15 rpm");
-        tvTemperatura.setText("149°");
-        tvPresion.setText("0 mbar");*/
 
         switch (vehiculo.getEstado()){
             case "Parado":

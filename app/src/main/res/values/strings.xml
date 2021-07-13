@@ -35,4 +35,5 @@
     <string name="rpm">Rpm: </string>
     <string name="temperatura">Temperatura: </string>
     <string name="presion">Presión: </string>
+    <string name="solo_fecha">Fecha: </string>
 </resources>

@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +19,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
@@ -106,8 +112,45 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+   /* @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        SpannableString spannable;
+        MenuItem item;
+        //menu.add("FLOTA ARCO");
+        for (int x=0;x<listaVehiculos.size();x++) {
+            item = menu.getItem(x);
+
+            String estado = listaVehiculos.get(x).getEstado();
+
+                switch (estado) {
+                    case "Parado":
+                        spannable = new SpannableString(menu.getItem(x).toString());
+                        spannable.setSpan(new ForegroundColorSpan(Color.RED), 0, spannable.length(), 0);
+                        item.setTitle(spannable);
+                        menu.add(listaVehiculos.get(x).getMatricula());
+                        break;
+                    case "En Marcha":
+                        spannable = new SpannableString(menu.getItem(x).toString());
+                        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0, spannable.length(), 0);
+                        item.setTitle(spannable);
+                        menu.add(Color.GREEN + listaVehiculos.get(x).getMatricula());
+                        break;
+                    case "Ralentí":
+                        spannable = new SpannableString(menu.getItem(x).toString());
+                        spannable.setSpan(new ForegroundColorSpan(Color.MAGENTA), 0, spannable.length(), 0);
+                        item.setTitle(spannable);
+                        menu.add(Color.MAGENTA + listaVehiculos.get(x).getMatricula());
+                        break;
+                }
+                //menu.add(listaVehiculos.get(x).getMatricula());
+
+        }
+        return true;
+    }*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         menu.add("FLOTA ARCO");
         for (int x=0;x<listaVehiculos.size();x++){
             menu.add(listaVehiculos.get(x).getMatricula());
@@ -133,7 +176,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
             Toast.makeText(getApplicationContext(), "Ha seleccionado " + item, Toast.LENGTH_SHORT).show();
-
             new DialogoDatos(context, coche);
             return true;
         }else{
@@ -147,21 +189,60 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
+    public void onMapReady(@NonNull GoogleMap googleMap){
         mMap = googleMap;
-
+        Marker punto = null;
         Double lati, longi;
+        String marcha;
+
 
         //Recorro la lista de vehículos y los muestro en el mapa
         for (int i=0;i<listaVehiculos.size();i++){
             lati = listaVehiculos.get(i).getLatitud();
             longi = listaVehiculos.get(i).getLongitud();
+            marcha = listaVehiculos.get(i).getEstado();
 
             LatLng marca = new LatLng(lati,longi);
-            mMap.addMarker(new MarkerOptions().position(marca).title(listaVehiculos.get(i).getMatricula()));
+            //mMap.addMarker(new MarkerOptions().position(marca).title(listaVehiculos.get(i).getMatricula())).showInfoWindow();
+            punto = mMap.addMarker(new MarkerOptions().position(marca).title(listaVehiculos.get(i).getMatricula()));
+            punto.showInfoWindow();
+            switch (marcha){
+                case "Parado":
+                    punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
+                    break;
+                case "En Marcha":
+                    punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_marcha));
+                    break;
+                case "Ralentí":
+                    punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_ralenti));
+                    break;
+            }
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40,-3.5),5.7f));
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                Vehiculo vehi = null;
+                for (int i = 0; i < listaVehiculos.size(); i++) {
+                    if (listaVehiculos.get(i).getMatricula().equals(marker.getTitle())) {
+                        vehi = listaVehiculos.get(i);
+                    }
+                }
+                new DialogoDatos(context, vehi);
+                return true;
+            }
+        });
+
+        LatLng spain = new LatLng(40,-3.5);
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(spain)
+                .zoom(6)
+                .bearing(0)
+                .build();
+        // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marca,7f));
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+       // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40,-3.5),5.7f));
 
     }
 
