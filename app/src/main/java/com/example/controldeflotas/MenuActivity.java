@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -25,16 +27,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class MenuActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-    Context context;
+    static Context context;
 
     ArrayList<Vehiculo> listaVehiculos;
 
@@ -244,6 +249,25 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
        // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40,-3.5),5.7f));
 
+    }
+
+    public static String obtenerDireccion(double latitud, double longitud){
+
+        String direccion = "";
+
+        if(latitud != 0.0 && longitud != 0.0){
+            try{
+                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(latitud, longitud, 1);
+                if(!list.isEmpty()){
+                    Address DirCalle = list.get(0);
+                    direccion = DirCalle.getAddressLine(0);
+                }
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+        return direccion;
     }
 
 }

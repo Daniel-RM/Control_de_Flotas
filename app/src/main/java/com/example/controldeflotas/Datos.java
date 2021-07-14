@@ -101,13 +101,16 @@ public class Datos {
 
     @Override
     public String toString() {
-        return "Datos{" +
+
+        /*return "Datos{" +
                 "matricula='" + matricula + '\'' +
                 ", fecha='" + fecha + '\'' +
                 ", hora='" + hora + '\'' +
                 ", comportamiento='" + comportamiento + '\'' +
                 ", velocidad='" + velocidad + '\'' +
                 ", distancia='" + distancia + '\'' +
-                '}';
+                '}';*/
+        return hora + " / " + MenuActivity.obtenerDireccion(latitud, longitud) + " / " + estado + " / " + distancia;
     }
+
 }

@@ -36,4 +36,8 @@
     <string name="temperatura">Temperatura: </string>
     <string name="presion">Presión: </string>
     <string name="solo_fecha">Fecha: </string>
+
+    <!--Pantalla de Detalles-->
+    <string name="hora">Hora:</string>
+    <string name="estado">Estado:</string>
 </resources>

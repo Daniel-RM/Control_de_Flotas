@@ -59,10 +59,13 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalles);
 
+        getSupportActionBar().hide();
+
         listView = findViewById(R.id.listView);
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -247,6 +250,200 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         dato.setDistancia("110");
         listaDatos.add(dato);
 
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:30:00");
+        dato.setLatitud(41.562735);
+        dato.setLongitud(-1.125085);
+        dato.setEstado("En Marcha");
+        dato.setComportamiento("Envío periódico");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:31:00");
+        dato.setLatitud(41.554642);
+        dato.setLongitud(-1.131053);
+        dato.setEstado("En Marcha");
+        dato.setComportamiento("Envío periódico");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:32:00");
+        dato.setLatitud(41.544785);
+        dato.setLongitud(-1.142709);
+        dato.setEstado("En Marcha");
+        dato.setComportamiento("Cambio dirección");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:33:00");
+        dato.setLatitud(41.544245);
+        dato.setLongitud(-1.151442);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:34:00");
+        dato.setLatitud(41.550132);
+        dato.setLongitud(-1.159237);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:35:00");
+        dato.setLatitud(41.559098);
+        dato.setLongitud(-1.174863);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:36:00");
+        dato.setLatitud(41.560232);
+        dato.setLongitud(-1.184715);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:37:00");
+        dato.setLatitud(41.551159);
+        dato.setLongitud(-1.210554);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:38:00");
+        dato.setLatitud(41.539167);
+        dato.setLongitud(-1.237511);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:39:00");
+        dato.setLatitud(41.516824);
+        dato.setLongitud(-1.290198);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:40:00");
+        dato.setLatitud(41.490726);
+        dato.setLongitud(-1.358626);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:41:00");
+        dato.setLatitud(41.490373);
+        dato.setLongitud(-1.364505);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:42:00");
+        dato.setLatitud(41.490710);
+        dato.setLongitud(-1.365664);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:43:00");
+        dato.setLatitud(41.492944);
+        dato.setLongitud(-1.367230);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:44:00");
+        dato.setLatitud(41.493583);
+        dato.setLongitud(-1.365533);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
+        dato = new Datos();
+        dato.setMatricula("9999CCC");
+        dato.setFecha("13/7/2021");
+        dato.setHora("12:45:00");
+        dato.setLatitud(41.493914);
+        dato.setLongitud(-1.365452);
+        dato.setEstado("Parado");
+        dato.setComportamiento("Paro motor");
+        dato.setVelocidad("120");
+        dato.setDistancia("110");
+        listaDatos.add(dato);
+
         Log.e("ArrayList:", listaDatos.toString());
 
         /*adaptador = new ArrayAdapter<Datos>(this, android.R.layout.simple_list_item_1, listaDatos);
@@ -299,25 +496,23 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        if (line != null) {
-            line.remove();
+
             mMap.clear();
             onMapReady(mMap);
-        } else {
+
             listaDatosHoy = new ArrayList<>();
             String date = dayOfMonth + "/" + (month + 1) + "/" + year;
             editText.setText(date);
 
             for (int i = 0; i < listaDatos.size(); i++) {
-
                 if (listaDatos.get(i).getFecha().equals(date) && listaDatos.get(i).getMatricula().equals(vehiculo.getMatricula())) {
                     listaDatosHoy.add(listaDatos.get(i));
                 }
             }
 
-            adaptador = new ArrayAdapter<Datos>(this, android.R.layout.simple_list_item_1, listaDatosHoy);
+            adaptador = new ArrayAdapter<Datos>(this, R.layout.lista_item, listaDatosHoy);
             listView.setAdapter(adaptador);
-            listView.setVisibility(View.VISIBLE);
+            //listView.setVisibility(View.VISIBLE);
 
             if (!adaptador.isEmpty()) {
                 LatLng puntoA, puntoB;
@@ -332,6 +527,5 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                             .geodesic(true));
                 }
             }
-        }
     }
 }

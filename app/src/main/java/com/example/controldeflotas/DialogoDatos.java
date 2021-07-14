@@ -67,7 +67,7 @@ public class DialogoDatos {
         }
 
         tvMatricula.setText(vehiculo.getMatricula());
-        tvDireccion.setText(obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
+        tvDireccion.setText(MenuActivity.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
         tvFechaHora.setText(fecha);
         tvVelocidad.setText(vehiculo.getVelocidad());
         tvDistancia.setText(vehiculo.getDistancia());
@@ -99,7 +99,7 @@ public class DialogoDatos {
 
     }
 
-    public String obtenerDireccion(double latitud, double longitud){
+    /*public String obtenerDireccion(double latitud, double longitud){
 
             String direccion = "";
 
@@ -116,6 +116,6 @@ public class DialogoDatos {
                 }
             }
             return direccion;
-    }
+    }*/
 
 }
