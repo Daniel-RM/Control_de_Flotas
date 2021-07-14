@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -44,8 +45,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     ArrayList<Vehiculo> listaVehiculos;
 
     private boolean showDownloadMenu = false;
-    private final int MENU_DOWNLOAD = 1;
-    private final int MENU_SETTINGS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +112,23 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         listaVehiculos.add(vehiculo);
 
+        vehiculo = new Vehiculo();
+        vehiculo.setMatricula("1111AAA");
+        vehiculo.setLatitud(37.570407);
+        vehiculo.setLongitud(-5.303457);
+        vehiculo.setEstado("Parado");
+        vehiculo.setFecha(fecha);
+        vehiculo.setVelocidad("0");
+        vehiculo.setDistancia("21");
+        vehiculo.setAltitud("300");
+        vehiculo.setRpm("5");
+        vehiculo.setTemperatura("152");
+        vehiculo.setPresion("0");
+
+        listaVehiculos.add(vehiculo);
+
+
+
         Log.e("ArrayList:", listaVehiculos.toString());
 
     }
@@ -123,6 +139,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         MenuItem item;
         //menu.add("FLOTA ARCO");
         for (int x=0;x<listaVehiculos.size();x++) {
+            menu.add(listaVehiculos.get(x).getMatricula());
             item = menu.getItem(x);
 
             String estado = listaVehiculos.get(x).getEstado();
@@ -132,19 +149,19 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         spannable = new SpannableString(menu.getItem(x).toString());
                         spannable.setSpan(new ForegroundColorSpan(Color.RED), 0, spannable.length(), 0);
                         item.setTitle(spannable);
-                        menu.add(listaVehiculos.get(x).getMatricula());
+                       // menu.add(listaVehiculos.get(x).getMatricula());
                         break;
                     case "En Marcha":
                         spannable = new SpannableString(menu.getItem(x).toString());
                         spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0, spannable.length(), 0);
                         item.setTitle(spannable);
-                        menu.add(Color.GREEN + listaVehiculos.get(x).getMatricula());
+                       // menu.add(Color.GREEN + listaVehiculos.get(x).getMatricula());
                         break;
                     case "Ralentí":
                         spannable = new SpannableString(menu.getItem(x).toString());
                         spannable.setSpan(new ForegroundColorSpan(Color.MAGENTA), 0, spannable.length(), 0);
                         item.setTitle(spannable);
-                        menu.add(Color.MAGENTA + listaVehiculos.get(x).getMatricula());
+                       // menu.add(Color.MAGENTA + listaVehiculos.get(x).getMatricula());
                         break;
                 }
                 //menu.add(listaVehiculos.get(x).getMatricula());
@@ -176,7 +193,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(!item.getTitle().equals("FLOTA ARCO")) {
             Vehiculo coche = null;
             for (int i = 0; i < listaVehiculos.size(); i++) {
-                if (listaVehiculos.get(i).getMatricula() == item.getTitle()) {
+                if (listaVehiculos.get(i).getMatricula() == item.getTitle().toString()) {
                     coche = listaVehiculos.get(i);
                 }
             }
@@ -199,7 +216,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         Marker punto = null;
         Double lati, longi;
         String marcha;
-
 
         //Recorro la lista de vehículos y los muestro en el mapa
         for (int i=0;i<listaVehiculos.size();i++){
@@ -224,10 +240,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
+                marker.showInfoWindow();
                 Vehiculo vehi = null;
                 for (int i = 0; i < listaVehiculos.size(); i++) {
                     if (listaVehiculos.get(i).getMatricula().equals(marker.getTitle())) {
