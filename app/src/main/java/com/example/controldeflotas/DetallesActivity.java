@@ -31,6 +31,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,6 +59,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     ArrayList<Datos> listaDatosHoy = new ArrayList<>();
     Polyline line = null;
 
+    String fecha;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +82,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         editText = findViewById(R.id.editTextDate);
 
         Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha = format.format(currentDate);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        fecha = format.format(currentDate);
         editText.setText(fecha);
 
         editText.setOnClickListener(new View.OnClickListener() {
@@ -90,366 +98,22 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
         vehiculo = (Vehiculo) extra.getSerializable("Vehiculo");
 
-        Datos dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("12/7/2021");
-        dato.setHora("12:00:00");
-        dato.setLatitud(42.4305968);
-        dato.setLongitud(-2.53488895);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("12/7/2021");
-        dato.setHora("12:30:00");
-        dato.setLatitud(42.22408775);
-        dato.setLongitud(-1.8972332);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("12/7/2021");
-        dato.setHora("13:00:00");
-        dato.setLatitud(41.889091);
-        dato.setLongitud(-1.42195578);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("12/7/2021");
-        dato.setHora("13:30:00");
-        dato.setLatitud(41.67831923);
-        dato.setLongitud(-0.8782818);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Cambio dirección");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("12/7/2021");
-        dato.setHora("14:00:00");
-        dato.setLatitud(41.49433943);
-        dato.setLongitud(-1.36805455);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("11/7/2021");
-        dato.setHora("12:30:00");
-        dato.setLatitud(42.22408775);
-        dato.setLongitud(-1.8972332);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("11/7/2021");
-        dato.setHora("13:00:00");
-        dato.setLatitud(41.889091);
-        dato.setLongitud(-1.42195578);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("11/7/2021");
-        dato.setHora("13:30:00");
-        dato.setLatitud(41.67831923);
-        dato.setLongitud(-0.8782818);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Cambio dirección");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("3709LNS");
-        dato.setFecha("11/7/2021");
-        dato.setHora("14:00:00");
-        dato.setLatitud(41.49433943);
-        dato.setLongitud(-1.36805455);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-        dato = new Datos();
-        dato.setMatricula("1234ABC");
-        dato.setFecha("11/7/2021");
-        dato.setHora("12:30:00");
-        dato.setLatitud(42.22408775);
-        dato.setLongitud(-1.8972332);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("1234ABC");
-        dato.setFecha("11/7/2021");
-        dato.setHora("13:00:00");
-        dato.setLatitud(41.889091);
-        dato.setLongitud(-1.42195578);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("1234ABC");
-        dato.setFecha("11/7/2021");
-        dato.setHora("13:30:00");
-        dato.setLatitud(41.67831923);
-        dato.setLongitud(-0.8782818);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Cambio dirección");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("1234ABC");
-        dato.setFecha("11/7/2021");
-        dato.setHora("14:00:00");
-        dato.setLatitud(41.49433943);
-        dato.setLongitud(-1.36805455);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:30:00");
-        dato.setLatitud(41.562735);
-        dato.setLongitud(-1.125085);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:31:00");
-        dato.setLatitud(41.554642);
-        dato.setLongitud(-1.131053);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Envío periódico");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:32:00");
-        dato.setLatitud(41.544785);
-        dato.setLongitud(-1.142709);
-        dato.setEstado("En Marcha");
-        dato.setComportamiento("Cambio dirección");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:33:00");
-        dato.setLatitud(41.544245);
-        dato.setLongitud(-1.151442);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:34:00");
-        dato.setLatitud(41.550132);
-        dato.setLongitud(-1.159237);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:35:00");
-        dato.setLatitud(41.559098);
-        dato.setLongitud(-1.174863);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:36:00");
-        dato.setLatitud(41.560232);
-        dato.setLongitud(-1.184715);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:37:00");
-        dato.setLatitud(41.551159);
-        dato.setLongitud(-1.210554);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:38:00");
-        dato.setLatitud(41.539167);
-        dato.setLongitud(-1.237511);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:39:00");
-        dato.setLatitud(41.516824);
-        dato.setLongitud(-1.290198);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:40:00");
-        dato.setLatitud(41.490726);
-        dato.setLongitud(-1.358626);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:41:00");
-        dato.setLatitud(41.490373);
-        dato.setLongitud(-1.364505);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:42:00");
-        dato.setLatitud(41.490710);
-        dato.setLongitud(-1.365664);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:43:00");
-        dato.setLatitud(41.492944);
-        dato.setLongitud(-1.367230);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:44:00");
-        dato.setLatitud(41.493583);
-        dato.setLongitud(-1.365533);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        dato = new Datos();
-        dato.setMatricula("9999CCC");
-        dato.setFecha("13/7/2021");
-        dato.setHora("12:45:00");
-        dato.setLatitud(41.493914);
-        dato.setLongitud(-1.365452);
-        dato.setEstado("Parado");
-        dato.setComportamiento("Paro motor");
-        dato.setVelocidad("120");
-        dato.setDistancia("110");
-        listaDatos.add(dato);
-
-        Log.e("ArrayList:", listaDatos.toString());
+        recogeDatos();
 
         /*adaptador = new ArrayAdapter<Datos>(this, android.R.layout.simple_list_item_1, listaDatos);
         listView.setAdapter(adaptador);
         listView.setVisibility(View.VISIBLE);*/
+    }
 
+    public void recogeDatos() {
+        URL url = null;
+
+        try {
+            url = new URL("http://" + LoginActivity.urlFinalLocal + "/tramasReport.action?id=" + vehiculo.getIdentificador() + "&sid=" + fecha);
+            int x = 0;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -461,17 +125,20 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
         // Add a marker and move the camera
         LatLng marca = new LatLng(vehiculo.getLatitud(), vehiculo.getLongitud());
-        punto = mMap.addMarker(new MarkerOptions().position(marca).title(vehiculo.getMatricula()));
+        punto = mMap.addMarker(new MarkerOptions().position(marca).title(vehiculo.getIdentificador()));
 
         switch (marcha){
-            case "Parado":
-                punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
-                break;
-            case "En Marcha":
+            case "0":
                 punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_marcha));
                 break;
-            case "Ralentí":
+            case "1":
+                punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
+                break;
+            case "2":
                 punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_ralenti));
+                break;
+            case "3":
+                punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_descarga));
                 break;
         }
 
@@ -480,7 +147,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 .zoom(12)
                 .bearing(0)
                 .build();
-       // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marca,7f));
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
@@ -512,7 +178,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
             adaptador = new ArrayAdapter<Datos>(this, R.layout.lista_item, listaDatosHoy);
             listView.setAdapter(adaptador);
-            //listView.setVisibility(View.VISIBLE);
+
 
             if (!adaptador.isEmpty()) {
                 LatLng puntoA, puntoB;

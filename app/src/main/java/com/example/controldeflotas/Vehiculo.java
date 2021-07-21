@@ -1,10 +1,15 @@
 package com.example.controldeflotas;
 
+import com.google.android.gms.maps.model.Marker;
+
 import java.io.Serializable;
 
 public class Vehiculo implements Serializable {
 
+    private String tipoVehiculo;
+    private String descripcion;
     private String matricula;
+    private String identificador;
     private double latitud, longitud;
     private String estado;
     private String fecha;
@@ -15,21 +20,13 @@ public class Vehiculo implements Serializable {
     private String temperatura;
     private String presion;
 
-    public Vehiculo() {
+
+    public String getIdentificador() {
+        return identificador;
     }
 
-    public Vehiculo(String matricula, double latitud, double longitud, String estado, String fecha, String velocidad, String distancia, String altitud, String rpm, String temperatura, String presion) {
-        this.matricula = matricula;
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.estado = estado;
-        this.fecha = fecha;
-        this.velocidad = velocidad;
-        this.distancia = distancia;
-        this.altitud = altitud;
-        this.rpm = rpm;
-        this.temperatura = temperatura;
-        this.presion = presion;
+    public void setIdentificador(String identicador) {
+        this.identificador = identicador;
     }
 
     public String getMatricula() {
@@ -120,20 +117,39 @@ public class Vehiculo implements Serializable {
         this.presion = presion;
     }
 
+    public String getTipoVehiculo() {
+        return tipoVehiculo;
+    }
+
+    public void setTipoVehiculo(String tipoVehiculo) {
+        this.tipoVehiculo = tipoVehiculo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Override
     public String toString() {
         return "Vehiculo{" +
-                "matricula='" + matricula + '\'' +
+                "tipoVehiculo='" + tipoVehiculo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", matricula='" + matricula + '\'' +
+                ", identificador='" + identificador + '\'' +
                 ", latitud=" + latitud +
                 ", longitud=" + longitud +
                 ", estado='" + estado + '\'' +
                 ", fecha='" + fecha + '\'' +
-                ", velocidad=" + velocidad +
-                ", distancia=" + distancia +
-                ", altitud=" + altitud +
-                ", rpm=" + rpm +
-                ", temperatura=" + temperatura +
-                ", presion=" + presion +
+                ", velocidad='" + velocidad + '\'' +
+                ", distancia='" + distancia + '\'' +
+                ", altitud='" + altitud + '\'' +
+                ", rpm='" + rpm + '\'' +
+                ", temperatura='" + temperatura + '\'' +
+                ", presion='" + presion + '\'' +
                 '}';
     }
 }

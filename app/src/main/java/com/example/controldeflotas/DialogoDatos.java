@@ -13,19 +13,21 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class DialogoDatos {
+public class DialogoDatos  {
 
-    Context context;
+    //Context context;
 
+    @SuppressLint("ResourceAsColor")
     public DialogoDatos(Context context, Vehiculo vehiculo){
 
-        this.context = context;
+        //this.context = context;
 
         final Dialog dialogo = new Dialog(context);
         dialogo.setCancelable(false);
@@ -53,29 +55,30 @@ public class DialogoDatos {
         btnDetalle = dialogo.findViewById(R.id.btnDetalle);
         btnCancel = dialogo.findViewById(R.id.btnCancel);
 
-
         switch (vehiculo.getEstado()){
-            case "Parado":
-                tvMatricula.setBackgroundColor(Color.RED);
-                break;
-            case "En Marcha":
+            case "0":
                 tvMatricula.setBackgroundColor(Color.GREEN);
                 break;
-            case "Ralentí":
+            case "1":
+                tvMatricula.setBackgroundColor(Color.RED);
+                break;
+            case "2":
+                tvMatricula.setBackgroundColor(R.color.purple_700);
+                break;
+            case "3":
                 tvMatricula.setBackgroundColor(Color.MAGENTA);
                 break;
         }
 
-        tvMatricula.setText(vehiculo.getMatricula());
+        tvMatricula.setText(vehiculo.getIdentificador());
         tvDireccion.setText(MenuActivity.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
         tvFechaHora.setText(fecha);
-        tvVelocidad.setText(vehiculo.getVelocidad());
-        tvDistancia.setText(vehiculo.getDistancia());
-        tvAltitud.setText(vehiculo.getAltitud());
-        tvRpm.setText(vehiculo.getRpm());
-        tvTemperatura.setText(vehiculo.getTemperatura());
-        tvPresion.setText(vehiculo.getPresion());
-
+        tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
+        tvDistancia.setText(vehiculo.getDistancia() + " kms");
+        tvAltitud.setText(vehiculo.getAltitud() + " mts");
+        tvRpm.setText(vehiculo.getRpm() + " rpm");
+        tvTemperatura.setText(vehiculo.getTemperatura() + " °C");
+        tvPresion.setText(vehiculo.getPresion().substring(0,3) + " mbar");
 
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -98,24 +101,5 @@ public class DialogoDatos {
         dialogo.show();
 
     }
-
-    /*public String obtenerDireccion(double latitud, double longitud){
-
-            String direccion = "";
-
-            if(latitud != 0.0 && longitud != 0.0){
-                try{
-                    Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                    List<Address> list = geocoder.getFromLocation(latitud, longitud, 1);
-                    if(!list.isEmpty()){
-                        Address DirCalle = list.get(0);
-                        direccion = DirCalle.getAddressLine(0);
-                    }
-                }catch(IOException e){
-                    e.printStackTrace();
-                }
-            }
-            return direccion;
-    }*/
 
 }

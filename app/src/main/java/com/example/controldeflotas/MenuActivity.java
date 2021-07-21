@@ -5,18 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,17 +21,28 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.ui.IconGenerator;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
 
 public class MenuActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -42,15 +50,28 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     static Context context;
 
-    ArrayList<Vehiculo> listaVehiculos;
+    Map<String, Vehiculo> mapaVehiculos = new HashMap<>();
+    Map<String, Marker> mapaMarcas = new HashMap<>();
+    List<Flota> flotas = null;
 
     private boolean showDownloadMenu = false;
+
+    private boolean primeraEjecucion = false;
+
+    final String ESTADO_MARCHA = "En Marcha";
+    final String ESTADO_PARADO = "Parado";
+    final String ESTADO_RALENTI = "Ralentí";
+    final String ESTADO_DESCARGANDO = "Descargando";
+    final String TODOS = "Todos";
+    final String TITULO = "ESTADOS:";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        flotas = LoginActivity.myObjects;
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -61,148 +82,214 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         context = this;
 
-        listaVehiculos = new ArrayList<>();
-
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
         String fecha = format.format(currentDate);
 
-        Vehiculo vehiculo = new Vehiculo();
-        vehiculo.setMatricula("3709LNS");
-        vehiculo.setLatitud(41.493891);
-        vehiculo.setLongitud(-1.365427);
-        vehiculo.setEstado("Parado");
-        vehiculo.setFecha(fecha);
-        vehiculo.setVelocidad("0");
-        vehiculo.setDistancia("0");
-        vehiculo.setAltitud("400");
-        vehiculo.setRpm("0");
-        vehiculo.setTemperatura("150");
-        vehiculo.setPresion("0");
-
-        listaVehiculos.add(vehiculo);
-
-        vehiculo = new Vehiculo();
-        vehiculo.setMatricula("1234ABC");
-        vehiculo.setLatitud(43.384968);
-        vehiculo.setLongitud(-3.872779);
-        vehiculo.setEstado("En Marcha");
-        vehiculo.setFecha(fecha);
-        vehiculo.setVelocidad("120");
-        vehiculo.setDistancia("210");
-        vehiculo.setAltitud("687");
-        vehiculo.setRpm("15");
-        vehiculo.setTemperatura("175");
-        vehiculo.setPresion("0");
-
-        listaVehiculos.add(vehiculo);
-
-        vehiculo = new Vehiculo();
-        vehiculo.setMatricula("9999CCC");
-        vehiculo.setLatitud(39.940690);
-        vehiculo.setLongitud(-3.436161);
-        vehiculo.setEstado("Ralentí");
-        vehiculo.setFecha(fecha);
-        vehiculo.setVelocidad("0");
-        vehiculo.setDistancia("21");
-        vehiculo.setAltitud("300");
-        vehiculo.setRpm("5");
-        vehiculo.setTemperatura("152");
-        vehiculo.setPresion("0");
-
-        listaVehiculos.add(vehiculo);
-
-        vehiculo = new Vehiculo();
-        vehiculo.setMatricula("1111AAA");
-        vehiculo.setLatitud(37.570407);
-        vehiculo.setLongitud(-5.303457);
-        vehiculo.setEstado("Parado");
-        vehiculo.setFecha(fecha);
-        vehiculo.setVelocidad("0");
-        vehiculo.setDistancia("21");
-        vehiculo.setAltitud("300");
-        vehiculo.setRpm("5");
-        vehiculo.setTemperatura("152");
-        vehiculo.setPresion("0");
-
-        listaVehiculos.add(vehiculo);
-
-
-
-        Log.e("ArrayList:", listaVehiculos.toString());
+        trataDatos();
 
     }
 
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        SpannableString spannable;
-        MenuItem item;
-        //menu.add("FLOTA ARCO");
-        for (int x=0;x<listaVehiculos.size();x++) {
-            menu.add(listaVehiculos.get(x).getMatricula());
-            item = menu.getItem(x);
+    private void trataDatos(){
 
-            String estado = listaVehiculos.get(x).getEstado();
-
-                switch (estado) {
-                    case "Parado":
-                        spannable = new SpannableString(menu.getItem(x).toString());
-                        spannable.setSpan(new ForegroundColorSpan(Color.RED), 0, spannable.length(), 0);
-                        item.setTitle(spannable);
-                       // menu.add(listaVehiculos.get(x).getMatricula());
-                        break;
-                    case "En Marcha":
-                        spannable = new SpannableString(menu.getItem(x).toString());
-                        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0, spannable.length(), 0);
-                        item.setTitle(spannable);
-                       // menu.add(Color.GREEN + listaVehiculos.get(x).getMatricula());
-                        break;
-                    case "Ralentí":
-                        spannable = new SpannableString(menu.getItem(x).toString());
-                        spannable.setSpan(new ForegroundColorSpan(Color.MAGENTA), 0, spannable.length(), 0);
-                        item.setTitle(spannable);
-                       // menu.add(Color.MAGENTA + listaVehiculos.get(x).getMatricula());
-                        break;
-                }
-                //menu.add(listaVehiculos.get(x).getMatricula());
-
+        for (Flota flota : flotas){
+           for(Vehiculo vehiculo : flota.vehiculos){
+               mapaVehiculos.put(vehiculo.getIdentificador(),vehiculo);
+           }
         }
-        return true;
-    }*/
+    }
+
+    private void iniciarlizarWS() {
+        try {
+            //WebSocketClient webSocket = new WebSocketClient(new URI("ws://arco06server:8083/ControlFlotasUnifor/ws/comunicaciones/1")) {
+            WebSocketClient webSocket = new WebSocketClient(new URI("ws://" + LoginActivity.urlFinalLocal + "/ws/comunicaciones/1")) {
+                @Override
+                public void onOpen(ServerHandshake serverHandshake) {
+                    this.send("latidoVehiculos");
+                }
+
+                @Override
+                public void onMessage(String s) {
+
+                    //Tratar la información aquí. Rellenar el mapa para después mostrarlo en el mapa
+                    try {
+
+                        JSONObject objeto = new JSONObject(s);
+                        JSONObject mensaje = new JSONObject(objeto.getString("mensaje"));
+                        int x =0;
+
+                        for (Iterator<String> it = mensaje.keys(); it.hasNext(); ) {
+                            Vehiculo vehiculo;
+                            String identificador = it.next();
+                            JSONObject jVehiculo = (JSONObject) mensaje.get(identificador);
+                            vehiculo = mapaVehiculos.get(identificador);
+
+                            if (vehiculo == null){
+                                continue;
+                            }
+
+                            vehiculo.setIdentificador(identificador);
+                            vehiculo.setAltitud(String.valueOf(jVehiculo.getInt("altitud")));
+                            vehiculo.setDistancia(String.valueOf(jVehiculo.getInt("distancia_dia")));
+                            vehiculo.setEstado(jVehiculo.getString("estado"));
+                            vehiculo.setLatitud(jVehiculo.getDouble("latitud"));
+                            vehiculo.setLongitud(jVehiculo.getDouble("longitud"));
+                            vehiculo.setVelocidad(String.valueOf(jVehiculo.getInt("velocidad")));
+                            vehiculo.setRpm(String.valueOf(jVehiculo.getInt("rpm_cuba")));
+                            vehiculo.setTemperatura(String.valueOf(jVehiculo.getDouble("temperatura")));
+                            vehiculo.setPresion(String.valueOf(jVehiculo.getDouble("presion")));
+                            vehiculo.setFecha(jVehiculo.getString("hora"));
+                            if(jVehiculo.has("descripcion")) {
+                                vehiculo.setDescripcion(jVehiculo.getString("descripcion"));
+                            }
+                            if(jVehiculo.has("tipoVehiculo")){
+                                vehiculo.setTipoVehiculo(jVehiculo.getString("tipoVehiculo"));
+                            }
+
+                            mapaVehiculos.put(identificador,vehiculo);
+
+                            Double lati = vehiculo.getLatitud();
+                            Double longi = vehiculo.getLongitud();
+                            String ident = vehiculo.getIdentificador();
+                            String matricula = vehiculo.getMatricula();
+
+                            if (primeraEjecucion){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Marker punto;
+                                        LatLng marca = new LatLng(lati, longi);
+                                        if(lati!=0 && longi!=0) {
+                                            if (mapaMarcas.get(ident) == null) {
+                                                punto = mMap.addMarker(new MarkerOptions().position(marca).title(ident));
+                                                punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_marcha));
+                                                mapaMarcas.put(ident, punto);
+                                            } else {
+                                                punto = mapaMarcas.get(ident);
+                                                punto.setPosition(marca);
+                                            }
+                                        }
+                                        Log.e("ArrayList:", mapaVehiculos.toString());
+                                    }
+                                });
+                            }
+                        }
+
+                        //Muestro los iconos en el mapa
+                        if(!primeraEjecucion) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    LatLngBounds.Builder centraCamara = new LatLngBounds.Builder();
+                                    for(Vehiculo vehiculo:mapaVehiculos.values()) {
+                                        Marker marca = null;
+                                        if (vehiculo.getLatitud() != 0.0 && vehiculo.getLongitud() != 0.0) {
+                                            LatLng posicion = new LatLng(vehiculo.getLatitud(), vehiculo.getLongitud());
+                                            marca = mMap.addMarker(new MarkerOptions().position(posicion).title(vehiculo.getIdentificador()));
+
+                                            if (vehiculo.getEstado() != null) {
+                                                switch (vehiculo.getEstado()) {
+                                                    case "0":
+                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_marcha));
+                                                        break;
+                                                    case "1":
+                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
+                                                        break;
+                                                    case "2":
+                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_ralenti));
+                                                        break;
+                                                    case "3":
+                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_descarga));
+                                                        break;
+                                                }
+                                            } else {
+                                                marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
+                                            }
+
+                                            mapaMarcas.put(vehiculo.getIdentificador(), marca);
+                                            centraCamara.include(posicion);
+                                        }
+                                    }
+                                    //Centro la cámara en los Marker
+                                    LatLngBounds limites = centraCamara.build();
+
+                                    int ancho = getResources().getDisplayMetrics().widthPixels;
+                                    int alto = getResources().getDisplayMetrics().heightPixels;
+                                    int padding = (int) (alto * 0.05); // 5% de espacio (padding) superior e inferior
+
+                                    CameraUpdate centrarmarcadores = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
+                                    mMap.animateCamera(centrarmarcadores);
+                                }
+                            });
+                            primeraEjecucion = true;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onClose(int i, String s, boolean b) {
+                }
+
+                @Override
+                public void onError(Exception e) {
+                }
+            };
+
+            webSocket.connect();
+
+        }catch(Exception e){
+            Log.e("Error", e.toString());
+            e.printStackTrace();
+        }
+
+        Log.e("ArrayList:", mapaVehiculos.toString());
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        menu.add("FLOTA ARCO");
-        for (int x=0;x<listaVehiculos.size();x++){
-            menu.add(listaVehiculos.get(x).getMatricula());
-        }
+        menu.add(TITULO);
+        menu.add(TODOS);
+        menu.add(ESTADO_MARCHA);
+        menu.add(ESTADO_PARADO);
+        menu.add(ESTADO_RALENTI);
+        menu.add(ESTADO_DESCARGANDO);
+
         return true;
     }
-
-
-   /* @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if(!item.getTitle().equals("FLOTA ARCO")) {
-            Vehiculo coche = null;
-            for (int i = 0; i < listaVehiculos.size(); i++) {
-                if (listaVehiculos.get(i).getMatricula() == item.getTitle().toString()) {
-                    coche = listaVehiculos.get(i);
+        if(!item.getTitle().toString().equals(TITULO)) {
+            for (Vehiculo coche : mapaVehiculos.values()) {
+                if(coche.getEstado()==null){
+                    continue;
+                }
+                Marker marker = mapaMarcas.get(coche.getIdentificador());
+                switch (item.getTitle().toString()) {
+                    case ESTADO_MARCHA:
+                        marker.setVisible(coche.getEstado().equals("0"));
+                        break;
+                    case ESTADO_PARADO:
+                        marker.setVisible(coche.getEstado().equals("1"));
+                        break;
+                    case ESTADO_RALENTI:
+                        marker.setVisible(coche.getEstado().equals("2"));
+                        break;
+                    case ESTADO_DESCARGANDO:
+                        marker.setVisible(coche.getEstado().equals("3"));
+                        break;
+                    case TODOS:
+                        marker.setVisible(true);
+                        break;
                 }
             }
-            Toast.makeText(getApplicationContext(), "Ha seleccionado " + item, Toast.LENGTH_SHORT).show();
-            new DialogoDatos(context, coche);
-            return true;
-        }else{
-            return false;
         }
+            return true;
     }
 
     public void toggleMenu(View view){
@@ -213,43 +300,14 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap){
         mMap = googleMap;
-        Marker punto = null;
-        Double lati, longi;
-        String marcha;
 
-        //Recorro la lista de vehículos y los muestro en el mapa
-        for (int i=0;i<listaVehiculos.size();i++){
-            lati = listaVehiculos.get(i).getLatitud();
-            longi = listaVehiculos.get(i).getLongitud();
-            marcha = listaVehiculos.get(i).getEstado();
-
-            LatLng marca = new LatLng(lati,longi);
-            //mMap.addMarker(new MarkerOptions().position(marca).title(listaVehiculos.get(i).getMatricula())).showInfoWindow();
-            punto = mMap.addMarker(new MarkerOptions().position(marca).title(listaVehiculos.get(i).getMatricula()));
-            punto.showInfoWindow();
-            switch (marcha){
-                case "Parado":
-                    punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
-                    break;
-                case "En Marcha":
-                    punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_marcha));
-                    break;
-                case "Ralentí":
-                    punto.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_ralenti));
-                    break;
-            }
-        }
+        iniciarlizarWS();
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
                 marker.showInfoWindow();
-                Vehiculo vehi = null;
-                for (int i = 0; i < listaVehiculos.size(); i++) {
-                    if (listaVehiculos.get(i).getMatricula().equals(marker.getTitle())) {
-                        vehi = listaVehiculos.get(i);
-                    }
-                }
+                Vehiculo vehi = mapaVehiculos.get(marker.getTitle());
                 new DialogoDatos(context, vehi);
                 return true;
             }
@@ -261,9 +319,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .zoom(6)
                 .bearing(0)
                 .build();
-        // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marca,7f));
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-       // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40,-3.5),5.7f));
 
     }
 

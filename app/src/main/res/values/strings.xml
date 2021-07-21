@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">ControldeFlotas</string>
+    <string name="google_api_key">AIzaSyC0xfrl2TKnA33pGZNhE1Njn2a2r1EiPmU</string>
 
     <!--Pantalla de Login-->
     <string name="controlFlotas">CONTROL DE FLOTAS</string>
