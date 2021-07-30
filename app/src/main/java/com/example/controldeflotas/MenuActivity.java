@@ -1,9 +1,13 @@
 package com.example.controldeflotas;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,7 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
@@ -49,14 +54,18 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
 
     static Context context;
+    static boolean modo_normal;
 
     Map<String, Vehiculo> mapaVehiculos = new HashMap<>();
     Map<String, Marker> mapaMarcas = new HashMap<>();
     List<Flota> flotas = null;
 
+    Toolbar toolbar;
+
     private boolean showDownloadMenu = false;
 
     private boolean primeraEjecucion = false;
+
 
     final String ESTADO_MARCHA = "En Marcha";
     final String ESTADO_PARADO = "Parado";
@@ -64,6 +73,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     final String ESTADO_DESCARGANDO = "Descargando";
     final String TODOS = "Todos";
     final String TITULO = "ESTADOS:";
+
+    SharedPreferences.Editor editorBorrado;
+    static boolean borraDatos;
 
 
     @Override
@@ -76,17 +88,29 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         context = this;
 
+        modo_normal = true;
+
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
         String fecha = format.format(currentDate);
 
         trataDatos();
+
+        borraDatos = false;
+
+        SharedPreferences prefBorrado = getSharedPreferences("borrar", Context.MODE_PRIVATE);
+        editorBorrado = prefBorrado.edit();
+        editorBorrado.putBoolean("borrar", borraDatos);
+        editorBorrado.commit();
 
     }
 
@@ -188,20 +212,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             marca = mMap.addMarker(new MarkerOptions().position(posicion).title(vehiculo.getIdentificador()));
 
                                             if (vehiculo.getEstado() != null) {
-                                                switch (vehiculo.getEstado()) {
-                                                    case "0":
-                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_marcha));
-                                                        break;
-                                                    case "1":
-                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
-                                                        break;
-                                                    case "2":
-                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_ralenti));
-                                                        break;
-                                                    case "3":
-                                                        marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_descarga));
-                                                        break;
-                                                }
+
+                                                DetallesActivity.dibujaIcono(vehiculo, marca);
+
                                             } else {
                                                 marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
                                             }
@@ -250,6 +263,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
 
         menu.add(TITULO);
         menu.add(TODOS);
@@ -261,8 +275,12 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
 
         if(!item.getTitle().toString().equals(TITULO)) {
             for (Vehiculo coche : mapaVehiculos.values()) {
@@ -287,10 +305,69 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker.setVisible(true);
                         break;
                 }
+
             }
         }
+
             return true;
+
     }
+
+    public void cerrar(View view){
+
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
+        alerta.setMessage("Desea salir de la aplicación o salir y cerrar la sesión?")
+                .setCancelable(false)
+                .setPositiveButton("Salir y cerrar sesión", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        borraDatos = true;
+                        editorBorrado.putBoolean("borrar", borraDatos);
+                        editorBorrado.commit();
+                        finishAffinity();
+                    }
+                })
+                .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                    }
+                });
+
+        AlertDialog titulo = alerta.create();
+        titulo.setTitle("Salir y cerrar sesión");
+        titulo.show();
+
+    }
+
+    public void zonas(View view){
+        Toast.makeText(getApplicationContext(),"Ver zonas", Toast.LENGTH_SHORT).show();
+    }
+
+    public void visualizar(View view){
+        if(mMap.getMapType()==GoogleMap.MAP_TYPE_HYBRID){
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            modo_normal = true;
+        }else{
+            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            modo_normal = false;
+        }
+        Toast.makeText(getApplicationContext(),"Visualizar", Toast.LENGTH_SHORT).show();
+    }
+    public void informes(View view){
+        Toast.makeText(getApplicationContext(),"Ver informes", Toast.LENGTH_SHORT).show();
+    }
+    public void ajustes(View view){
+        Toast.makeText(getApplicationContext(),"Ver ajustes", Toast.LENGTH_SHORT).show();
+    }
+
+
 
     public void toggleMenu(View view){
         showDownloadMenu=!showDownloadMenu;
@@ -300,6 +377,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap){
         mMap = googleMap;
+        //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         iniciarlizarWS();
 
@@ -308,7 +386,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(@NonNull Marker marker) {
                 marker.showInfoWindow();
                 Vehiculo vehi = mapaVehiculos.get(marker.getTitle());
-                new DialogoDatos(context, vehi);
+                new DialogoDatos(MenuActivity.this, vehi);
                 return true;
             }
         });
@@ -321,25 +399,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-    }
-
-    public static String obtenerDireccion(double latitud, double longitud){
-
-        String direccion = "";
-
-        if(latitud != 0.0 && longitud != 0.0){
-            try{
-                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                List<Address> list = geocoder.getFromLocation(latitud, longitud, 1);
-                if(!list.isEmpty()){
-                    Address DirCalle = list.get(0);
-                    direccion = DirCalle.getAddressLine(0);
-                }
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-        }
-        return direccion;
     }
 
 }

@@ -71,7 +71,7 @@ public class DialogoDatos  {
         }
 
         tvMatricula.setText(vehiculo.getIdentificador());
-        tvDireccion.setText(MenuActivity.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
+        tvDireccion.setText(Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
         tvFechaHora.setText(fecha);
         tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
         tvDistancia.setText(vehiculo.getDistancia() + " kms");
@@ -95,6 +95,7 @@ public class DialogoDatos  {
                 Intent intento = new Intent(context, DetallesActivity.class);
                 intento.putExtra("Vehiculo", vehiculo);
                 context.startActivity(intento);
+                dialogo.dismiss();
             }
         });
 

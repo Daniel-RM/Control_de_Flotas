@@ -45,16 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/estado"
+            android:text="@string/comportamiento"
             android:textColor="@color/white" />
 
-        <TextView
-            android:id="@+id/tvDistanciaTitulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/distancia"
-            android:textColor="@color/white" />
     </LinearLayout>
 
     <ListView

@@ -3,7 +3,7 @@
     <string name="google_api_key">AIzaSyC0xfrl2TKnA33pGZNhE1Njn2a2r1EiPmU</string>
 
     <!--Pantalla de Login-->
-    <string name="controlFlotas">CONTROL DE FLOTAS</string>
+    <string name="controlFlotas">ARCOMOV</string>
     <string name="usuario">Usuario: </string>
     <string name="contraseña">Contraseña: </string>
     <string name="login">Login</string>
@@ -15,15 +15,20 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="recordar">Recordar datos</string>
 
     <!--Pantalla de Maps / Menú flotante-->
     <string name="titulo">Control de Flotas</string>
     <string name="flota">Flota Arco</string>
     <string name="vehiculos">Vehículos</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu">Menú</string>
+    <string name="estados">ESTADOS</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="informes">Informes</string>
+    <string name="zonas">Zonas</string>
+    <string name="visualizar">Visualizar Mapa</string>
 
     <!--Pantalla de Diálogo Datos-->
     <string name="detalle">Detalle</string>
@@ -40,5 +45,10 @@
 
     <!--Pantalla de Detalles-->
     <string name="hora">Hora:</string>
-    <string name="estado">Estado:</string>
+    <string name="comportamiento">Comportamiento:</string>
+    <string name="title_activity_a_b">ActivityAB</string>
+
+    <!--Pantalla de Diálogo Cerrar-->
+    <string name="pregunta"></string>
+
 </resources>

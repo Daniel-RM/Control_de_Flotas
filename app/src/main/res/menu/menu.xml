@@ -2,5 +2,31 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Item" />
+
+    <item
+        android:id="@+id/cerrar"
+        android:enabled="true"
+        android:title="@string/cerrar_sesion"
+        app:actionLayout="@layout/icono_cerrar"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/zonas"
+        android:title="@string/zonas"
+        app:actionLayout="@layout/icono_zonas"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/visualizar"
+        android:title="@string/visualizar"
+        app:actionLayout="@layout/icono_visualizar"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/informes"
+        android:title="@string/informes"
+        app:actionLayout="@layout/icono_informes"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/ajustes"
+        android:title="@string/ajustes"
+        app:actionLayout="@layout/icono_ajustes"
+        app:showAsAction="always" />
 </menu>

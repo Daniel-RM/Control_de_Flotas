@@ -1,5 +1,12 @@
 package com.example.controldeflotas;
 
+import android.location.Address;
+import android.location.Geocoder;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class Datos {
 
     private String matricula;
@@ -13,6 +20,15 @@ public class Datos {
     private String distancia;
 
     public Datos() {
+    }
+
+    public Datos(String hora, double latitud, double longitud, String estado, String velocidad, String comportamiento){
+        this.hora = hora;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.estado = estado;
+        this.velocidad = velocidad;
+        this.comportamiento = comportamiento;
     }
 
     public Datos(String matricula, String fecha, String hora, double latitud, double longitud, String estado, String comportamiento, String velocidad, String distancia) {
@@ -110,7 +126,27 @@ public class Datos {
                 ", velocidad='" + velocidad + '\'' +
                 ", distancia='" + distancia + '\'' +
                 '}';*/
-        return hora + " / " + MenuActivity.obtenerDireccion(latitud, longitud) + " / " + estado + " / " + distancia;
+        return hora + " / " + obtenerDireccion(latitud, longitud) + " / " + comportamiento;
+        //return hora + " / " + "<" + latitud + "/" + longitud + "> / " + comportamiento;
+    }
+
+    public static String obtenerDireccion(double latitud, double longitud){
+
+        String direccion = "";
+
+        if(latitud != 0.0 && longitud != 0.0){
+            try{
+                Geocoder geocoder = new Geocoder(MenuActivity.context, Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(latitud, longitud, 1);
+                if(!list.isEmpty()){
+                    Address DirCalle = list.get(0);
+                    direccion = DirCalle.getAddressLine(0);
+                }
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+        return direccion;
     }
 
 }

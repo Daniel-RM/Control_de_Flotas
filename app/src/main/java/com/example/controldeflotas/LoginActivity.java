@@ -3,7 +3,9 @@ package com.example.controldeflotas;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.AsyncQueryHandler;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
@@ -13,8 +15,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -50,6 +54,9 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
     Button btnLogin;
     EditText etNombre, etPass;
 
+    CheckBox tvCheck;
+    int x = 0;
+
     String nombre, password;
     boolean correcto = false;
 
@@ -69,9 +76,14 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
         btnLogin = findViewById(R.id.btnLogin);
         etNombre = findViewById(R.id.etNombre);
         etPass = findViewById(R.id.etPass);
+
+        tvCheck = findViewById(R.id.tvCheck);
+
+        credenciales();
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +96,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 //                etNombre.setText("admin");
 //                etPass.setText("arco0*asi4");
 
-                etNombre.setText("arco0");
-                etPass.setText("arco0");
+//                etNombre.setText("arco0");
+//                etPass.setText("arco0");
 
                 nombre = etNombre.getText().toString();
                 password = etPass.getText().toString();
@@ -94,12 +106,28 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
                     @Override
                     public void run() {
                         if(proceso(nombre, password)){
+                            if(tvCheck.isChecked()){
+                                MenuActivity.borraDatos = false;
+                                SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("user", nombre);
+                                editor.putString("pass", password);
+                                editor.commit();
+                            }
                             List<Flota> flotas = recogerDatos();
                             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                             startActivity(intent);
                         } else {
-                            etNombre.setHintTextColor(Color.RED);
-                            etNombre.setHint("Asegúrese de introducir los datos correctos");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(nombre.isEmpty() || password.isEmpty()){
+                                            Toast.makeText(getApplicationContext(), "Por favor, rellene todos los campos", Toast.LENGTH_SHORT).show();
+                                        }else {
+                                            Toast.makeText(getApplicationContext(), "Los datos introducidos son erróneos", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                         }
                     }
                 });
@@ -116,10 +144,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         String linea, devuelve = "";
         URL url = null;
         try {
-            //url = new URL("http://arco06server:8083/ControlFlotas/validarLogin.action?username=admin&password=arco0*asi4");
             url = new URL("http://" + urlFinalLocal + "/validarLogin.action?username=" + nom + "&password=" + pass);
-            //url = new URL("http://flotas.arcoelectronica.net:8083/ControlFlotas/validarLogin.action?username=" + nom + "&password=" + pass);
-            //url = new URL("http://arco06server:8083/visorarco/validarLogin.action?username=" + nom + "&password=" + pass);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -190,5 +216,29 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         }
 
         return myObjects;
+    }
+
+    public void cargarPreferencias(){
+
+        SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        //SharedPreferences.Editor editor = preferences.edit();
+
+        String user = preferences.getString("user","");
+        String pass = preferences.getString("pass","");
+
+
+        etNombre.setText(user);
+        etPass.setText(pass);
+    }
+
+    public void credenciales(){
+        SharedPreferences prefBorrado = getSharedPreferences("borrar", Context.MODE_PRIVATE);
+        boolean borramos = prefBorrado.getBoolean("borrar", false);
+        if(!borramos){
+            cargarPreferencias();
+        }else{
+            etNombre.setText("");
+            etPass.setText("");
+        }
     }
 }
