@@ -31,7 +31,7 @@
     <string name="visualizar">Visualizar Mapa</string>
 
     <!--Pantalla de Diálogo Datos-->
-    <string name="detalle">Detalle</string>
+    <string name="informe">Informe</string>
     <string name="cancel">Cancelar</string>
     <string name="direccion">Dirección: </string>
     <string name="fecha">Fecha y hora: </string>
@@ -47,8 +47,11 @@
     <string name="hora">Hora:</string>
     <string name="comportamiento">Comportamiento:</string>
     <string name="title_activity_a_b">ActivityAB</string>
+    <string name="descargar">Descargar</string>
+    <string name="enviar">Enviar</string>
 
-    <!--Pantalla de Diálogo Cerrar-->
-    <string name="pregunta"></string>
+    <!--Pantalla de Diálogo Informe-->
+    <string name="title">ELIJA UN VEHÍCULO</string>
+    <string name="title_activity_zonas">Map</string>
 
 </resources>

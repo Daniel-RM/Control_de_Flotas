@@ -222,7 +222,7 @@
                 android:layout_width="20dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="@string/detalle"
+                android:text="@string/informe"
                 android:translationX="10dp" />
 
         </LinearLayout>

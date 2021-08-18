@@ -14,6 +14,38 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/include">
+
+        <Button
+            android:id="@+id/btnDescargar"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/descargar"
+            android:textAlignment="center"
+            android:translationX="-10dp" />
+
+        <Button
+            android:id="@+id/btnEnviar"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/enviar"
+            android:textAlignment="center"
+            android:translationX="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="20dp"
@@ -66,15 +98,15 @@
         android:id="@+id/editTextDate"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="15dp"
+        android:clickable="true"
         android:drawableStart="@drawable/icon_calendario"
         android:drawablePadding="10dp"
         android:ems="10"
+        android:focusable="false"
         android:hint="@string/solo_fecha"
         android:inputType="date"
-        android:focusable="false"
-        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -5,17 +5,31 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -37,6 +51,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +74,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     Map<String, Vehiculo> mapaVehiculos = new HashMap<>();
     Map<String, Marker> mapaMarcas = new HashMap<>();
     List<Flota> flotas = null;
+    List<Vehiculo> listaVehiculos = new ArrayList<>();
 
     Toolbar toolbar;
 
@@ -73,6 +89,20 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     final String ESTADO_DESCARGANDO = "Descargando";
     final String TODOS = "Todos";
     final String TITULO = "ESTADOS:";
+
+    final String SALIR = "Salir";
+    final String SINCERRAR = "Salir sin cerrar sesión";
+    final String CERRAR = "Salir y cerrar sesión";
+
+    final String ZONAS = "Zonas";
+
+    final String VISUALIZAR = "Visualizar";
+    final String MODOVISUAL = "Cambiar vista";
+
+    final String INFORMES = "Informes";
+    final String ALBARANES = "Albaranes";
+
+    final String CONFIGURACIÓN = "Configuración";
 
     SharedPreferences.Editor editorBorrado;
     static boolean borraDatos;
@@ -119,6 +149,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (Flota flota : flotas){
            for(Vehiculo vehiculo : flota.vehiculos){
                mapaVehiculos.put(vehiculo.getIdentificador(),vehiculo);
+               listaVehiculos.add(vehiculo);
            }
         }
     }
@@ -135,7 +166,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onMessage(String s) {
 
-                    //Tratar la información aquí. Rellenar el mapa para después mostrarlo en el mapa
+                    //Tratar la información aquí. Rellenar el map para después mostrarlo en el mapa
                     try {
 
                         JSONObject objeto = new JSONObject(s);
@@ -265,6 +296,19 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
 
+//        menu.add(SALIR);
+//
+//        SubMenu zonas = menu.addSubMenu(ZONAS);
+//
+//        SubMenu visualizar = menu.addSubMenu(VISUALIZAR);
+//        visualizar.add(MODOVISUAL);
+//
+//        SubMenu informes = menu.addSubMenu(INFORMES);
+//        informes.add(INFORMES);
+//        informes.add(ALBARANES);
+//
+//        SubMenu configuracion = menu.addSubMenu(CONFIGURACIÓN);
+
         menu.add(TITULO);
         menu.add(TODOS);
         menu.add(ESTADO_MARCHA);
@@ -277,10 +321,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
 
         if(!item.getTitle().toString().equals(TITULO)) {
             for (Vehiculo coche : mapaVehiculos.values()) {
@@ -289,6 +332,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 Marker marker = mapaMarcas.get(coche.getIdentificador());
                 switch (item.getTitle().toString()) {
+
                     case ESTADO_MARCHA:
                         marker.setVisible(coche.getEstado().equals("0"));
                         break;
@@ -347,6 +391,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void zonas(View view){
+        Intent intent = new Intent(getApplicationContext(), ZonasActivity.class);
+        startActivity(intent);
         Toast.makeText(getApplicationContext(),"Ver zonas", Toast.LENGTH_SHORT).show();
     }
 
@@ -361,13 +407,35 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(getApplicationContext(),"Visualizar", Toast.LENGTH_SHORT).show();
     }
     public void informes(View view){
-        Toast.makeText(getApplicationContext(),"Ver informes", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
+        alerta.setMessage("Qué tipo de informe quiere?")
+                .setCancelable(false)
+                .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new DialogoInforme(MenuActivity.this, listaVehiculos);
+                    }
+                })
+                .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(),"Ver albaranes", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog titulo = alerta.create();
+        titulo.setTitle("Informes y albaranes");
+        titulo.show();
     }
+
     public void ajustes(View view){
         Toast.makeText(getApplicationContext(),"Ver ajustes", Toast.LENGTH_SHORT).show();
     }
-
-
 
     public void toggleMenu(View view){
         showDownloadMenu=!showDownloadMenu;

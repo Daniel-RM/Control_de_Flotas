@@ -4,25 +4,39 @@ package com.example.controldeflotas;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,11 +52,20 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -58,6 +81,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -70,6 +94,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
     EditText editText;
 
+    Button btnEnviar, btnDescargar;
+
     ListView listView;
     List<Datos> listaDatos = new ArrayList<>();
     ArrayAdapter<Datos> adaptador;
@@ -78,6 +104,11 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     Polyline line = null;
 
     String fecha, fechaRuta;
+    String NOMBRE_DIRECTORIO = "/storage/self/primary/Download";
+    String NOMBRE_DOCUMENTO  = "MiPDF.pdf";
+    String[] informacionArray;
+    String[] partes;
+    int lineas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +128,9 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
         editText = findViewById(R.id.editTextDate);
 
+        btnDescargar = findViewById(R.id.btnDescargar);
+        btnEnviar = findViewById(R.id.btnEnviar);
+
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formatRuta = new SimpleDateFormat("yyyy-MM-dd");
@@ -115,6 +149,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         Bundle extra = intent.getExtras();
 
         vehiculo = (Vehiculo) extra.getSerializable("Vehiculo");
+        int x = 0;
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -122,9 +157,185 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 recogeDatos(fechaRuta);
             }
         });
+
+
+        btnDescargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listaDatos.size()==0){
+                    Toast.makeText(getApplicationContext(), "No existen datos de esta fecha", Toast.LENGTH_SHORT).show();
+                }else {
+                    lineas = listaDatos.size();
+                    crearPDF(false);
+                }
+            }
+        });
+
+        btnEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lineas = listaDatos.size();
+                crearPDF(true);
+                Toast.makeText(getApplicationContext(), "Ha pulsado enviar", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
+    //Creo el PDF con su formato
+    public void crearPDF(boolean envio) {
+
+        File file = null;
+
+        //Establezco el número de páginas
+        int paginas;
+        int vueltas = 0;
+
+        if ((listaDatos.size() % 30) == 0) {
+            paginas = listaDatos.size() / 30;
+        } else {
+            paginas = (listaDatos.size() / 30) + 1;
+        }
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,}, 1000);
+        }
+
+
+        android.graphics.pdf.PdfDocument miDocumento = new PdfDocument();
+        Paint myPaint = new Paint();
+
+        do {
+            for (int x = 0; x < paginas; x++) {
+                //Preparo la primera página
+                android.graphics.pdf.PdfDocument.PageInfo myPageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(500, 792, x + 1).create();
+                android.graphics.pdf.PdfDocument.Page myPage = miDocumento.startPage(myPageInfo);
+                Canvas canvas = myPage.getCanvas();
+
+
+                myPaint.setTextAlign(Paint.Align.CENTER);
+                myPaint.setTextSize(12.0f);
+                canvas.drawText("ARCOELECTRÓNICA", myPageInfo.getPageWidth() / 2, 30, myPaint);
+
+                myPaint.setTextSize(6.0f);
+                myPaint.setColor(Color.rgb(122, 119, 119));
+                canvas.drawText("Pol. Ind. La Cuesta, c/ Castilla y León, 5 ; La Almunia de Dª Godina", myPageInfo.getPageWidth() / 2, 40, myPaint);
+
+                myPaint.setTextAlign(Paint.Align.LEFT);
+                myPaint.setTextSize(9.0f);
+                myPaint.setColor(Color.rgb(81, 164, 157));
+                canvas.drawText("Informe de " + vehiculo.getIdentificador(), 10, 70, myPaint);
+                canvas.drawText("Fecha: " + fecha, 400, 70, myPaint);
+
+                canvas.drawText("Hora:", 10, 90, myPaint);
+                canvas.drawText("| Dirección:", 55, 90, myPaint);
+                canvas.drawText("| Comportamiento:", 340, 90, myPaint);
+                canvas.drawLine(10, 93, myPageInfo.getPageWidth() - 10, 93, myPaint);
+
+                myPaint.setTextAlign(Paint.Align.LEFT);
+                myPaint.setTextSize(8.0f);
+                myPaint.setColor(Color.BLACK);
+
+                int startXPosition = 10;
+                int endXPosition = myPageInfo.getPageWidth() - 10;
+                int startYPosition = 110;
+
+                if (lineas > 30) {
+                    if (vueltas != 0) {
+                        int loop = (vueltas * 30) + 30;
+                        for (int i = (vueltas * 30); i <= loop; i++) {
+                            if (informacionArray[i].contains("Paro") || informacionArray[i].contains("Reinicio")) {
+                                myPaint.setColor(Color.RED);
+                            } else {
+                                myPaint.setColor(Color.BLACK);
+                            }
+                            canvas.drawText(informacionArray[i], startXPosition, startYPosition, myPaint);
+                            canvas.drawLine(startXPosition, startYPosition + 3, endXPosition, startYPosition + 3, myPaint);
+                            startYPosition += 20;
+                        }
+                    } else {
+
+                        for (int i = 0; i <= 30; i++) {
+                            if (informacionArray[i].contains("Paro") || informacionArray[i].contains("Reinicio")) {
+                                myPaint.setColor(Color.RED);
+                            } else {
+                                myPaint.setColor(Color.BLACK);
+                            }
+                            canvas.drawText(informacionArray[i], startXPosition, startYPosition, myPaint);
+                            canvas.drawLine(startXPosition, startYPosition + 3, endXPosition, startYPosition + 3, myPaint);
+                            startYPosition += 20;
+                        }
+                    }
+                    vueltas++;
+                    lineas = lineas - 30;
+                    miDocumento.finishPage(myPage);
+                } else {
+                    for (int i = (vueltas * 30); i < listaDatos.size(); i++) {
+                        if (informacionArray[i].contains("Paro") || informacionArray[i].contains("Reinicio")) {
+                            myPaint.setColor(Color.RED);
+                        } else {
+                            myPaint.setColor(Color.BLACK);
+                        }
+                        canvas.drawText(informacionArray[i], startXPosition, startYPosition, myPaint);
+                        canvas.drawLine(startXPosition, startYPosition + 3, endXPosition, startYPosition + 3, myPaint);
+                        startYPosition += 20;
+                    }
+                    lineas = lineas - 30;
+                    miDocumento.finishPage(myPage);
+                }
+
+            }
+        } while (lineas > 0);
+
+        //Creo el fichero. Si existe uno previo, lo borro
+        file = new File(NOMBRE_DIRECTORIO, NOMBRE_DOCUMENTO);
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            file.delete();
+        }
+
+        //Escribo en el fichero
+        try {
+            miDocumento.writeTo(new FileOutputStream(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.e("Directorio: ", file.getAbsolutePath());
+
+        Toast.makeText(getApplicationContext(), "PDF creado correctamente en " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        miDocumento.close();
+
+
+        if(envio == true){
+
+            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), BuildConfig.APPLICATION_ID + ".provider", file);
+
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            emailIntent.putExtra(Intent.EXTRA_EMAIL,"");
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT,"Informe de " + vehiculo.getIdentificador());//Asunto - título mensaje
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Hola.\nLe adjunto PDF con el informe de " + vehiculo.getIdentificador());//Mensaje
+            emailIntent.setType("application/pdf");
+            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(Intent.createChooser(emailIntent, "Enviar email usando:"));
+        }
+
+    }
+
+
     public void recogeDatos(String fecha) {
+
+        int posic = 0;
 
         if(!listaDatos.isEmpty()) {
             listaDatos.clear();
@@ -159,13 +370,17 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 Log.e("Respuesta: ", devuelve);
 
                 String separa = Pattern.quote("||");
-                String[] partes = devuelve.split(separa);
+                partes = devuelve.split(separa);
+                informacionArray = new String[partes.length];
 
                 for (String trama : partes) {
                     Datos dato = new Datos();
                     String separa2 = Pattern.quote("|");
                     String[] datos = trama.split(separa2);
                     if(dato==null){
+                        continue;
+                    }
+                    if(partes.length == 1){
                         continue;
                     }
                     String hora = datos[2].substring(0,2) + ":" + datos[2].substring(2,4) + ":" + datos[2].substring(4,6);
@@ -175,7 +390,15 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     dato.setEstado(datos[4]);
                     dato.setVelocidad(datos[12]);
                     dato.setComportamiento(datos[7]);
+                    if(!datos[16].equals("null")){
+                        dato.setZona(datos[16]);
+                    }else{
+                        dato.setZona(dato.getLatitud() + "/" + dato.getLongitud());
+                        //dato.setZona(Datos.obtenerDireccion(dato.getLatitud(),dato.getLongitud())); Este método consume muchísimo tiempo
+                    }
                     listaDatos.add(dato);
+                    informacionArray[posic] = dato.toString();
+                    posic++;
                 }
             }
 
@@ -334,6 +557,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                //adaptador.notifyDataSetChanged();
                 recogeDatos(dia);
             }
         });

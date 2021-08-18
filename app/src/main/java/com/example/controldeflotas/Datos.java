@@ -18,17 +18,19 @@ public class Datos {
     private String comportamiento;
     private String velocidad;
     private String distancia;
+    private String zona;
 
     public Datos() {
     }
 
-    public Datos(String hora, double latitud, double longitud, String estado, String velocidad, String comportamiento){
+    public Datos(String hora, double latitud, double longitud, String estado, String velocidad, String comportamiento, String zona){
         this.hora = hora;
         this.latitud = latitud;
         this.longitud = longitud;
         this.estado = estado;
         this.velocidad = velocidad;
         this.comportamiento = comportamiento;
+        this.zona = zona;
     }
 
     public Datos(String matricula, String fecha, String hora, double latitud, double longitud, String estado, String comportamiento, String velocidad, String distancia) {
@@ -115,6 +117,14 @@ public class Datos {
         this.distancia = distancia;
     }
 
+    public String getZona() {
+        return zona;
+    }
+
+    public void setZona(String zona) {
+        this.zona = zona;
+    }
+
     @Override
     public String toString() {
 
@@ -126,8 +136,13 @@ public class Datos {
                 ", velocidad='" + velocidad + '\'' +
                 ", distancia='" + distancia + '\'' +
                 '}';*/
-        return hora + " / " + obtenerDireccion(latitud, longitud) + " / " + comportamiento;
-        //return hora + " / " + "<" + latitud + "/" + longitud + "> / " + comportamiento;
+
+           // return hora + "   /   " + obtenerDireccion(latitud, longitud) + "   /   " + comportamiento + "\n";
+            //return hora + " / " + "<" + latitud + "/" + longitud + "> / " + comportamiento;
+
+            return hora + "   /   " + zona + "   /   " + comportamiento + "\n";
+
+
     }
 
     public static String obtenerDireccion(double latitud, double longitud){
