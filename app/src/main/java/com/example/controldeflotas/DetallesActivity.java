@@ -394,7 +394,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                         dato.setZona(datos[16]);
                     }else{
                         dato.setZona(dato.getLatitud() + "/" + dato.getLongitud());
-                        //dato.setZona(Datos.obtenerDireccion(dato.getLatitud(),dato.getLongitud())); Este método consume muchísimo tiempo
+                        //dato.setZona(Datos.obtenerDireccion(dato.getLatitud(),dato.getLongitud()));// Este método consume muchísimo tiempo
                     }
                     listaDatos.add(dato);
                     informacionArray[posic] = dato.toString();
@@ -417,7 +417,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
                             items = listaDatos;
                             double veloc = Double.parseDouble(items.get(position).getVelocidad().substring(0,3));
-                            int x = 0;
                             TextView text  = (TextView)view.findViewById(R.id.textPersonalizado);
 
                             if(items.get(position)!=null){
@@ -622,5 +621,4 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 break;
         }
     }
-
 }

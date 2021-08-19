@@ -171,7 +171,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         JSONObject objeto = new JSONObject(s);
                         JSONObject mensaje = new JSONObject(objeto.getString("mensaje"));
-                        int x =0;
+
 
                         for (Iterator<String> it = mensaje.keys(); it.hasNext(); ) {
                             Vehiculo vehiculo;

@@ -53,5 +53,10 @@
     <!--Pantalla de Diálogo Informe-->
     <string name="title">ELIJA UN VEHÍCULO</string>
     <string name="title_activity_zonas">Map</string>
+    
+    <!--Pantalla de Zonas Activity-->
+    <string name="codigo">Código:</string>
+    <string name="descripcion">Descripción:</string>
+    <string name="tipo">Tipo Zona:</string>
 
 </resources>

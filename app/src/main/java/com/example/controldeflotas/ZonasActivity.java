@@ -1,13 +1,23 @@
 package com.example.controldeflotas;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.ClipData;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,9 +26,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.lowagie.text.pdf.AcroFields;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +45,11 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.AsynchronousByteChannel;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class ZonasActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -38,6 +59,12 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
     String[] partes;
 
     ListView listViewZonas;
+    List<Zona> listaZonas = new ArrayList<>();
+    ArrayAdapter<Zona> adaptador;
+
+    Map<String, Zona> mapaZonas = new HashMap<>();
+
+    Polygon poligono;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +79,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         listViewZonas = findViewById(R.id.listViewZonas);
-        listViewZonas.setBackgroundColor(Color.WHITE);
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -96,37 +122,101 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         try {
             Object respuesta = connection.getContent();
 
-            if(respuesta instanceof InputStream){
+            if(respuesta instanceof InputStream) {
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                while((linea = reader.readLine()) != null){
+                while ((linea = reader.readLine()) != null) {
                     response.append(linea);
                 }
+
                 devuelve = response.toString();
                 Log.e("Respuesta: ", devuelve);
 
-                String separador = Pattern.quote("]");
-                partes = devuelve.split(separador);
+                JSONArray objeto = new JSONArray(devuelve);
 
-                for(String trama : partes){
+                for (int x = 0; x < objeto.length(); x++) {
                     Zona zona = new Zona();
-                    String separa = Pattern.quote(",");
-                    String[] zonas = trama.split(separa);
+                    JSONArray trama = objeto.getJSONArray(x);
+                    zona.setCodigo((String) trama.get(0));
+                    zona.setDescripcion((String) trama.get(1));
+                    zona.setTipo(trataTipo((String) trama.get(2)));
+                    zona.setCoordenadas((String) trama.get(3));
+                    zona.setDireccion(String.valueOf(trama.get(4)));
 
-                    if(zona == null){
-                        continue;
-                    }
-
-//                    zona.setCodigo(zonas[0]);
-//                    zona.setDescripcion(zonas[1]);
-//                    zona.setTipo(zonas[2]);
-//                    zona.setCoordenadas(zonas[3] + "/" + zonas[4] + "/" + zonas[5] + "/" + zonas[6] + "/" + zonas[7]);
-//                    zona.setDireccion(zonas[8] + ", " + zonas[9] + ", " + zonas[10]);
-
+                    listaZonas.add(zona);
+                    mapaZonas.put(zona.getCodigo(), zona);
                 }
-
             }
-        } catch (IOException e) {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adaptador = new ArrayAdapter<Zona>(getApplicationContext(), R.layout.lista_item, listaZonas);
+                    listViewZonas.setAdapter(adaptador);
+
+                    listViewZonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            if(poligono != null){
+                                poligono.remove();
+                            }
+
+                            Zona zonaElegida = adaptador.getItem(position);
+
+                            String[] coordArray = zonaElegida.getCoordenadas();
+                            LatLng[] latLngs = new LatLng[coordArray.length];
+                            for(int i=0;i<coordArray.length;i++){
+                                String latLngString = coordArray[i];
+                                String[] latlong = latLngString.split(" ");
+                                double lati = Double.parseDouble(latlong[0]);
+                                double longi = Double.parseDouble(latlong[1]);
+                                latLngs[i] = new LatLng(lati,longi);
+
+                            }
+
+                            PolygonOptions poligonOptions = new PolygonOptions();
+                            for(LatLng coordenadas : latLngs){
+                                poligonOptions.add(coordenadas)
+                                        .fillColor(Color.RED);
+                            }
+
+                            poligono = mMap.addPolygon(poligonOptions);
+
+                            CameraPosition cameraPosition = new CameraPosition.Builder()
+                                    .target(latLngs[3])
+                                    .zoom(13)
+                                    .bearing(0)
+                                    .build();
+                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                        }
+                   });
+                }
+            });
+
+
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    private String trataTipo(String tipo){
+
+        String tipoCorregido = "";
+
+        if(tipo.equals("1")){
+            tipoCorregido = "Planta hormigón";
+        }else if(tipo.equals("2")){
+            tipoCorregido = "Obra Cliente";
+        }else if(tipo.equals("3")){
+            tipoCorregido = "Oficina Central";
+        }else if(tipo.equals("4")){
+            tipoCorregido = "Zona 4";
+        }else if(tipo.equals("99")){
+            tipoCorregido = "Talleres";
+        }
+        return tipoCorregido;
     }
 }
