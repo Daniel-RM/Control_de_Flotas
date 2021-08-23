@@ -296,19 +296,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
 
-//        menu.add(SALIR);
-//
-//        SubMenu zonas = menu.addSubMenu(ZONAS);
-//
-//        SubMenu visualizar = menu.addSubMenu(VISUALIZAR);
-//        visualizar.add(MODOVISUAL);
-//
-//        SubMenu informes = menu.addSubMenu(INFORMES);
-//        informes.add(INFORMES);
-//        informes.add(ALBARANES);
-//
-//        SubMenu configuracion = menu.addSubMenu(CONFIGURACIÓN);
-
         menu.add(TITULO);
         menu.add(TODOS);
         menu.add(ESTADO_MARCHA);
@@ -318,8 +305,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return true;
     }
-
-
 
 
     @Override

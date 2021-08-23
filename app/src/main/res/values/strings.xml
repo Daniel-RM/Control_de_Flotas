@@ -58,5 +58,12 @@
     <string name="codigo">Código:</string>
     <string name="descripcion">Descripción:</string>
     <string name="tipo">Tipo Zona:</string>
+    <string name="buscar">Búsqueda</string>
+    <string name="insert">Añadir</string>
+    <string name="update">Editar</string>
+    <string name="delete">Borrar</string>
+    <string name="guardar">Guardar</string>
+
+
 
 </resources>

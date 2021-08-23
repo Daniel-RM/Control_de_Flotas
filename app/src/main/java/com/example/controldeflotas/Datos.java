@@ -140,7 +140,7 @@ public class Datos {
            // return hora + "   /   " + obtenerDireccion(latitud, longitud) + "   /   " + comportamiento + "\n";
             //return hora + " / " + "<" + latitud + "/" + longitud + "> / " + comportamiento;
 
-            return hora + "   /   " + zona + "   /   " + comportamiento + "\n";
+            return hora + "   /   " + obtenerDireccion(latitud, longitud) + "   /   " + comportamiento + "\n";
 
 
     }

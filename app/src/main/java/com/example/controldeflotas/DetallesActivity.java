@@ -99,6 +99,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     ListView listView;
     List<Datos> listaDatos = new ArrayList<>();
     ArrayAdapter<Datos> adaptador;
+    List<Datos> listaPuntos = new ArrayList<>();
 
     Marker punto, marcaRuta, puntoFinal;
     Polyline line = null;
@@ -166,7 +167,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     Toast.makeText(getApplicationContext(), "No existen datos de esta fecha", Toast.LENGTH_SHORT).show();
                 }else {
                     lineas = listaDatos.size();
-                    crearPDF(false);
+                    crearPDF(false, editText.getText().toString());
                 }
             }
         });
@@ -175,7 +176,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 lineas = listaDatos.size();
-                crearPDF(true);
+                crearPDF(true, editText.getText().toString());
                 Toast.makeText(getApplicationContext(), "Ha pulsado enviar", Toast.LENGTH_SHORT).show();
             }
         });
@@ -183,7 +184,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     //Creo el PDF con su formato
-    public void crearPDF(boolean envio) {
+    public void crearPDF(boolean envio, String cuando) {
 
         File file = null;
 
@@ -229,7 +230,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 myPaint.setTextSize(9.0f);
                 myPaint.setColor(Color.rgb(81, 164, 157));
                 canvas.drawText("Informe de " + vehiculo.getIdentificador(), 10, 70, myPaint);
-                canvas.drawText("Fecha: " + fecha, 400, 70, myPaint);
+                canvas.drawText("Fecha: " + cuando, 400, 70, myPaint);
+                //canvas.drawText("Fecha: " + fecha, 400, 70, myPaint);
 
                 canvas.drawText("Hora:", 10, 90, myPaint);
                 canvas.drawText("| Dirección:", 55, 90, myPaint);
@@ -248,7 +250,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     if (vueltas != 0) {
                         int loop = (vueltas * 30) + 30;
                         for (int i = (vueltas * 30); i <= loop; i++) {
-                            if (informacionArray[i].contains("Paro") || informacionArray[i].contains("Reinicio")) {
+                            if (informacionArray[i].contains("Reinicio")) {
                                 myPaint.setColor(Color.RED);
                             } else {
                                 myPaint.setColor(Color.BLACK);
@@ -260,7 +262,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     } else {
 
                         for (int i = 0; i <= 30; i++) {
-                            if (informacionArray[i].contains("Paro") || informacionArray[i].contains("Reinicio")) {
+                            if (informacionArray[i].contains("Reinicio")) {
                                 myPaint.setColor(Color.RED);
                             } else {
                                 myPaint.setColor(Color.BLACK);
@@ -275,7 +277,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     miDocumento.finishPage(myPage);
                 } else {
                     for (int i = (vueltas * 30); i < listaDatos.size(); i++) {
-                        if (informacionArray[i].contains("Paro") || informacionArray[i].contains("Reinicio")) {
+                        if (informacionArray[i].contains("Reinicio")) {
                             myPaint.setColor(Color.RED);
                         } else {
                             myPaint.setColor(Color.BLACK);
@@ -396,9 +398,17 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                         dato.setZona(dato.getLatitud() + "/" + dato.getLongitud());
                         //dato.setZona(Datos.obtenerDireccion(dato.getLatitud(),dato.getLongitud()));// Este método consume muchísimo tiempo
                     }
-                    listaDatos.add(dato);
-                    informacionArray[posic] = dato.toString();
-                    posic++;
+
+                    if(datos[7].equals("Arranque motor") || datos[7].equals("Paro motor") || datos[7].equals("Reinicio módulo")){
+                        listaDatos.add(dato);
+                        informacionArray[posic] = dato.toString();
+                        posic++;
+                    }
+
+                    listaPuntos.add(dato);
+                    //listaDatos.add(dato);
+                    //informacionArray[posic] = dato.toString();
+
                 }
             }
 
@@ -419,17 +429,21 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                             double veloc = Double.parseDouble(items.get(position).getVelocidad().substring(0,3));
                             TextView text  = (TextView)view.findViewById(R.id.textPersonalizado);
 
-                            if(items.get(position)!=null){
-                                if(items.get(position).getEstado().equals("1")){
-                                    text.setTextColor(Color.RED);
-                                }
-                                if(items.get(position).getEstado().equals("0") && veloc > 5){
-                                    text.setTextColor(Color.BLACK);
-                                }
-                                if(!items.get(position).getEstado().equals("1") && veloc < 5){
-                                    text.setTextColor(Color.MAGENTA);
-                                }
-                            }
+//                            if(items.get(position)!=null){
+
+//                                if(items.get(position).getComportamiento().contains("Reinicio")){
+//                                    text.setTextColor(Color.RED);
+//                                }
+//                                if(items.get(position).getEstado().equals("1")){
+//                                    text.setTextColor(Color.RED);
+//                                }
+//                                if(items.get(position).getEstado().equals("0") && veloc > 5){
+//                                    text.setTextColor(Color.BLACK);
+//                                }
+//                                if(!items.get(position).getEstado().equals("1") && veloc < 5){
+//                                    text.setTextColor(Color.MAGENTA);
+//                                }
+//                            }
                             return view;
                         }
                     };
@@ -464,10 +478,10 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     //Dibujo la línea de la ruta
                     if (!adaptador.isEmpty()) {
                         LatLng puntoA, puntoB;
-                        for (int x = 0; x < (listaDatos.size() - 1); x++) {
+                        for (int x = 0; x < (listaPuntos.size() - 1); x++) {
 
-                            puntoA = new LatLng(listaDatos.get(x).getLatitud(), listaDatos.get(x).getLongitud());
-                            puntoB = new LatLng(listaDatos.get(x + 1).getLatitud(), listaDatos.get(x + 1).getLongitud());
+                            puntoA = new LatLng(listaPuntos.get(x).getLatitud(), listaPuntos.get(x).getLongitud());
+                            puntoB = new LatLng(listaPuntos.get(x + 1).getLatitud(), listaPuntos.get(x + 1).getLongitud());
 
                             line = mMap.addPolyline(new PolylineOptions()
                                     .add(puntoA, puntoB)
@@ -476,8 +490,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                                     .geodesic(true));
                         }
                         /////////////////////////////////////////////////Coloco el icono en la última posición
-                        Double ultimaLatitud = (listaDatos.get(listaDatos.size()-1).getLatitud());
-                        Double ultimaLongitud = (listaDatos.get(listaDatos.size()-1).getLongitud());
+                        Double ultimaLatitud = (listaPuntos.get(listaPuntos.size()-1).getLatitud());
+                        Double ultimaLongitud = (listaPuntos.get(listaPuntos.size()-1).getLongitud());
                         LatLng ultimaPosicion = new LatLng (ultimaLatitud, ultimaLongitud);
                         puntoFinal = mMap.addMarker(new MarkerOptions().position(ultimaPosicion).title(vehiculo.getIdentificador()));
 

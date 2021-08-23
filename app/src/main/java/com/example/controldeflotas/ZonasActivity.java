@@ -5,26 +5,37 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -56,20 +67,27 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
 
-    String[] partes;
-
     ListView listViewZonas;
     List<Zona> listaZonas = new ArrayList<>();
     ArrayAdapter<Zona> adaptador;
 
-    Map<String, Zona> mapaZonas = new HashMap<>();
-
     Polygon poligono;
+
+    ImageButton btnVer;
+    EditText etBuscar;
+
+    Button btnInsert, btnUpdate, btnDelete;
+
+    boolean seleccionado;
+
+    Zona zonaElegida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zonas);
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -79,6 +97,13 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         listViewZonas = findViewById(R.id.listViewZonas);
+        btnVer = findViewById(R.id.btnVer);
+        etBuscar = findViewById(R.id.etBuscar);
+        btnInsert = findViewById(R.id.btnInsert);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        btnDelete = findViewById(R.id.btnDelete);
+
+        seleccionado = false;
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -86,7 +111,84 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                 cargaDatos();
             }
         });
+
+        btnVer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mMap.getMapType()==GoogleMap.MAP_TYPE_HYBRID){
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }else{
+                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }
+            }
+        });
+
+        etBuscar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adaptador.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        btnInsert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Zona zonaVacia = new Zona();
+                Toast.makeText(getApplicationContext(), "Ha pulsado añadir zona", Toast.LENGTH_SHORT).show();
+                new DialogoZonas(ZonasActivity.this, zonaVacia);
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Comprueba que haya una zona seleccionada
+                if(!seleccionado) {
+                    Toast.makeText(getApplicationContext(), "Por favor, seleccione una zona primero", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Ha pulsado editar la zona " + zonaElegida.getCodigo(), Toast.LENGTH_SHORT).show();
+                    new DialogoZonas(ZonasActivity.this, zonaElegida);
+                }
+
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Comprueba que haya una zona seleccionada
+                if(!seleccionado){
+                    Toast.makeText(getApplicationContext(), "Por favor, seleccione una zona primero", Toast.LENGTH_SHORT).show();
+                }else{
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ZonasActivity.this);
+                    alerta.setMessage("¿Está seguro de querer eliminar la zona " + zonaElegida.getCodigo() + "?")
+                            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getApplicationContext(), "Ha seleccionado eliminar la zona " + zonaElegida.getCodigo(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    AlertDialog titulo = alerta.create();
+                    titulo.setTitle("Eliminar Zona");
+                    titulo.show();
+                }
+            }
+        });
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -95,7 +197,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         LatLng spain = new LatLng(40,-3.5);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(spain)
-                .zoom(6)
+                .zoom(5)
                 .bearing(0)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -143,7 +245,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                     zona.setDireccion(String.valueOf(trama.get(4)));
 
                     listaZonas.add(zona);
-                    mapaZonas.put(zona.getCodigo(), zona);
+
                 }
             }
 
@@ -161,7 +263,9 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                                 poligono.remove();
                             }
 
-                            Zona zonaElegida = adaptador.getItem(position);
+                            seleccionado = true;
+
+                            zonaElegida = adaptador.getItem(position);
 
                             String[] coordArray = zonaElegida.getCoordenadas();
                             LatLng[] latLngs = new LatLng[coordArray.length];
@@ -177,18 +281,25 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                             PolygonOptions poligonOptions = new PolygonOptions();
                             for(LatLng coordenadas : latLngs){
                                 poligonOptions.add(coordenadas)
-                                        .fillColor(Color.RED);
+                                        .fillColor(Color.argb(128, 255, 0, 0));
+                                        //.fillColor(Color.RED);
                             }
 
+                            //Dibujo el polígono
                             poligono = mMap.addPolygon(poligonOptions);
 
-                            CameraPosition cameraPosition = new CameraPosition.Builder()
-                                    .target(latLngs[3])
-                                    .zoom(13)
-                                    .bearing(0)
-                                    .build();
-                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                            //Centro la cámara, para que la zona, salga centrada en el mapa
+                            LatLngBounds.Builder centraCamara = new LatLngBounds.Builder();
+                            for(LatLng centros:latLngs) {
+                                centraCamara.include(centros);
+                            }
+                            LatLngBounds limites = centraCamara.build();
+                            int ancho = getResources().getDisplayMetrics().widthPixels;
+                            int alto = getResources().getDisplayMetrics().heightPixels;
+                            int padding = (int)(ancho/4);
 
+                            CameraUpdate centrarZonas = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
+                            mMap.animateCamera(centrarZonas);
                         }
                    });
                 }
@@ -202,7 +313,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
 
 
-    private String trataTipo(String tipo){
+    public static String trataTipo(String tipo){
 
         String tipoCorregido = "";
 
