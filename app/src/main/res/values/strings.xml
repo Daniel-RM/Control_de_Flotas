@@ -63,6 +63,15 @@
     <string name="update">Editar</string>
     <string name="delete">Borrar</string>
     <string name="guardar">Guardar</string>
+    <string name="finalizar">Finalizar</string>
+
+    <string-array name="tiposZonas">
+        <item>Planta Hormigón</item>
+        <item>Obra Cliente</item>
+        <item>Oficina Central</item>
+        <item>Zona 4</item>
+        <item>Talleres</item>
+    </string-array>
 
 
 

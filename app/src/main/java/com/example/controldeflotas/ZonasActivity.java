@@ -1,12 +1,11 @@
 package com.example.controldeflotas;
 
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
+
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -15,18 +14,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,34 +30,31 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.lowagie.text.pdf.AcroFields;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URI;
+
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.AsynchronousByteChannel;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+
 
 public class ZonasActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -71,16 +64,21 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
     List<Zona> listaZonas = new ArrayList<>();
     ArrayAdapter<Zona> adaptador;
 
+    List<Marker> listaMarcas = new ArrayList<>();
+    LatLng[] latLngs;
+    Marker marked;
+
     Polygon poligono;
 
     ImageButton btnVer;
     EditText etBuscar;
 
-    Button btnInsert, btnUpdate, btnDelete;
+    Button btnInsert, btnUpdate, btnDelete, btnFinalizar;
 
     boolean seleccionado;
 
     Zona zonaElegida;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +100,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         btnInsert = findViewById(R.id.btnInsert);
         btnUpdate = findViewById(R.id.btnUpdate);
         btnDelete = findViewById(R.id.btnDelete);
+        btnFinalizar = findViewById(R.id.btnFinalizar);
 
         seleccionado = false;
 
@@ -111,6 +110,8 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                 cargaDatos();
             }
         });
+
+        btnFinalizar.setVisibility(View.INVISIBLE);
 
         btnVer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,8 +141,15 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 Zona zonaVacia = new Zona();
-                Toast.makeText(getApplicationContext(), "Ha pulsado añadir zona", Toast.LENGTH_SHORT).show();
-                new DialogoZonas(ZonasActivity.this, zonaVacia);
+                btnFinalizar.setVisibility(View.VISIBLE);
+
+                btnFinalizar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new DialogoZonas(ZonasActivity.this, zonaVacia);
+                    }
+                });
+
             }
         });
 
@@ -152,10 +160,58 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                 if(!seleccionado) {
                     Toast.makeText(getApplicationContext(), "Por favor, seleccione una zona primero", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getApplicationContext(), "Ha pulsado editar la zona " + zonaElegida.getCodigo(), Toast.LENGTH_SHORT).show();
-                    new DialogoZonas(ZonasActivity.this, zonaElegida);
-                }
+                    btnFinalizar.setVisibility(View.VISIBLE);
+                    //PolygonOptions poligonOptions = new PolygonOptions();
+                    for(LatLng coordenadas : latLngs){
+                        marked = mMap.addMarker(new MarkerOptions().position(coordenadas).draggable(true));
+                        listaMarcas.add(marked);
+                    }
 
+                    poligono.setPoints(markersToLatLng(listaMarcas));
+
+                    mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        @Override
+                        public void onMarkerDragStart(@NonNull Marker marker) {
+
+                        }
+
+                        @Override
+                        public void onMarkerDrag(@NonNull Marker marker) {
+
+                        }
+
+                        @Override
+                        public void onMarkerDragEnd(@NonNull Marker marker) {
+                            for(int g=0;g<listaMarcas.size();g++){
+                                if(listaMarcas.get(g).getId() == marker.getId()){
+                                    listaMarcas.get(g).setPosition(marker.getPosition());
+                                }
+                            }
+                            poligono.remove();
+                            PolygonOptions poligonOptions = new PolygonOptions();
+                            latLngs = new LatLng[listaMarcas.size()];
+                            for(int i=0;i<listaMarcas.size();i++){
+                                latLngs[i] = listaMarcas.get(i).getPosition();
+                            }
+                            for(LatLng coordenadas : latLngs){
+                                poligonOptions.add(coordenadas)
+                                        .fillColor(Color.argb(128, 255, 0, 0));
+                            }
+
+                            //Dibujo el polígono
+                            poligono = mMap.addPolygon(poligonOptions);
+                            zonaElegida.setDireccion(Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude));
+                            Toast.makeText(getApplicationContext(), "Ha dejado la marca en " + Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude) ,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    btnFinalizar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new DialogoZonas(ZonasActivity.this, zonaElegida);
+                        }
+                    });
+                }
             }
         });
 
@@ -261,28 +317,33 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                             if(poligono != null){
                                 poligono.remove();
+                                if(listaMarcas != null){
+                                    for(int x = 0;x<listaMarcas.size();x++){
+                                        listaMarcas.get(x).remove();
+                                    }
+                                    listaMarcas.clear();
+                                }
                             }
+
 
                             seleccionado = true;
 
                             zonaElegida = adaptador.getItem(position);
 
                             String[] coordArray = zonaElegida.getCoordenadas();
-                            LatLng[] latLngs = new LatLng[coordArray.length];
+                            latLngs = new LatLng[coordArray.length];
                             for(int i=0;i<coordArray.length;i++){
                                 String latLngString = coordArray[i];
                                 String[] latlong = latLngString.split(" ");
                                 double lati = Double.parseDouble(latlong[0]);
                                 double longi = Double.parseDouble(latlong[1]);
                                 latLngs[i] = new LatLng(lati,longi);
-
                             }
 
                             PolygonOptions poligonOptions = new PolygonOptions();
                             for(LatLng coordenadas : latLngs){
                                 poligonOptions.add(coordenadas)
                                         .fillColor(Color.argb(128, 255, 0, 0));
-                                        //.fillColor(Color.RED);
                             }
 
                             //Dibujo el polígono
@@ -311,6 +372,17 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
+    private List<LatLng> markersToLatLng(List<Marker> markers){
+        List<LatLng> latLngs = new ArrayList<>();
+        if(markers == null){
+            return latLngs;
+        }
+        for(Marker m : markers){
+            latLngs.add(m.getPosition());
+        }
+        return latLngs;
+    }
+
 
 
     public static String trataTipo(String tipo){
@@ -330,4 +402,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         }
         return tipoCorregido;
     }
+
+
 }
