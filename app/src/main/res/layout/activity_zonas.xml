@@ -63,43 +63,33 @@
             android:textColor="@color/white" />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/btnVer"
-        android:layout_width="40dp"
+    <EditText
+        android:id="@+id/etBuscar"
+        android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/teal_700"
-        android:src="@android:drawable/ic_menu_mapmode"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <EditText
-        android:id="@+id/etBuscar"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="10dp"
-        android:paddingLeft="10dp"
         android:background="@android:color/white"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:ems="10"
         android:hint="@string/buscar"
         android:inputType="textPersonName"
+        android:paddingLeft="10dp"
         android:textAlignment="textStart"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/layUno"
+        android:layout_width="360dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:translationX="-10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/include">
 
         <Button
             android:id="@+id/btnInsert"
@@ -108,7 +98,7 @@
             android:layout_weight="1"
             android:background="@color/teal_700"
             android:text="@string/insert"
-            android:translationX="-10dp" />
+            android:translationX="-5dp" />
 
         <Button
             android:id="@+id/btnUpdate"
@@ -125,17 +115,50 @@
             android:layout_weight="1"
             android:background="@color/teal_700"
             android:text="@string/delete"
-            android:translationX="10dp" />
+            android:translationX="5dp" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnFinalizar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/layDos"
+        android:layout_width="360dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="150dp"
-        android:text="@string/finalizar"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:translationX="-10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnFinalizar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/finalizar"
+            android:translationX="-5dp" />
+
+        <Button
+            android:id="@+id/btnCancelado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancelar"
+            android:translationX="5dp" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnVer"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
+        android:background="@color/teal_700"
+        android:src="@android:drawable/ic_menu_mapmode"
+        android:translationX="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/include" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

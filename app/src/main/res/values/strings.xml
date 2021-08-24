@@ -64,6 +64,7 @@
     <string name="delete">Borrar</string>
     <string name="guardar">Guardar</string>
     <string name="finalizar">Finalizar</string>
+    <string name="cancelar">Cancelar</string>
 
     <string-array name="tiposZonas">
         <item>Planta Hormigón</item>
