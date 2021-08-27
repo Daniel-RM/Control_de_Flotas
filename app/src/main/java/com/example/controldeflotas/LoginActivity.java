@@ -64,8 +64,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 
     static List<Flota> myObjects = null;
 
-    public static String urlFinalPruebas = "arco06server:8083/ControlFlotas"; // admin
-    public static String urlFinalLocal = "arco06server:8083/visorarco"; // arco0
+    public static String urlFinalLocal  = "arco06server:8083/ControlFlotas"; // admin
+    //public static String urlFinalLocal = "arco06server:8083/visorarco"; // arco0
 
 
     @Override

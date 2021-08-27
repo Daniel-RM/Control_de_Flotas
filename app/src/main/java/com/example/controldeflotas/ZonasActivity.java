@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.AlertDialog;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -47,6 +48,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 
 import java.net.URL;
@@ -62,27 +64,27 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
 
     ListView listViewZonas;
-    List<Zona> listaZonas = new ArrayList<>();
+    ArrayList<Zona> listaZonas = new ArrayList<>();
     ArrayAdapter<Zona> adaptador;
 
     List<Marker> listaMarcas = new ArrayList<>();
-    LatLng[] latLngs;
+    LatLng[] latLngs ;
+    List<LatLng> listaCoordenadas = new ArrayList<>();
     Marker marked;
 
     Polygon poligono;
 
-    ImageButton btnVer;
+    ImageButton btnVer, btnAtras;
     EditText etBuscar;
 
-    Button btnInsert, btnUpdate, btnDelete, btnFinalizar, btnCancelado;
+    Button btnInsert, btnUpdate, btnDelete;
 
     boolean seleccionado;
 
     Zona zonaElegida, zonaVacia;
 
-    View layUno;
-    View layDos;
-
+    private ArrayList<Zona> zonasList;
+    ListViewZonasAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,17 +100,15 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        zonasList = new ArrayList<>();
+
         listViewZonas = findViewById(R.id.listViewZonas);
         btnVer = findViewById(R.id.btnVer);
         etBuscar = findViewById(R.id.etBuscar);
         btnInsert = findViewById(R.id.btnInsert);
         btnUpdate = findViewById(R.id.btnUpdate);
         btnDelete = findViewById(R.id.btnDelete);
-        btnFinalizar = findViewById(R.id.btnFinalizar);
-        btnCancelado = findViewById(R.id.btnCancelado);
-
-        layUno = findViewById(R.id.layUno);
-        layDos = findViewById(R.id.layDos);
+        btnAtras = findViewById(R.id.btnAtras);
 
         seleccionado = false;
 
@@ -119,10 +119,18 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        layDos.setVisibility(View.INVISIBLE);
 
         btnUpdate.setEnabled(false);
         btnDelete.setEnabled(false);
+
+        //Método poara volver a la actividad anterior
+        btnAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intento = new Intent(getApplicationContext(), MenuActivity.class);
+                startActivity(intento);
+            }
+        });
 
         //Método para cambiar el estilo de vista (normal o relieve)
         btnVer.setOnClickListener(new View.OnClickListener() {
@@ -150,31 +158,14 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
             public void afterTextChanged(Editable s) {}
         });
 
-        //Método llamado, al pulsar finalizar, después de añadir o editar una zona
-        btnFinalizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DialogoZonas(ZonasActivity.this, zonaVacia);
-            }
-        });
-
-        //Método llamado al cancelar la operación de añadir o editar una zona
-        btnCancelado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layDos.setVisibility(View.INVISIBLE);
-                layUno.setVisibility(View.VISIBLE);
-                cargaInicial();
-            }
-        });
 
         //Botón añadir zonas
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layUno.setVisibility(View.INVISIBLE);
-                layDos.setVisibility(View.VISIBLE);
-                zonaVacia = new Zona();
+                //zonaVacia = new Zona();
+                Intent intenta = new Intent(getApplicationContext(), AgregaActivity.class);
+                startActivity(intenta);
             }
         });
 
@@ -183,51 +174,15 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layUno.setVisibility(View.INVISIBLE);
-                layDos.setVisibility(View.VISIBLE);
-
-                    for (LatLng coordenadas : latLngs) {
-                        marked = mMap.addMarker(new MarkerOptions().position(coordenadas).draggable(true));
-                        listaMarcas.add(marked);
-                    }
-
-                    poligono.setPoints(markersToLatLng(listaMarcas));
-
-                    mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                        @Override
-                        public void onMarkerDragStart(@NonNull Marker marker) {
-
-                        }
-
-                        @Override
-                        public void onMarkerDrag(@NonNull Marker marker) {
-
-                        }
-
-                        @Override
-                        public void onMarkerDragEnd(@NonNull Marker marker) {
-                            for (int g = 0; g < listaMarcas.size(); g++) {
-                                if (listaMarcas.get(g).getId() == marker.getId()) {
-                                    listaMarcas.get(g).setPosition(marker.getPosition());
-                                }
-                            }
-                            poligono.remove();
-                            PolygonOptions poligonOptions = new PolygonOptions();
-                            latLngs = new LatLng[listaMarcas.size()];
-                            for (int i = 0; i < listaMarcas.size(); i++) {
-                                latLngs[i] = listaMarcas.get(i).getPosition();
-                            }
-                            for (LatLng coordenadas : latLngs) {
-                                poligonOptions.add(coordenadas)
-                                        .fillColor(Color.argb(128, 255, 0, 0));
-                            }
-
-                            //Dibujo el polígono
-                            poligono = mMap.addPolygon(poligonOptions);
-                            zonaElegida.setDireccion(Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude));
-                            Toast.makeText(getApplicationContext(), "Ha dejado la marca en " + Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                for(int u = 0;u<latLngs.length;u++){
+                    listaCoordenadas.add(latLngs[u]);
+                }
+                Intent intent = new Intent(getApplicationContext(), EdicionActivity.class);
+                Bundle bundle = new Bundle();
+                intent.putExtra("Zona", zonaElegida);
+                intent.putExtra("latlong", (Serializable) listaCoordenadas);
+                intent.putExtra("lista", (Serializable) listaMarcas);
+                startActivity(intent);
             }
         });
 
@@ -263,6 +218,10 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //Evito que puedan pulsar la tecla "hacia atrás"
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -327,15 +286,14 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adaptador = new ArrayAdapter<Zona>(getApplicationContext(), R.layout.lista_item, listaZonas);
-                    listViewZonas.setAdapter(adaptador);
-
+                    zonasList = listaZonas;
+                    adapter = new ListViewZonasAdapter(zonasList, ZonasActivity.this);
+                    listViewZonas.setAdapter(adapter);
                     listViewZonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                             seleccionado = true;
-                            zonaElegida = adaptador.getItem(position);
+                            zonaElegida = (Zona) adapter.getItem(position);
 
                             btnUpdate.setEnabled(true);
                             btnDelete.setEnabled(true);
@@ -355,7 +313,36 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                             CameraUpdate centrarZonas = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
                             mMap.animateCamera(centrarZonas);
                         }
-                   });
+                    });
+//                    adaptador = new ArrayAdapter<Zona>(getApplicationContext(), R.layout.lista_item, listaZonas);
+//                    listViewZonas.setAdapter(adaptador);
+//
+//                    listViewZonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                            seleccionado = true;
+//                            zonaElegida = adaptador.getItem(position);
+//
+//                            btnUpdate.setEnabled(true);
+//                            btnDelete.setEnabled(true);
+//
+//                            cargaInicial();
+//
+//                            //Centro la cámara, para que la zona, salga centrada en el mapa
+//                            LatLngBounds.Builder centraCamara = new LatLngBounds.Builder();
+//                            for(LatLng centros:latLngs) {
+//                                centraCamara.include(centros);
+//                            }
+//                            LatLngBounds limites = centraCamara.build();
+//                            int ancho = getResources().getDisplayMetrics().widthPixels;
+//                            int alto = getResources().getDisplayMetrics().heightPixels;
+//                            int padding = (int)(ancho/4);
+//
+//                            CameraUpdate centrarZonas = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
+//                            mMap.animateCamera(centrarZonas);
+//                        }
+//                   });
                 }
             });
 
@@ -365,7 +352,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     //Método para pasar la lista de marcas, a coordenadas
-    private List<LatLng> markersToLatLng(List<Marker> markers){
+    public static List<LatLng> markersToLatLng(List<Marker> markers){
         List<LatLng> latLngs = new ArrayList<>();
         if(markers == null){
             return latLngs;

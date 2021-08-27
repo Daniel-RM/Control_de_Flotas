@@ -144,6 +144,11 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //Evito que puedan pulsar la tecla "hacia atrás"
+    }
+
     private void trataDatos(){
 
         for (Flota flota : flotas){
@@ -193,7 +198,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             vehiculo.setRpm(String.valueOf(jVehiculo.getInt("rpm_cuba")));
                             vehiculo.setTemperatura(String.valueOf(jVehiculo.getDouble("temperatura")));
                             vehiculo.setPresion(String.valueOf(jVehiculo.getDouble("presion")));
-                            vehiculo.setFecha(jVehiculo.getString("hora"));
+                            vehiculo.setFecha(jVehiculo.getString("ultima_trama"));
                             if(jVehiculo.has("descripcion")) {
                                 vehiculo.setDescripcion(jVehiculo.getString("descripcion"));
                             }

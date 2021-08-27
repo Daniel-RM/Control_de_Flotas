@@ -32,7 +32,6 @@ public class DialogoZonas {
         btnGuardar = dialogo.findViewById(R.id.btnGuardar);
 
         etCodigo = dialogo.findViewById(R.id.etCodigo);
-        //etTipo = dialogo.findViewById(R.id.etTipo);
         etDescripcion = dialogo.findViewById(R.id.etDescripcion);
         etDireccion = dialogo.findViewById(R.id.etDireccion);
         spTipo = dialogo.findViewById(R.id.spTipo);
@@ -42,7 +41,6 @@ public class DialogoZonas {
 
         if(zona.getCodigo()!=null){
             etCodigo.setText(zona.getCodigo());
-            //etTipo.setText(zona.getTipo());
             etDescripcion.setText(zona.getDescripcion());
             etDireccion.setText(zona.getDireccion());
             switch (zona.getTipo()){
@@ -61,9 +59,11 @@ public class DialogoZonas {
                 case TALLERES:
                     spTipo.setSelection(4);
                     break;
-
-
             }
+        }
+
+        if(zona.getDireccion()!=null){
+            etDireccion.setText(zona.getDireccion());
         }
 
 
@@ -79,7 +79,8 @@ public class DialogoZonas {
             public void onClick(View v) {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(context);
                 //alerta.setMessage("Guardar los datos modificados de " +etCodigo.getText().toString() + "?")
-                alerta.setMessage("Guardar los datos modificados de " +zona.getCodigo() + "?")
+                alerta.setMessage("Guardar los datos modificados de " + etCodigo.getText().toString() + "?")
+                //alerta.setMessage("Guardar los datos modificados de " +zona.getCodigo() + "?")
                         .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

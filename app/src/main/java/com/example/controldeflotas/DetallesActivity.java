@@ -52,6 +52,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.BuildConfig;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Paragraph;
@@ -78,10 +79,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -97,7 +100,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     Button btnEnviar, btnDescargar;
 
     ListView listView;
-    List<Datos> listaDatos = new ArrayList<>();
+    ArrayList<Datos> listaDatos = new ArrayList<>();
     ArrayAdapter<Datos> adaptador;
     List<Datos> listaPuntos = new ArrayList<>();
 
@@ -111,12 +114,19 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     String[] partes;
     int lineas;
 
+    private ArrayList<Datos> datosList;
+    ListViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalles);
 
         listView = findViewById(R.id.listView);
+
+        datosList = new ArrayList<Datos>();
+
+
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -375,7 +385,10 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 partes = devuelve.split(separa);
                 informacionArray = new String[partes.length];
 
+                int contador = 0;
+                //Set<String> estados = new HashSet<>();
                 for (String trama : partes) {
+                    contador++;
                     Datos dato = new Datos();
                     String separa2 = Pattern.quote("|");
                     String[] datos = trama.split(separa2);
@@ -391,6 +404,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     dato.setHora(hora);
                     dato.setEstado(datos[4]);
                     dato.setVelocidad(datos[12]);
+                    //estados.add(datos[7]);
                     dato.setComportamiento(datos[7]);
                     if(!datos[16].equals("null")){
                         dato.setZona(datos[16]);
@@ -399,7 +413,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                         //dato.setZona(Datos.obtenerDireccion(dato.getLatitud(),dato.getLongitud()));// Este método consume muchísimo tiempo
                     }
 
-                    if(datos[7].equals("Arranque motor") || datos[7].equals("Paro motor") || datos[7].equals("Reinicio módulo")){
+                    if(datos[7].equals("Arranque motor") || datos[7].equals("Paro motor") || datos[7].equals("Reinicio módulo") || datos[7].equals("Inicio Descarga") || datos[7].equals("Final Descarga") || contador == partes.length){
                         listaDatos.add(dato);
                         informacionArray[posic] = dato.toString();
                         posic++;
@@ -417,43 +431,14 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
                 @Override
                 public void run() {
-                    adaptador = new ArrayAdapter<Datos>(getApplicationContext(), R.layout.lista_item, listaDatos){
-                        private List<Datos> items;
-                        @NonNull
-                        @Override
-                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-                            View view = super.getView(position, convertView, parent);
-
-                            items = listaDatos;
-                            double veloc = Double.parseDouble(items.get(position).getVelocidad().substring(0,3));
-                            TextView text  = (TextView)view.findViewById(R.id.textPersonalizado);
-
-//                            if(items.get(position)!=null){
-
-//                                if(items.get(position).getComportamiento().contains("Reinicio")){
-//                                    text.setTextColor(Color.RED);
-//                                }
-//                                if(items.get(position).getEstado().equals("1")){
-//                                    text.setTextColor(Color.RED);
-//                                }
-//                                if(items.get(position).getEstado().equals("0") && veloc > 5){
-//                                    text.setTextColor(Color.BLACK);
-//                                }
-//                                if(!items.get(position).getEstado().equals("1") && veloc < 5){
-//                                    text.setTextColor(Color.MAGENTA);
-//                                }
-//                            }
-                            return view;
-                        }
-                    };
-
-                    listView.setAdapter(adaptador);
-
+                    /////////////////////////////////////
+                    datosList = listaDatos;
+                    adapter = new ListViewAdapter(datosList, DetallesActivity.this);
+                    listView.setAdapter(adapter);
+                    //adapter.notifyDataSetChanged();
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                             if(marcaRuta != null){
                                 marcaRuta.remove();
                             }
@@ -474,9 +459,72 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }
                     });
+                    /////////////////////////////////////
+
+
+//                    adaptador = new ArrayAdapter<Datos>(getApplicationContext(), R.layout.lista_item, listaDatos){
+//                        private List<Datos> items;
+//                        @NonNull
+//                        @Override
+//                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//
+//                            View view = super.getView(position, convertView, parent);
+//
+//                            items = listaDatos;
+//                            double veloc = Double.parseDouble(items.get(position).getVelocidad().substring(0,3));
+//                            TextView text  = (TextView)view.findViewById(R.id.textPersonalizado);
+//
+////                            if(items.get(position)!=null){
+//
+////                                if(items.get(position).getComportamiento().contains("Reinicio")){
+////                                    text.setTextColor(Color.RED);
+////                                }
+////                                if(items.get(position).getEstado().equals("1")){
+////                                    text.setTextColor(Color.RED);
+////                                }
+////                                if(items.get(position).getEstado().equals("0") && veloc > 5){
+////                                    text.setTextColor(Color.BLACK);
+////                                }
+////                                if(!items.get(position).getEstado().equals("1") && veloc < 5){
+////                                    text.setTextColor(Color.MAGENTA);
+////                                }
+////                            }
+//                            return view;
+//                        }
+//                    };
+
+
+
+//                    listView.setAdapter(adaptador);
+
+//                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                            if(marcaRuta != null){
+//                                marcaRuta.remove();
+//                            }
+//                            if(puntoFinal != null){
+//                                puntoFinal.remove();
+//                            }
+//
+//                            //Dibujo el icono en el punto de la ruta que se ha pulsado
+//                            punto.remove();
+//                            LatLng puntoRuta = new LatLng((listaDatos.get(position).getLatitud()),(listaDatos.get(position).getLongitud()));
+//                            marcaRuta = mMap.addMarker(new MarkerOptions().position(puntoRuta).title(vehiculo.getIdentificador()));
+//                            dibujaIcono(vehiculo, marcaRuta);
+//                            CameraPosition cameraPosition = new CameraPosition.Builder()
+//                                    .target(puntoRuta)
+//                                    .zoom(12)
+//                                    .bearing(0)
+//                                    .build();
+//                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//                        }
+//                    });
 
                     //Dibujo la línea de la ruta
-                    if (!adaptador.isEmpty()) {
+                    if (!adapter.isEmpty()) {
+                    //if (!adaptador.isEmpty()) {
                         LatLng puntoA, puntoB;
                         for (int x = 0; x < (listaPuntos.size() - 1); x++) {
 

@@ -2,7 +2,9 @@ package com.example.controldeflotas;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Zona {
+import java.io.Serializable;
+
+public class Zona implements Serializable {
 
     private String codigo;
     private String descripcion;
@@ -70,80 +72,6 @@ public class Zona {
     public void setCoordenadas(String coordenadas) {
         this.coordenadas = coordenadas;
     }
-
-//        public LatLng getCoordenada1() {
-//
-//        if(coordenada1.length() == 1){
-//            coordenada1 = coordenada5;
-//        }
-//
-//        String[] latlong = coordenada1.split(" ");
-//        double lati = Double.parseDouble(latlong[0]);
-//        double longi = Double.parseDouble(latlong[1]);
-//        LatLng location = new LatLng(lati, longi);
-//
-//        return location;
-//    }
-//
-//    public void setCoordenada1(String coordenada1) {
-//        this.coordenada1 = coordenada1;
-//    }
-//
-//    public LatLng getCoordenada2() {
-//
-//        String[] latlong = coordenada2.split(" ");
-//        double lati = Double.parseDouble(latlong[0]);
-//        double longi = Double.parseDouble(latlong[1]);
-//        LatLng location = new LatLng(lati, longi);
-//
-//        return location;
-//    }
-//
-//    public void setCoordenada2(String coordenada2) {
-//        this.coordenada2 = coordenada2;
-//    }
-//
-//    public LatLng getCoordenada3() {
-//
-//        String[] latlong = coordenada3.split(" ");
-//        double lati = Double.parseDouble(latlong[0]);
-//        double longi = Double.parseDouble(latlong[1]);
-//        LatLng location = new LatLng(lati, longi);
-//
-//        return location;
-//    }
-//
-//    public void setCoordenada3(String coordenada3) {
-//        this.coordenada3 = coordenada3;
-//    }
-//
-//    public LatLng getCoordenada4() {
-//
-//        String[] latlong = coordenada4.split(" ");
-//        double lati = Double.parseDouble(latlong[0]);
-//        double longi = Double.parseDouble(latlong[1]);
-//        LatLng location = new LatLng(lati, longi);
-//
-//        return location;
-//    }
-//
-//    public void setCoordenada4(String coordenada4) {
-//        this.coordenada4 = coordenada4;
-//    }
-//
-//    public LatLng getCoordenada5() {
-//
-//        String[] latlong = coordenada5.split(" ");
-//        double lati = Double.parseDouble(latlong[0]);
-//        double longi = Double.parseDouble(latlong[1]);
-//        LatLng location = new LatLng(lati, longi);
-//
-//        return location;
-//    }
-//
-//    public void setCoordenada5(String coordenada5) {
-//        this.coordenada5 = coordenada5;
-//    }
 
     public String getDireccion() {
         return direccion;

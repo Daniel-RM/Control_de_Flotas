@@ -33,7 +33,7 @@
     <!--Pantalla de Diálogo Datos-->
     <string name="informe">Informe</string>
     <string name="cancel">Cancelar</string>
-    <string name="direccion">Dirección: </string>
+    <string name="direccion">Dirección:</string>
     <string name="fecha">Fecha y hora: </string>
     <string name="velocidad">Velocidad: </string>
     <string name="distancia">Distancia: </string>
@@ -44,8 +44,9 @@
     <string name="solo_fecha">Fecha: </string>
 
     <!--Pantalla de Detalles-->
-    <string name="hora">Hora:</string>
-    <string name="comportamiento">Comportamiento:</string>
+    <string name="hora">Hora</string>
+    <string name="direc">Dirección</string>
+    <string name="comportamiento">Acción</string>
     <string name="title_activity_a_b">ActivityAB</string>
     <string name="descargar">Descargar</string>
     <string name="enviar">Enviar</string>
@@ -53,11 +54,11 @@
     <!--Pantalla de Diálogo Informe-->
     <string name="title">ELIJA UN VEHÍCULO</string>
     <string name="title_activity_zonas">Map</string>
-    
+
     <!--Pantalla de Zonas Activity-->
-    <string name="codigo">Código:</string>
-    <string name="descripcion">Descripción:</string>
-    <string name="tipo">Tipo Zona:</string>
+    <string name="codigo">Código</string>
+    <string name="descripcion">Descripción</string>
+    <string name="tipo">Tipo Zona</string>
     <string name="buscar">Búsqueda</string>
     <string name="insert">Añadir</string>
     <string name="update">Editar</string>
@@ -65,6 +66,7 @@
     <string name="guardar">Guardar</string>
     <string name="finalizar">Finalizar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="agrega">Añadir</string>
 
     <string-array name="tiposZonas">
         <item>Planta Hormigón</item>
@@ -73,7 +75,7 @@
         <item>Zona 4</item>
         <item>Talleres</item>
     </string-array>
-
+    <string name="title_activity_edicion">Map</string>
 
 
 </resources>

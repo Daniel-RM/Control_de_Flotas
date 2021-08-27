@@ -142,7 +142,6 @@ public class Datos {
 
             return hora + "   /   " + obtenerDireccion(latitud, longitud) + "   /   " + comportamiento + "\n";
 
-
     }
 
     public static String obtenerDireccion(double latitud, double longitud){
@@ -155,7 +154,8 @@ public class Datos {
                 List<Address> list = geocoder.getFromLocation(latitud, longitud, 1);
                 if(!list.isEmpty()){
                     Address DirCalle = list.get(0);
-                    direccion = DirCalle.getAddressLine(0);
+                    direccion = DirCalle.getLocality() + ", " + DirCalle.getThoroughfare() + ", " + DirCalle.getSubThoroughfare();
+                    //direccion = DirCalle.getAddressLine(0);
                 }
             }catch(IOException e){
                 e.printStackTrace();

@@ -44,22 +44,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/codigo"
+            android:textAlignment="center"
             android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tvDescripcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:text="@string/descripcion"
+            android:textAlignment="center"
             android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tvTipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.8"
             android:text="@string/tipo"
+            android:textAlignment="center"
             android:textColor="@color/white" />
     </LinearLayout>
 
@@ -119,35 +122,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layDos"
-        android:layout_width="360dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:translationX="-10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btnFinalizar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/finalizar"
-            android:translationX="-5dp" />
-
-        <Button
-            android:id="@+id/btnCancelado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancelar"
-            android:translationX="5dp" />
-    </LinearLayout>
-
     <ImageButton
         android:id="@+id/btnVer"
         android:layout_width="40dp"
@@ -160,5 +134,16 @@
         android:translationX="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnAtras"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/teal_700"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnVer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

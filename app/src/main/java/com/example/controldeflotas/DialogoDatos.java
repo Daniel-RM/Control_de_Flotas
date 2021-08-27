@@ -70,9 +70,11 @@ public class DialogoDatos  {
                 break;
         }
 
-        tvMatricula.setText(vehiculo.getIdentificador());
+        //tvMatricula.setText(vehiculo.getIdentificador());
+        tvMatricula.setText(vehiculo.getMatricula().trim());
         tvDireccion.setText(Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
-        tvFechaHora.setText(fecha);
+        tvFechaHora.setText(vehiculo.getFecha());
+        //tvFechaHora.setText(fecha);
         tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
         tvDistancia.setText(vehiculo.getDistancia() + " kms");
         tvAltitud.setText(vehiculo.getAltitud() + " mts");
