@@ -19,6 +19,12 @@ public class Vehiculo implements Serializable {
     private String rpm;
     private String temperatura;
     private String presion;
+    private String odometro;
+    private String combustibleTotalUsado;
+    private String horasMotor;
+    private String combustibleNivel;
+    private String tmpMotor;
+    private String distanciaServicio;
 
 
     public String getIdentificador() {
@@ -133,6 +139,48 @@ public class Vehiculo implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public String getOdometro() { return odometro; }
+
+    public void setOdometro(String odometro) {this.odometro = odometro;}
+
+    public String getCombustibleTotalUsado() {return combustibleTotalUsado;}
+
+    public void setCombustibleTotalUsado(String combustibleTotalUsado) {
+        this.combustibleTotalUsado = combustibleTotalUsado;
+    }
+
+    public String getHorasMotor() {
+        return horasMotor;
+    }
+
+    public void setHorasMotor(String horasMotor) {
+        this.horasMotor = horasMotor;
+    }
+
+    public String getCombustibleNivel() {
+        return combustibleNivel;
+    }
+
+    public void setCombustibleNivel(String combustibleNivel) {
+        this.combustibleNivel = combustibleNivel;
+    }
+
+    public String getTmpMotor() {
+        return tmpMotor;
+    }
+
+    public void setTmpMotor(String tmpMotor) {
+        this.tmpMotor = tmpMotor;
+    }
+
+    public String getDistanciaServicio() {
+        return distanciaServicio;
+    }
+
+    public void setDistanciaServicio(String distanciaServicio) {
+        this.distanciaServicio = distanciaServicio;
+    }
+
     @Override
     public String toString() {
 //        return "Vehiculo{" +
@@ -151,6 +199,7 @@ public class Vehiculo implements Serializable {
 //                ", temperatura='" + temperatura + '\'' +
 //                ", presion='" + presion + '\'' +
 //                '}';
-        return identificador;
+        //return identificador;
+        return matricula;
     }
 }

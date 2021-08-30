@@ -36,11 +36,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,6 +51,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -96,8 +100,12 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     static Vehiculo vehiculo;
 
     EditText editText;
+    TextView tvCoche;
 
     Button btnEnviar, btnDescargar;
+    ImageButton btnVuelve;
+
+    ProgressBar pbDetalles;
 
     ListView listView;
     ArrayList<Datos> listaDatos = new ArrayList<>();
@@ -126,7 +134,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
         datosList = new ArrayList<Datos>();
 
-
+        tvCoche = findViewById(R.id.tvCoche);
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -138,9 +146,10 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         MenuActivity.context = this;
 
         editText = findViewById(R.id.editTextDate);
-
         btnDescargar = findViewById(R.id.btnDescargar);
         btnEnviar = findViewById(R.id.btnEnviar);
+        btnVuelve = findViewById(R.id.btnVuelve);
+        pbDetalles = findViewById(R.id.pbDetalles);
 
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -160,12 +169,22 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         Bundle extra = intent.getExtras();
 
         vehiculo = (Vehiculo) extra.getSerializable("Vehiculo");
-        int x = 0;
+
+        tvCoche.setText(vehiculo.getMatricula().trim());
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 recogeDatos(fechaRuta);
+            }
+        });
+
+        //Botón para volver a la pantalla inicial
+        btnVuelve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intento = new Intent(getApplicationContext(), MenuActivity.class);
+                startActivity(intento);
             }
         });
 
@@ -191,6 +210,11 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Evito que puedan pulsar la tecla "hacia atrás"
     }
 
     //Creo el PDF con su formato
@@ -432,9 +456,11 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 @Override
                 public void run() {
                     /////////////////////////////////////
+
                     datosList = listaDatos;
                     adapter = new ListViewAdapter(datosList, DetallesActivity.this);
                     listView.setAdapter(adapter);
+                    pbDetalles.setVisibility(View.INVISIBLE);
                     //adapter.notifyDataSetChanged();
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -527,7 +553,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     //if (!adaptador.isEmpty()) {
                         LatLng puntoA, puntoB;
                         for (int x = 0; x < (listaPuntos.size() - 1); x++) {
-
+                            LatLng posicion = new LatLng(listaPuntos.get(x).getLatitud(), listaPuntos.get(x).getLongitud());
                             puntoA = new LatLng(listaPuntos.get(x).getLatitud(), listaPuntos.get(x).getLongitud());
                             puntoB = new LatLng(listaPuntos.get(x + 1).getLatitud(), listaPuntos.get(x + 1).getLongitud());
 
@@ -545,12 +571,33 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
                         dibujaIcono(vehiculo, puntoFinal);
 
-                        CameraPosition cameraPosition = new CameraPosition.Builder()
-                                .target(ultimaPosicion)
-                                .zoom(12)
-                                .bearing(0)
-                                .build();
-                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        //Centro la cámara en la ruta
+                        LatLngBounds.Builder centraCamara = new LatLngBounds.Builder();
+                        LatLng[] puntos = new LatLng[listaPuntos.size()];
+                        for(int i=0;i<listaPuntos.size();i++){
+                            puntos[i] = new LatLng(listaPuntos.get(i).getLatitud(), listaPuntos.get(i).getLongitud());
+                        }
+                        for(LatLng centros : puntos){
+                            centraCamara.include(centros);
+                        }
+
+                        LatLngBounds limites = centraCamara.build();
+
+                        int ancho = getResources().getDisplayMetrics().widthPixels;
+                        int alto = getResources().getDisplayMetrics().heightPixels;
+                        int padding = 150;
+
+
+                        //CameraUpdate centrarmarcadores = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
+                        CameraUpdate centrarmarcadores = CameraUpdateFactory.newLatLngBounds(limites, padding);
+                        mMap.animateCamera(centrarmarcadores);
+
+//                        CameraPosition cameraPosition = new CameraPosition.Builder()
+//                                .target(ultimaPosicion)
+//                                .zoom(12)
+//                                .bearing(0)
+//                                .build();
+//                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         /////////////////////////////////////////////////
                     }
                 }

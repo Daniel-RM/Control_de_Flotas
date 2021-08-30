@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="460dp"
+        android:layout_height="match_parent"
         android:background="@color/bluefondo"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,6 +68,7 @@
                 android:layout_width="57dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/velocidad"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -78,6 +79,7 @@
                 android:layout_width="57dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/distancia"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -88,6 +90,7 @@
                 android:layout_width="57dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/altitud"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -98,14 +101,15 @@
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:background="@color/black"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
             <TextView
                 android:id="@+id/tvVelocidad"
-                android:layout_width="57dp"
-                android:layout_height="47dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -113,8 +117,8 @@
 
             <TextView
                 android:id="@+id/tvDistancia"
-                android:layout_width="57dp"
-                android:layout_height="47dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -122,8 +126,8 @@
 
             <TextView
                 android:id="@+id/tvAltitud"
-                android:layout_width="57dp"
-                android:layout_height="47dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -143,6 +147,7 @@
                 android:layout_width="57dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/rpm"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -153,6 +158,7 @@
                 android:layout_width="57dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/temperatura"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -163,7 +169,97 @@
                 android:layout_width="57dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/presion"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:background="@color/black"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:id="@+id/tvRpm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvTemperatura"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvPresion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:text="@string/datosCan"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/black"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:id="@+id/tvOdometroTitle"
+                android:layout_width="57dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/odometro"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvCombustibleTotalTitle"
+                android:layout_width="57dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/combustibleUsado"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvHorasMotorTitle"
+                android:layout_width="57dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/horasMotor"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
@@ -175,30 +271,108 @@
             android:background="@color/black"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+
+            <TextView
+                android:id="@+id/tvOdometro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvCombustibleUsado"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvHorasMotor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/black"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
             <TextView
-                android:id="@+id/tvRpm"
-                android:layout_width="57dp"
-                android:layout_height="47dp"
+                android:id="@+id/tvCombustibleNivelTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/nivelCombustible"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvTempMotorTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/tempMotor"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvDistanciaServicioTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/servicio"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:background="@color/black"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+
+            <TextView
+                android:id="@+id/tvCombustibleNivel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/tvTemperatura"
-                android:layout_width="57dp"
-                android:layout_height="47dp"
+                android:id="@+id/tvTemperaturaMotor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/tvPresion"
-                android:layout_width="57dp"
-                android:layout_height="47dp"
+                android:id="@+id/tvDistanciaServicio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -232,6 +406,8 @@
                 android:translationX="10dp" />
 
         </LinearLayout>
+
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

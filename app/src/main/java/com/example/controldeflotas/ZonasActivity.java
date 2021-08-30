@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -81,6 +82,8 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     boolean seleccionado;
 
+    ProgressBar pbZonas;
+
     Zona zonaElegida, zonaVacia;
 
     private ArrayList<Zona> zonasList;
@@ -109,6 +112,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         btnUpdate = findViewById(R.id.btnUpdate);
         btnDelete = findViewById(R.id.btnDelete);
         btnAtras = findViewById(R.id.btnAtras);
+        pbZonas = findViewById(R.id.pbZonas);
 
         seleccionado = false;
 
@@ -289,6 +293,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                     zonasList = listaZonas;
                     adapter = new ListViewZonasAdapter(zonasList, ZonasActivity.this);
                     listViewZonas.setAdapter(adapter);
+                    pbZonas.setVisibility(View.INVISIBLE);
                     listViewZonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

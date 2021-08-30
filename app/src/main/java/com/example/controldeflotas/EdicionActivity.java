@@ -49,7 +49,8 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
 
     ImageButton btnVisualiza;
 
-    TextView tvDatos;
+    //TextView tvDatos;
+    TextView tvCode, tvDesc, tvZone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,10 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         btnCancela = findViewById(R.id.btnCancela);
         btnVisualiza = findViewById(R.id.btnVisualiza);
 
-        tvDatos = findViewById(R.id.tvDatos);
+        //tvDatos = findViewById(R.id.tvDatos);
+        tvCode = findViewById(R.id.tvCode);
+        tvDesc = findViewById(R.id.tvDesc);
+        tvZone = findViewById(R.id.tvZone);
 
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
@@ -76,7 +80,11 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
             listaMarcas = (List<Marker>) bundle.get("lista");
         }
 
-        tvDatos.setText(zonaElegida.toString());
+        tvCode.setText(zonaElegida.getCodigo());
+        tvDesc.setText(zonaElegida.getDescripcion());
+        tvZone.setText(zonaElegida.getTipo());
+
+        //tvDatos.setText(zonaElegida.toString());
 
         latLngs = new LatLng[listaCoordenadas.size()];
 

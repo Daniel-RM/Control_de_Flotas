@@ -66,8 +66,6 @@
         android:layout_marginBottom="50dp"
         android:background="@color/design_default_color_primary_dark"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -78,14 +76,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/codigo"
+            android:textAlignment="center"
             android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tvDescripcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:text="@string/descripcion"
+            android:textAlignment="center"
             android:textColor="@color/white" />
 
         <TextView
@@ -93,20 +93,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingRight="10dp"
             android:text="@string/tipo"
+            android:textAlignment="center"
             android:textColor="@color/white" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvDatos"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        tools:layout_editor_absoluteX="160dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <TextView
+            android:id="@+id/tvCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:gravity="center"
+            android:padding="5dp"/>
+
+        <TextView
+            android:id="@+id/tvDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:singleLine="false"
+            android:gravity="center"
+            android:padding="5dp"/>
+
+        <TextView
+            android:id="@+id/tvZone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:gravity="center"
+            android:padding="5dp"/>
+    </LinearLayout>
+
+    <!-- <TextView
+         android:id="@+id/tvDatos"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:background="@color/white"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp"
+         android:textColor="@color/black"
+         android:textSize="18sp"
+         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+         tools:layout_editor_absoluteX="160dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

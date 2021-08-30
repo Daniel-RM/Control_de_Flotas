@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -55,7 +56,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
     EditText etNombre, etPass;
 
     CheckBox tvCheck;
-    int x = 0;
 
     String nombre, password;
     boolean correcto = false;
@@ -64,8 +64,10 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 
     static List<Flota> myObjects = null;
 
-    public static String urlFinalLocal  = "arco06server:8083/ControlFlotas"; // admin
-    //public static String urlFinalLocal = "arco06server:8083/visorarco"; // arco0
+    ProgressBar pbConecta;
+
+    //public static String urlFinalLocal  = "arco06server:8083/ControlFlotas"; // admin
+    public static String urlFinalLocal = "arco06server:8083/visorarco"; // arco0
 
 
     @Override
@@ -82,16 +84,21 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         etPass = findViewById(R.id.etPass);
 
         tvCheck = findViewById(R.id.tvCheck);
+        pbConecta = findViewById(R.id.pbConecta);
+
+        pbConecta.setVisibility(View.INVISIBLE);
 
         credenciales();
 
-
+        //Al pulsar el botón de Login, comprueba si hay datos guardados, los compruebo y si es correcto, realizo la conexión y recojo los datos de la Flota
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 etNombre.setTextColor(Color.BLACK);
                 correcto = false;
+
+                pbConecta.setVisibility(View.VISIBLE);//ProgressBar al intentar realizar la conexión
 
 //                etNombre.setText("admin");
 //                etPass.setText("arco0*asi4");
@@ -126,6 +133,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
                                         }else {
                                             Toast.makeText(getApplicationContext(), "Los datos introducidos son erróneos", Toast.LENGTH_SHORT).show();
                                         }
+                                        pbConecta.setVisibility(View.INVISIBLE);
                                     }
                                 });
                         }
@@ -135,7 +143,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         });
     }
 
-
+    //Comprueba que los datos introducidos, sean correctos
     public boolean proceso(String nom, String pass) {
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
@@ -183,6 +191,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         return correcto;
     }
 
+    //Recojo los datos de la flota
     public List recogerDatos(){
 
         String url = "http://" + urlFinalLocal + "/vehiculosFlota.action";
@@ -199,7 +208,10 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 
         try {
             response = client.newCall(request).execute();
+            pbConecta.setVisibility(View.INVISIBLE);//Escondo la ProgressBar al realizar la conexión
         } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "No ha sido posible realizar la conexión. Por favor, inténtelo de nuevo", Toast.LENGTH_SHORT).show();
+            pbConecta.setVisibility(View.INVISIBLE);//Escondo la ProgressBar si algo ha ido mal, para que el usuario, vuelva a intentar realizar la conexión
             e.printStackTrace();
         }
 
@@ -218,6 +230,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         return myObjects;
     }
 
+    //Si el usuario guardó las credenciales, se mostrarán aquí
     public void cargarPreferencias(){
 
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
@@ -231,6 +244,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         etPass.setText(pass);
     }
 
+    //Compruebo si el usuario ha guardado las credenciales o no
     public void credenciales(){
         SharedPreferences prefBorrado = getSharedPreferences("borrar", Context.MODE_PRIVATE);
         boolean borramos = prefBorrado.getBoolean("borrar", false);

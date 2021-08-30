@@ -42,6 +42,13 @@
     <string name="temperatura">Temperatura: </string>
     <string name="presion">Presión: </string>
     <string name="solo_fecha">Fecha: </string>
+    <string name="datosCan">DATOS CAN</string>
+    <string name="odometro">Odómetro:</string>
+    <string name="combustibleUsado">Combustible usado:</string>
+    <string name="horasMotor">Horas de motor:</string>
+    <string name="nivelCombustible">Nivel de combustible:</string>
+    <string name="tempMotor">Temperatura motor:</string>
+    <string name="servicio">Distancia servicio:</string>
 
     <!--Pantalla de Detalles-->
     <string name="hora">Hora</string>

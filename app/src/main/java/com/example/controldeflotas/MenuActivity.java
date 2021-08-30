@@ -82,6 +82,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private boolean primeraEjecucion = false;
 
+    private boolean datosCAN = false;
+
 
     final String ESTADO_MARCHA = "En Marcha";
     final String ESTADO_PARADO = "Parado";
@@ -205,6 +207,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if(jVehiculo.has("tipoVehiculo")){
                                 vehiculo.setTipoVehiculo(jVehiculo.getString("tipoVehiculo"));
                             }
+
+                            vehiculo.setOdometro(jVehiculo.getString("odometro"));
+                            vehiculo.setCombustibleTotalUsado(jVehiculo.getString("combustibleTot"));
+                            vehiculo.setHorasMotor(jVehiculo.getString("hrs_motor"));
+                            vehiculo.setCombustibleNivel(jVehiculo.getString("combustible"));
+                            vehiculo.setTmpMotor(jVehiculo.getString("tmp_motor"));
+                            vehiculo.setDistanciaServicio(jVehiculo.getString("distancia_servicio"));
 
                             mapaVehiculos.put(identificador,vehiculo);
 
@@ -351,8 +360,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
         alerta.setMessage("Desea salir de la aplicación o salir y cerrar la sesión?")
-                .setCancelable(false)
-                .setPositiveButton("Salir y cerrar sesión", new DialogInterface.OnClickListener() {
+                .setCancelable(true)
+                .setNegativeButton("Salir y cerrar sesión", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         borraDatos = true;
@@ -361,18 +370,20 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         finishAffinity();
                     }
                 })
-                .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Volver a la pantalla de Login", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
                     }
                 })
-                .setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Salir", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finishAffinity();
                     }
                 });
+
 
         AlertDialog titulo = alerta.create();
         titulo.setTitle("Salir y cerrar sesión");
@@ -380,12 +391,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    //Pulsan icono zonas - Vamos a ZonasActivity
     public void zonas(View view){
         Intent intent = new Intent(getApplicationContext(), ZonasActivity.class);
         startActivity(intent);
-        Toast.makeText(getApplicationContext(),"Ver zonas", Toast.LENGTH_SHORT).show();
     }
 
+    //Cambio el modo del mapa al pusar el botón
     public void visualizar(View view){
         if(mMap.getMapType()==GoogleMap.MAP_TYPE_HYBRID){
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -394,8 +406,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
             modo_normal = false;
         }
-        Toast.makeText(getApplicationContext(),"Visualizar", Toast.LENGTH_SHORT).show();
     }
+
+    //Icono informes - abro cuadro de diálogo con las distintas opciones: informes, albaranes o cancelar.
     public void informes(View view){
         AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
         alerta.setMessage("Qué tipo de informe quiere?")
@@ -423,7 +436,26 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         titulo.show();
     }
 
+    //El usuario podrá seleccionar los datos a mostrar en el cuadro de diálogo
     public void ajustes(View view){
+        AlertDialog.Builder alert = new AlertDialog.Builder(MenuActivity.this);
+        alert.setMessage("Elija los datos a mostrar:")
+                .setCancelable(false)
+                .setPositiveButton("Datos del vehículo", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        datosCAN = false;
+                    }
+                })
+                .setNegativeButton("Datos del vehículo y su estado", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        datosCAN = true;
+                    }
+                });
+        AlertDialog titulo = alert.create();
+        titulo.setTitle("Datos a mostrar");
+        titulo.show();
         Toast.makeText(getApplicationContext(),"Ver ajustes", Toast.LENGTH_SHORT).show();
     }
 
@@ -444,7 +476,11 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(@NonNull Marker marker) {
                 marker.showInfoWindow();
                 Vehiculo vehi = mapaVehiculos.get(marker.getTitle());
-                new DialogoDatos(MenuActivity.this, vehi);
+                if(datosCAN){
+                    new DialogoDatosCan(MenuActivity.this, vehi);
+                }else {
+                    new DialogoDatos(MenuActivity.this, vehi);
+                }
                 return true;
             }
         });
