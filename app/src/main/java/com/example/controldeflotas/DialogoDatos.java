@@ -72,15 +72,43 @@ public class DialogoDatos  {
 
         //tvMatricula.setText(vehiculo.getIdentificador());
         tvMatricula.setText(vehiculo.getMatricula().trim());
-        tvDireccion.setText(Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
+        if(!Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()).contains("null")){
+            tvDireccion.setText(Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
+        }else{
+            tvDireccion.setText("No existen datos");
+        }
         tvFechaHora.setText(vehiculo.getFecha());
         //tvFechaHora.setText(fecha);
-        tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
-        tvDistancia.setText(vehiculo.getDistancia() + " kms");
-        tvAltitud.setText(vehiculo.getAltitud() + " mts");
-        tvRpm.setText(vehiculo.getRpm() + " rpm");
-        tvTemperatura.setText(vehiculo.getTemperatura() + " °C");
-        tvPresion.setText(vehiculo.getPresion().substring(0,3) + " mbar");
+        if(!vehiculo.getVelocidad().equals("null")){
+            tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
+        }else{
+            tvVelocidad.setText( "No hay datos");
+        }
+        if(!vehiculo.getDistancia().equals("null")){
+            tvDistancia.setText(vehiculo.getDistancia() + " kms");
+        }else{
+            tvDistancia.setText("No hay datos");
+        }
+        if(!vehiculo.getAltitud().equals("null")){
+            tvAltitud.setText(vehiculo.getAltitud() + " mts");
+        }else{
+            tvAltitud.setText("No hay datos");
+        }
+        if(!vehiculo.getRpm().equals("null")){
+            tvRpm.setText(vehiculo.getRpm() + " rpm");
+        }else{
+            tvRpm.setText("No hay datos");
+        }
+        if(!vehiculo.getTemperatura().equals("null")){
+            tvTemperatura.setText(vehiculo.getTemperatura() + " °C");
+        }else{
+            tvTemperatura.setText("No hay datos");
+        }
+        if(!vehiculo.getPresion().equals("null")){
+            tvPresion.setText(vehiculo.getPresion().substring(0,3) + " mbar");
+        }else{
+            tvPresion.setText("No hay datos");
+        }
 
 
         btnCancel.setOnClickListener(new View.OnClickListener() {

@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.nio.channels.AsynchronousByteChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EdicionActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -40,6 +41,8 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
     Zona zonaElegida;
 
     List<LatLng> listaCoordenadas;
+
+    List<LatLng> listaCoordenadasEditadas = new ArrayList<>();
 
     List<Marker> listaMarcas = new ArrayList<>();
 
@@ -101,7 +104,7 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         btnFinaliza.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogoZonas(EdicionActivity.this, zonaElegida);
+                new DialogoZonas(EdicionActivity.this, zonaElegida, listaCoordenadasEditadas, true);
             }
         });
 
@@ -223,14 +226,19 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
                 for (int i = 0; i < listaMarcas.size(); i++) {
                     latLngs[i] = listaMarcas.get(i).getPosition();
                 }
+
                 for (LatLng coordenadas : latLngs) {
                     poligonOptions.add(coordenadas)
                             .fillColor(Color.argb(128, 255, 0, 0));
                 }
 
+
+
                 //Dibujo el polígono
                 poligono = mMap.addPolygon(poligonOptions);
+                listaCoordenadasEditadas = poligono.getPoints();
                 zonaElegida.setDireccion(Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude));
+                zonaElegida.setCoordenadas(listaCoordenadasEditadas.toString());
                 Toast.makeText(getApplicationContext(), "Ha dejado la marca en " + Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude), Toast.LENGTH_SHORT).show();
 
             }

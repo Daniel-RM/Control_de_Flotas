@@ -62,6 +62,12 @@ import java.util.List;
 
 public class ZonasActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    URL url = null;
+    URLConnection connection = null;
+    BufferedReader reader = null;
+    StringBuffer response = new StringBuffer();
+    String linea, devuelve = "";
+
     private GoogleMap mMap;
 
     ListView listViewZonas;
@@ -71,7 +77,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
     List<Marker> listaMarcas = new ArrayList<>();
     LatLng[] latLngs ;
     List<LatLng> listaCoordenadas = new ArrayList<>();
-    Marker marked;
 
     Polygon poligono;
 
@@ -84,7 +89,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     ProgressBar pbZonas;
 
-    Zona zonaElegida, zonaVacia;
+    Zona zonaElegida;
 
     private ArrayList<Zona> zonasList;
     ListViewZonasAdapter adapter;
@@ -155,7 +160,8 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adaptador.getFilter().filter(s);
+                //adaptador.getFilter().filter(s);
+                adapter.getFilter().filter(s);
             }
 
             @Override
@@ -167,7 +173,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //zonaVacia = new Zona();
                 Intent intenta = new Intent(getApplicationContext(), AgregaActivity.class);
                 startActivity(intenta);
             }
@@ -209,6 +214,23 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                             .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    AsyncTask.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try{
+                                                url = new URL("http://" + LoginActivity.urlFinalLocal + "/eliminarZonas.action?nombre=" + zonaElegida.getCodigo());
+                                                connection = url.openConnection();
+                                                connection.getContent();
+                                                //Reinicio la Activity, para que se carguen las zonas, sin la eliminada
+                                                finish();
+                                                startActivity(getIntent());
+                                            }catch(MalformedURLException ex){
+                                                ex.printStackTrace();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
                                     Toast.makeText(getApplicationContext(), "Ha seleccionado eliminar la zona " + zonaElegida.getCodigo(), Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -242,11 +264,11 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     //Cargo los datos al principio y relleno la listview
     public void cargaDatos(){
-        URL url = null;
-        URLConnection connection = null;
-        BufferedReader reader = null;
-        StringBuffer response = new StringBuffer();
-        String linea, devuelve = "";
+//        URL url = null;
+//        URLConnection connection = null;
+//        BufferedReader reader = null;
+//        StringBuffer response = new StringBuffer();
+//        String linea, devuelve = "";
 
         try {
             url = new URL("http://" + LoginActivity.urlFinalLocal + "/ajaxZonas.action");
@@ -375,7 +397,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
         String tipoCorregido = "";
 
         if(tipo.equals("1")){
-            tipoCorregido = "Planta hormigón";
+            tipoCorregido = "Planta Hormigón";
         }else if(tipo.equals("2")){
             tipoCorregido = "Obra Cliente";
         }else if(tipo.equals("3")){

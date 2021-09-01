@@ -51,12 +51,15 @@ public class DialogoInforme {
         listViewCoches.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MenuActivity.context, DetallesActivity.class);
-                intent.putExtra("Vehiculo", lista.get(position));
-                MenuActivity.context.startActivity(intent);
+//                Intent intent = new Intent(MenuActivity.context, DetallesActivity.class);
+//                intent.putExtra("Vehiculo", lista.get(position));
+//                MenuActivity.context.startActivity(intent);
+                if(MenuActivity.datosCAN){
+                    new DialogoDatosCan(MenuActivity.context, lista.get(position));
+                }else{
+                    new DialogoDatos(MenuActivity.context, lista.get(position));
+                }
                 dialogo.dismiss();
-
-                Toast.makeText(MenuActivity.context, "Ha pulsado " + lista.get(position), Toast.LENGTH_SHORT).show();
             }
         });
     }

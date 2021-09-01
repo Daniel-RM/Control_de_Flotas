@@ -394,7 +394,7 @@
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:text="@string/cancel"
-                android:translationX="-10dp" />
+                android:translationX="-5dp" />
 
             <Button
                 android:id="@+id/btnDetalle"
@@ -402,8 +402,7 @@
                 android:layout_width="20dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="@string/informe"
-                android:translationX="10dp" />
+                android:text="@string/informe" />
 
         </LinearLayout>
 

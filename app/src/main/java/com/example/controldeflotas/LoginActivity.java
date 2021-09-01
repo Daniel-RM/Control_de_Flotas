@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 
     //public static String urlFinalLocal  = "arco06server:8083/ControlFlotas"; // admin
     public static String urlFinalLocal = "arco06server:8083/visorarco"; // arco0
+    //public static String urlFinalLocal = "flotas.arcoelectronica.net:8083/visorarco"; // arco, sin wifi
 
 
     @Override

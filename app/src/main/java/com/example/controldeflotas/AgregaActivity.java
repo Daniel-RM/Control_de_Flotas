@@ -37,6 +37,7 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
     Polygon polygon;
     Marker marked;
     LatLng[] latLngs;
+    PolygonOptions poligonOptions = new PolygonOptions();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,8 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        Toast.makeText(getApplicationContext(), "Pulse el botón \"Añadir\" para comenzar", Toast.LENGTH_SHORT).show();
+
         zonaNueva = new Zona();
 
         btnAgrega = findViewById(R.id.btnAgrega);
@@ -58,6 +61,9 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
         btnCancelo = findViewById(R.id.btnCancelo);
         imgVer = findViewById(R.id.imgVer);
         imgVolver = findViewById(R.id.imgVolver);
+
+        btnFine.setEnabled(false);
+        btnCancelo.setEnabled(false);
 
         //Método para cambiar el tipo de vista del mapa
         imgVer.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +86,7 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
+        //Método para cancelar la zona creada, dejar el mapa en blanco y volver a empezar
         btnCancelo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,9 +96,19 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
                     for(int x=0;x<listaMarcas.size();x++){
                         listaMarcas.get(x).remove();
                     }
+                    latLngs = new LatLng[0];
+
+
+                    poligonOptions = new PolygonOptions();
+                    marked.remove();
                     listaMarcas.clear();
                     puntosTocados.clear();
+                    puntosTocados = new ArrayList<>();
                     polygon = null;
+                    zonaNueva = new Zona();
+                    mMap.clear();
+                    btnFine.setEnabled(false);
+                    btnCancelo.setEnabled(false);
                 }
             }
         });
@@ -100,7 +117,7 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Marque 4 puntos en orden(sin diagonales) en el mapa para dibujar la zona, por favor", Toast.LENGTH_SHORT).show();
-                PolygonOptions poligonOptions = new PolygonOptions();
+                //PolygonOptions poligonOptions = new PolygonOptions();
                 mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng latLng) {
@@ -117,6 +134,8 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
                                             .fillColor(Color.argb(128, 255, 0, 0));
                                 }
                                 polygon = mMap.addPolygon(poligonOptions);
+                                btnCancelo.setEnabled(true);
+                                btnFine.setEnabled(true);
                                 zonaNueva.setDireccion(Datos.obtenerDireccion(marked.getPosition().latitude, marked.getPosition().longitude));
                                 mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                                     @Override
@@ -131,13 +150,14 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
 
                                     @Override
                                     public void onMarkerDragEnd(@NonNull Marker marker) {
+
                                         for (int g = 0; g < listaMarcas.size(); g++) {
                                             if (listaMarcas.get(g).getId() == marker.getId()) {
                                                 listaMarcas.get(g).setPosition(marker.getPosition());
                                             }
                                         }
                                         polygon.remove();
-                                        PolygonOptions poligonOptions = new PolygonOptions();
+                                        poligonOptions = new PolygonOptions();
                                         latLngs = new LatLng[listaMarcas.size()];
                                         for (int i = 0; i < listaMarcas.size(); i++) {
                                             latLngs[i] = listaMarcas.get(i).getPosition();
@@ -162,7 +182,15 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
         btnFine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogoZonas(AgregaActivity.this, zonaNueva);
+                String coordeno = "";
+                for(int x = 0;x<puntosTocados.size();x++) {
+                    String punto = puntosTocados.get(x).toString();
+                    punto = punto.trim();
+                    punto = punto.replace("lat/lng:", "");
+                    coordeno = coordeno + punto + "|";
+                }
+                zonaNueva.setCoordenadas(coordeno);
+                new DialogoZonas(AgregaActivity.this, zonaNueva, puntosTocados, false);
             }
         });
 
@@ -185,9 +213,5 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
                 .bearing(0)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-
     }
-
-
 }

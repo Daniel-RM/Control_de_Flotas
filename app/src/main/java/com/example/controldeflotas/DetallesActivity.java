@@ -374,7 +374,18 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         int posic = 0;
 
         if(!listaDatos.isEmpty()) {
-            listaDatos.clear();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    listaDatos.clear();
+                    listaPuntos.clear();
+                    line.remove();
+                    informacionArray = new String[0];
+                    partes = new String[0];
+                    datosList.clear();
+                }
+            });
+
         }
 
         URL url = null;
@@ -404,6 +415,16 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 devuelve = response.toString();
                 Log.e("Respuesta: ", devuelve);
+
+                if(devuelve.equals("")){
+                    pbDetalles.setVisibility(View.INVISIBLE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "No hay datos de este vehículo en esta fecha", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
 
                 String separa = Pattern.quote("||");
                 partes = devuelve.split(separa);
@@ -647,6 +668,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
         String date, dia;
+
+        pbDetalles.setVisibility(View.VISIBLE);
 
         mMap.clear();
         onMapReady(mMap);

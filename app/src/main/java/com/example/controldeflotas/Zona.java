@@ -69,6 +69,10 @@ public class Zona implements Serializable {
         return coordArray;
     }
 
+    public String getCoordenadasString(){
+        return coordenadas;
+    }
+
     public void setCoordenadas(String coordenadas) {
         this.coordenadas = coordenadas;
     }

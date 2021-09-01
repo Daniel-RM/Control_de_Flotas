@@ -82,7 +82,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private boolean primeraEjecucion = false;
 
-    private boolean datosCAN = false;
+    public static boolean datosCAN = false;
 
 
     final String ESTADO_MARCHA = "En Marcha";
@@ -456,7 +456,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         AlertDialog titulo = alert.create();
         titulo.setTitle("Datos a mostrar");
         titulo.show();
-        Toast.makeText(getApplicationContext(),"Ver ajustes", Toast.LENGTH_SHORT).show();
     }
 
     public void toggleMenu(View view){

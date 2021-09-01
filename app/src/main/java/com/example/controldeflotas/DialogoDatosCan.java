@@ -60,21 +60,75 @@ public class DialogoDatosCan {
 
         //tvMatricula.setText(vehiculo.getIdentificador());
         tvMatricula.setText(vehiculo.getMatricula().trim());
-        tvDireccion.setText(Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
+        if(!Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()).contains("null")){
+            tvDireccion.setText(Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
+        }else{
+            tvDireccion.setText("No existen datos");
+        }
+
         tvFechaHora.setText(vehiculo.getFecha());
         //tvFechaHora.setText(fecha);
-        tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
-        tvDistancia.setText(vehiculo.getDistancia() + " kms");
-        tvAltitud.setText(vehiculo.getAltitud() + " mts");
-        tvRpm.setText(vehiculo.getRpm() + " rpm");
-        tvTemperatura.setText(vehiculo.getTemperatura() + " °C");
-        tvPresion.setText(vehiculo.getPresion().substring(0,3) + " mbar");
-        tvOdometro.setText(vehiculo.getOdometro() + " kms");
-        tvCombustibleUsado.setText(vehiculo.getCombustibleTotalUsado() + " lts");
-        tvHorasMotor.setText(vehiculo.getHorasMotor() + " hrs");
-        tvCombustibleNivel.setText(vehiculo.getCombustibleNivel() + " %");
-        tvTemperaturaMotor.setText(vehiculo.getTmpMotor() + " °");
-        tvDistanciaServicio.setText(vehiculo.getDistanciaServicio() + " kms");
+        if(!vehiculo.getVelocidad().equals("null")){
+            tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
+        }else{
+            tvVelocidad.setText("No hay datos");
+        }
+        if(!vehiculo.getDistancia().equals("null")){
+            tvDistancia.setText(vehiculo.getDistancia() + " kms");
+        }else{
+            tvDistancia.setText("No hay datos");
+        }
+        if(!vehiculo.getAltitud().equals("null")){
+            tvAltitud.setText(vehiculo.getAltitud() + " mts");
+        }else{
+            tvAltitud.setText("No hay datos");
+        }
+        if(!vehiculo.getRpm().equals("null")){
+            tvRpm.setText(vehiculo.getRpm() + " rpm");
+        }else{
+            tvRpm.setText("No hay datos");
+        }
+        if(!vehiculo.getTemperatura().equals("null")){
+            tvTemperatura.setText(vehiculo.getTemperatura() + " °C");
+        }else{
+            tvTemperatura.setText("No hay datos");
+        }
+        if(!vehiculo.getPresion().equals("null")){
+            tvPresion.setText(vehiculo.getPresion().substring(0,3) + " mbar");
+        }else{
+            tvPresion.setText("No hay datos");
+        }
+        if(!vehiculo.getOdometro().equals("null")){
+            tvOdometro.setText(vehiculo.getOdometro() + " kms");
+        }else{
+            tvOdometro.setText("No hay datos");
+        }
+        if(!vehiculo.getCombustibleTotalUsado().equals("null")){
+            tvCombustibleUsado.setText(vehiculo.getCombustibleTotalUsado() + " lts");
+        }else{
+            tvCombustibleUsado.setText("No hay datos");
+        }
+        if(!vehiculo.getHorasMotor().equals("null")){
+            tvHorasMotor.setText(vehiculo.getHorasMotor() + " hrs");
+        }else{
+            tvHorasMotor.setText("No hay datos");
+        }
+        if(!vehiculo.getCombustibleNivel().equals("null")){
+            tvCombustibleNivel.setText(vehiculo.getCombustibleNivel() + " %");
+        }else{
+            tvCombustibleNivel.setText("No hay datos");
+        }
+        if(!vehiculo.getTmpMotor().equals("null")){
+            tvTemperaturaMotor.setText(vehiculo.getTmpMotor() + " °");
+        }else{
+            tvTemperaturaMotor.setText("No hay datos");
+        }
+        if(!vehiculo.getDistanciaServicio().equals("null")){
+            tvDistanciaServicio.setText(vehiculo.getDistanciaServicio() + " kms");
+        }else{
+            tvDistanciaServicio.setText("No hay datos");
+        }
+
 
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
