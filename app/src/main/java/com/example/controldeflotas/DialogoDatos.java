@@ -5,29 +5,20 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
+
+//Clase que maneja el cuadro de diálogo de los datos del coche sin los datos del CAN
 public class DialogoDatos  {
-
-    //Context context;
 
     @SuppressLint("ResourceAsColor")
     public DialogoDatos(Context context, Vehiculo vehiculo){
-
-        //this.context = context;
 
         final Dialog dialogo = new Dialog(context);
         dialogo.setCancelable(false);
@@ -43,7 +34,6 @@ public class DialogoDatos  {
         tvMatricula = dialogo.findViewById(R.id.tvMatricula);
         tvDireccion = dialogo.findViewById(R.id.tvDireccion);
         tvFechaHora = dialogo.findViewById(R.id.tvFechaHora);
-
 
         tvVelocidad = dialogo.findViewById(R.id.tvVelocidad);
         tvDistancia = dialogo.findViewById(R.id.tvDistancia);
@@ -70,47 +60,52 @@ public class DialogoDatos  {
                 break;
         }
 
-        //tvMatricula.setText(vehiculo.getIdentificador());
         tvMatricula.setText(vehiculo.getMatricula().trim());
         if(!Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()).contains("null")){
             tvDireccion.setText(Datos.obtenerDireccion(vehiculo.getLatitud(), vehiculo.getLongitud()));
         }else{
             tvDireccion.setText("No existen datos");
         }
+
         tvFechaHora.setText(vehiculo.getFecha());
-        //tvFechaHora.setText(fecha);
+
         if(!vehiculo.getVelocidad().equals("null")){
             tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
         }else{
             tvVelocidad.setText( "No hay datos");
         }
+
         if(!vehiculo.getDistancia().equals("null")){
             tvDistancia.setText(vehiculo.getDistancia() + " kms");
         }else{
             tvDistancia.setText("No hay datos");
         }
+
         if(!vehiculo.getAltitud().equals("null")){
             tvAltitud.setText(vehiculo.getAltitud() + " mts");
         }else{
             tvAltitud.setText("No hay datos");
         }
+
         if(!vehiculo.getRpm().equals("null")){
             tvRpm.setText(vehiculo.getRpm() + " rpm");
         }else{
             tvRpm.setText("No hay datos");
         }
+
         if(!vehiculo.getTemperatura().equals("null")){
             tvTemperatura.setText(vehiculo.getTemperatura() + " °C");
         }else{
             tvTemperatura.setText("No hay datos");
         }
+
         if(!vehiculo.getPresion().equals("null")){
             tvPresion.setText(vehiculo.getPresion().substring(0,3) + " mbar");
         }else{
             tvPresion.setText("No hay datos");
         }
 
-
+        //Botón que esconde el cuadro de diálogo
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +113,7 @@ public class DialogoDatos  {
             }
         });
 
-
+        //Botón que llama a Detalles Activity, para mostrar el informe del vehículo seleccionado
         btnDetalle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

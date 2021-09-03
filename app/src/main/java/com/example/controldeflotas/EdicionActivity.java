@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,9 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-import java.nio.channels.AsynchronousByteChannel;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class EdicionActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -41,18 +38,14 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
     Zona zonaElegida;
 
     List<LatLng> listaCoordenadas;
-
     List<LatLng> listaCoordenadasEditadas = new ArrayList<>();
-
     List<Marker> listaMarcas = new ArrayList<>();
-
     LatLng[] latLngs;
 
     Button btnFinaliza, btnCancela;
 
     ImageButton btnVisualiza;
 
-    //TextView tvDatos;
     TextView tvCode, tvDesc, tvZone;
 
     @Override
@@ -70,8 +63,6 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         btnFinaliza = findViewById(R.id.btnFinaliza);
         btnCancela = findViewById(R.id.btnCancela);
         btnVisualiza = findViewById(R.id.btnVisualiza);
-
-        //tvDatos = findViewById(R.id.tvDatos);
         tvCode = findViewById(R.id.tvCode);
         tvDesc = findViewById(R.id.tvDesc);
         tvZone = findViewById(R.id.tvZone);
@@ -86,8 +77,6 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         tvCode.setText(zonaElegida.getCodigo());
         tvDesc.setText(zonaElegida.getDescripcion());
         tvZone.setText(zonaElegida.getTipo());
-
-        //tvDatos.setText(zonaElegida.toString());
 
         latLngs = new LatLng[listaCoordenadas.size()];
 
@@ -108,7 +97,7 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
-        //Método para cambiar los tipos de mapas
+        //Método para cambiar el modo de visualización del mapa
         btnVisualiza.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,11 +110,11 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         });
     }
 
+    //Evito que puedan pulsar la tecla "hacia atrás"
     @Override
-    public void onBackPressed() {
-        //Evito que puedan pulsar la tecla "hacia atrás"
-    }
+    public void onBackPressed() {}
 
+    //Método que carga el mapa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -141,7 +130,7 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         cargarZona();
     }
 
-
+    //Método que muestra la zona elegida para editarla
     private void cargarZona(){
 
             if(poligono != null){
@@ -194,7 +183,7 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
             latLngs[i] = listaCoordenadas.get(i);
             int x = 0;
         }
-
+        //Añado marcas, para poder realizar la edición de la zona
         for (LatLng coordenadas : latLngs) {
             Marker marked = mMap.addMarker(new MarkerOptions().position(coordenadas).draggable(true));
             listaMarcas.add(marked);
@@ -202,6 +191,7 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
 
         poligono.setPoints(ZonasActivity.markersToLatLng(listaMarcas));
 
+        //Método que maneja el arrastre de las marcas, para acotar la zona
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(@NonNull Marker marker) {
@@ -232,15 +222,12 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
                             .fillColor(Color.argb(128, 255, 0, 0));
                 }
 
-
-
                 //Dibujo el polígono
                 poligono = mMap.addPolygon(poligonOptions);
                 listaCoordenadasEditadas = poligono.getPoints();
                 zonaElegida.setDireccion(Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude));
                 zonaElegida.setCoordenadas(listaCoordenadasEditadas.toString());
                 Toast.makeText(getApplicationContext(), "Ha dejado la marca en " + Datos.obtenerDireccion(marker.getPosition().latitude, marker.getPosition().longitude), Toast.LENGTH_SHORT).show();
-
             }
         });
     }

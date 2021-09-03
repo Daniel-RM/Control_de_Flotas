@@ -62,6 +62,7 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
         imgVer = findViewById(R.id.imgVer);
         imgVolver = findViewById(R.id.imgVolver);
 
+        //Botones de finalizar y cancelar, estarán deshabilitados, hasta que no se añada una zona
         btnFine.setEnabled(false);
         btnCancelo.setEnabled(false);
 
@@ -98,7 +99,6 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
                     latLngs = new LatLng[0];
 
-
                     poligonOptions = new PolygonOptions();
                     marked.remove();
                     listaMarcas.clear();
@@ -113,11 +113,12 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
+        //Método para añadir una zona nueva
         btnAgrega.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Marque 4 puntos en orden(sin diagonales) en el mapa para dibujar la zona, por favor", Toast.LENGTH_SHORT).show();
-                //PolygonOptions poligonOptions = new PolygonOptions();
+                //Cuando pulsan en el mapa, añado las marcas. Espero a que haya 4 marcas para crearla
                 mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng latLng) {
@@ -139,14 +140,10 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
                                 zonaNueva.setDireccion(Datos.obtenerDireccion(marked.getPosition().latitude, marked.getPosition().longitude));
                                 mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                                     @Override
-                                    public void onMarkerDragStart(@NonNull Marker marker) {
-
-                                    }
+                                    public void onMarkerDragStart(@NonNull Marker marker) {}
 
                                     @Override
-                                    public void onMarkerDrag(@NonNull Marker marker) {
-
-                                    }
+                                    public void onMarkerDrag(@NonNull Marker marker) {}
 
                                     @Override
                                     public void onMarkerDragEnd(@NonNull Marker marker) {
@@ -179,6 +176,7 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
+        //Método que llamará al cuadro de diálogo, para recoger los datos que faltan, para crear la zona nueva
         btnFine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,12 +195,11 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
+    //Evito que puedan pulsar la tecla "hacia atrás"
     @Override
-    public void onBackPressed() {
-        //Evito que puedan pulsar la tecla "hacia atrás"
-    }
+    public void onBackPressed() { }
 
-
+    //Se carga el mapa
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;

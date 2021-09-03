@@ -183,23 +183,6 @@ public class Vehiculo implements Serializable {
 
     @Override
     public String toString() {
-//        return "Vehiculo{" +
-//                "tipoVehiculo='" + tipoVehiculo + '\'' +
-//                ", descripcion='" + descripcion + '\'' +
-//                ", matricula='" + matricula + '\'' +
-//                ", identificador='" + identificador + '\'' +
-//                ", latitud=" + latitud +
-//                ", longitud=" + longitud +
-//                ", estado='" + estado + '\'' +
-//                ", fecha='" + fecha + '\'' +
-//                ", velocidad='" + velocidad + '\'' +
-//                ", distancia='" + distancia + '\'' +
-//                ", altitud='" + altitud + '\'' +
-//                ", rpm='" + rpm + '\'' +
-//                ", temperatura='" + temperatura + '\'' +
-//                ", presion='" + presion + '\'' +
-//                '}';
-        //return identificador;
         return matricula;
     }
 }

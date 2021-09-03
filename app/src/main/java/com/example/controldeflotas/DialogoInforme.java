@@ -2,21 +2,19 @@ package com.example.controldeflotas;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
+//Clase que maneja el cuadro de diálogo que muestra los vehículos de la flota, para seleccionar uno de ellos. Saldrá un cuadro de diálogo con los datos del vehículo seleccionado
 public class DialogoInforme {
 
     ArrayAdapter<Vehiculo> adaptador;
@@ -51,9 +49,7 @@ public class DialogoInforme {
         listViewCoches.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(MenuActivity.context, DetallesActivity.class);
-//                intent.putExtra("Vehiculo", lista.get(position));
-//                MenuActivity.context.startActivity(intent);
+
                 if(MenuActivity.datosCAN){
                     new DialogoDatosCan(MenuActivity.context, lista.get(position));
                 }else{

@@ -5,33 +5,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ActionProvider;
-import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.Toast;
-
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -49,9 +33,6 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,10 +41,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-
+//Clase que muestra un mapa con la flota entera y maneja el menú de opciones principal
 public class MenuActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -84,7 +64,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public static boolean datosCAN = false;
 
-
     final String ESTADO_MARCHA = "En Marcha";
     final String ESTADO_PARADO = "Parado";
     final String ESTADO_RALENTI = "Ralentí";
@@ -92,23 +71,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     final String TODOS = "Todos";
     final String TITULO = "ESTADOS:";
 
-    final String SALIR = "Salir";
-    final String SINCERRAR = "Salir sin cerrar sesión";
-    final String CERRAR = "Salir y cerrar sesión";
-
-    final String ZONAS = "Zonas";
-
-    final String VISUALIZAR = "Visualizar";
-    final String MODOVISUAL = "Cambiar vista";
-
-    final String INFORMES = "Informes";
-    final String ALBARANES = "Albaranes";
-
-    final String CONFIGURACIÓN = "Configuración";
-
     SharedPreferences.Editor editorBorrado;
     static boolean borraDatos;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,10 +110,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    //Evito que puedan pulsar la tecla "hacia atrás"
     @Override
-    public void onBackPressed() {
-        //Evito que puedan pulsar la tecla "hacia atrás"
-    }
+    public void onBackPressed() {}
 
     private void trataDatos(){
 
@@ -163,7 +126,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void iniciarlizarWS() {
         try {
-            //WebSocketClient webSocket = new WebSocketClient(new URI("ws://arco06server:8083/ControlFlotasUnifor/ws/comunicaciones/1")) {
+
             WebSocketClient webSocket = new WebSocketClient(new URI("ws://" + LoginActivity.urlFinalLocal + "/ws/comunicaciones/1")) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
@@ -207,13 +170,24 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if(jVehiculo.has("tipoVehiculo")){
                                 vehiculo.setTipoVehiculo(jVehiculo.getString("tipoVehiculo"));
                             }
-
-                            vehiculo.setOdometro(jVehiculo.getString("odometro"));
-                            vehiculo.setCombustibleTotalUsado(jVehiculo.getString("combustibleTot"));
-                            vehiculo.setHorasMotor(jVehiculo.getString("hrs_motor"));
-                            vehiculo.setCombustibleNivel(jVehiculo.getString("combustible"));
-                            vehiculo.setTmpMotor(jVehiculo.getString("tmp_motor"));
-                            vehiculo.setDistanciaServicio(jVehiculo.getString("distancia_servicio"));
+                            if(jVehiculo.has("odometro")){
+                                vehiculo.setOdometro(jVehiculo.getString("odometro"));
+                            }
+                            if(jVehiculo.has("combustibleTot")){
+                                vehiculo.setCombustibleTotalUsado(jVehiculo.getString("combustibleTot"));
+                            }
+                            if(jVehiculo.has("hrs_motor")){
+                                vehiculo.setHorasMotor(jVehiculo.getString("hrs_motor"));
+                            }
+                            if(jVehiculo.has("combustible")){
+                                vehiculo.setCombustibleNivel(jVehiculo.getString("combustible"));
+                            }
+                            if(jVehiculo.has("tmp_motor")){
+                                vehiculo.setTmpMotor(jVehiculo.getString("tmp_motor"));
+                            }
+                            if(jVehiculo.has("distancia_servicio")){
+                                vehiculo.setDistanciaServicio(jVehiculo.getString("distancia_servicio"));
+                            }
 
                             mapaVehiculos.put(identificador,vehiculo);
 
@@ -305,7 +279,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.e("ArrayList:", mapaVehiculos.toString());
     }
 
-
+    //Método que añade opciones al menú
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -320,7 +294,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-
+    //Método que muestra los vehículos, según su estado (parado, en marcha, etc...)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -348,14 +322,12 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker.setVisible(true);
                         break;
                 }
-
             }
         }
-
             return true;
-
     }
 
+    //Método que maneja la salida de la aplicación: decide si se guardan los datos del Login al salir o vuelve a esa pantalla de Login
     public void cerrar(View view){
 
         AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
@@ -466,7 +438,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap){
         mMap = googleMap;
-        //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         iniciarlizarWS();
 

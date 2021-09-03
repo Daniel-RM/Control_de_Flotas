@@ -2,17 +2,13 @@
 package com.example.controldeflotas;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -20,24 +16,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,16 +46,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.BuildConfig;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTable;
-import com.lowagie.text.pdf.PdfWriter;
-
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
-
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -75,21 +54,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 public class DetallesActivity extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener {
@@ -103,7 +75,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     TextView tvCoche;
 
     Button btnEnviar, btnDescargar;
-    ImageButton btnVuelve;
+    ImageButton btnVuelve, btnVisual;
 
     ProgressBar pbDetalles;
 
@@ -125,6 +97,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     private ArrayList<Datos> datosList;
     ListViewAdapter adapter;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +123,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         btnEnviar = findViewById(R.id.btnEnviar);
         btnVuelve = findViewById(R.id.btnVuelve);
         pbDetalles = findViewById(R.id.pbDetalles);
+        btnVisual = findViewById(R.id.btnVisuali);
+
 
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -188,7 +163,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
-
+        //Botón para descargar el PDF con los datos de la ruta
         btnDescargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +176,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
+        //Botón para enviar el PDF con los datos de la ruta
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,12 +186,23 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
+        //Botón para cambiar el modo de vista del mapa
+        btnVisual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID){
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }else{
+                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }
+            }
+        });
+
     }
 
+    //Evito que puedan pulsar la tecla "hacia atrás"
     @Override
-    public void onBackPressed() {
-        //Evito que puedan pulsar la tecla "hacia atrás"
-    }
+    public void onBackPressed() {}
 
     //Creo el PDF con su formato
     public void crearPDF(boolean envio, String cuando) {
@@ -232,14 +219,12 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             paginas = (listaDatos.size() / 30) + 1;
         }
 
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                         PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,}, 1000);
         }
-
 
         android.graphics.pdf.PdfDocument miDocumento = new PdfDocument();
         Paint myPaint = new Paint();
@@ -250,7 +235,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 android.graphics.pdf.PdfDocument.PageInfo myPageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(500, 792, x + 1).create();
                 android.graphics.pdf.PdfDocument.Page myPage = miDocumento.startPage(myPageInfo);
                 Canvas canvas = myPage.getCanvas();
-
 
                 myPaint.setTextAlign(Paint.Align.CENTER);
                 myPaint.setTextSize(12.0f);
@@ -263,7 +247,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 myPaint.setTextAlign(Paint.Align.LEFT);
                 myPaint.setTextSize(9.0f);
                 myPaint.setColor(Color.rgb(81, 164, 157));
-                canvas.drawText("Informe de " + vehiculo.getIdentificador(), 10, 70, myPaint);
+                canvas.drawText("Informe de " + vehiculo.getMatricula(), 10, 70, myPaint);
                 canvas.drawText("Fecha: " + cuando, 400, 70, myPaint);
                 //canvas.drawText("Fecha: " + fecha, 400, 70, myPaint);
 
@@ -323,7 +307,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     lineas = lineas - 30;
                     miDocumento.finishPage(myPage);
                 }
-
             }
         } while (lineas > 0);
 
@@ -351,7 +334,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         Toast.makeText(getApplicationContext(), "PDF creado correctamente en " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
         miDocumento.close();
 
-
         if(envio == true){
 
             Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), BuildConfig.APPLICATION_ID + ".provider", file);
@@ -365,10 +347,9 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(emailIntent, "Enviar email usando:"));
         }
-
     }
 
-
+    //Método que recoge los datos de un vehículo en una fecha concreta, los muestra en la listView y muestra la ruta en el mapa
     public void recogeDatos(String fecha) {
 
         int posic = 0;
@@ -385,7 +366,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     datosList.clear();
                 }
             });
-
         }
 
         URL url = null;
@@ -393,7 +373,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         BufferedReader reader = null;
         StringBuffer response = new StringBuffer();
         String linea, devuelve = "";
-
 
         try {
             url = new URL("http://" + LoginActivity.urlFinalLocal + "/tramasReport.action?id=" + vehiculo.getIdentificador() + "&sid=" + fecha);
@@ -405,7 +384,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         }
 
         try{
-
             Object respuesta = connection.getContent();
 
             if(respuesta instanceof InputStream){
@@ -431,7 +409,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 informacionArray = new String[partes.length];
 
                 int contador = 0;
-                //Set<String> estados = new HashSet<>();
+
                 for (String trama : partes) {
                     contador++;
                     Datos dato = new Datos();
@@ -449,7 +427,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     dato.setHora(hora);
                     dato.setEstado(datos[4]);
                     dato.setVelocidad(datos[12]);
-                    //estados.add(datos[7]);
                     dato.setComportamiento(datos[7]);
                     if(!datos[16].equals("null")){
                         dato.setZona(datos[16]);
@@ -465,24 +442,18 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     }
 
                     listaPuntos.add(dato);
-                    //listaDatos.add(dato);
-                    //informacionArray[posic] = dato.toString();
 
                 }
             }
 
             //Muestro la listview de la ruta y la dibujo en el mapa
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
-                    /////////////////////////////////////
-
                     datosList = listaDatos;
                     adapter = new ListViewAdapter(datosList, DetallesActivity.this);
                     listView.setAdapter(adapter);
                     pbDetalles.setVisibility(View.INVISIBLE);
-                    //adapter.notifyDataSetChanged();
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -506,68 +477,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }
                     });
-                    /////////////////////////////////////
-
-
-//                    adaptador = new ArrayAdapter<Datos>(getApplicationContext(), R.layout.lista_item, listaDatos){
-//                        private List<Datos> items;
-//                        @NonNull
-//                        @Override
-//                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//
-//                            View view = super.getView(position, convertView, parent);
-//
-//                            items = listaDatos;
-//                            double veloc = Double.parseDouble(items.get(position).getVelocidad().substring(0,3));
-//                            TextView text  = (TextView)view.findViewById(R.id.textPersonalizado);
-//
-////                            if(items.get(position)!=null){
-//
-////                                if(items.get(position).getComportamiento().contains("Reinicio")){
-////                                    text.setTextColor(Color.RED);
-////                                }
-////                                if(items.get(position).getEstado().equals("1")){
-////                                    text.setTextColor(Color.RED);
-////                                }
-////                                if(items.get(position).getEstado().equals("0") && veloc > 5){
-////                                    text.setTextColor(Color.BLACK);
-////                                }
-////                                if(!items.get(position).getEstado().equals("1") && veloc < 5){
-////                                    text.setTextColor(Color.MAGENTA);
-////                                }
-////                            }
-//                            return view;
-//                        }
-//                    };
-
-
-
-//                    listView.setAdapter(adaptador);
-
-//                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                            if(marcaRuta != null){
-//                                marcaRuta.remove();
-//                            }
-//                            if(puntoFinal != null){
-//                                puntoFinal.remove();
-//                            }
-//
-//                            //Dibujo el icono en el punto de la ruta que se ha pulsado
-//                            punto.remove();
-//                            LatLng puntoRuta = new LatLng((listaDatos.get(position).getLatitud()),(listaDatos.get(position).getLongitud()));
-//                            marcaRuta = mMap.addMarker(new MarkerOptions().position(puntoRuta).title(vehiculo.getIdentificador()));
-//                            dibujaIcono(vehiculo, marcaRuta);
-//                            CameraPosition cameraPosition = new CameraPosition.Builder()
-//                                    .target(puntoRuta)
-//                                    .zoom(12)
-//                                    .bearing(0)
-//                                    .build();
-//                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//                        }
-//                    });
 
                     //Dibujo la línea de la ruta
                     if (!adapter.isEmpty()) {
@@ -584,7 +493,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                                     .color(Color.RED)
                                     .geodesic(true));
                         }
-                        /////////////////////////////////////////////////Coloco el icono en la última posición
+                        //Coloco el icono en la última posición
                         Double ultimaLatitud = (listaPuntos.get(listaPuntos.size()-1).getLatitud());
                         Double ultimaLongitud = (listaPuntos.get(listaPuntos.size()-1).getLongitud());
                         LatLng ultimaPosicion = new LatLng (ultimaLatitud, ultimaLongitud);
@@ -612,14 +521,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                         //CameraUpdate centrarmarcadores = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
                         CameraUpdate centrarmarcadores = CameraUpdateFactory.newLatLngBounds(limites, padding);
                         mMap.animateCamera(centrarmarcadores);
-
-//                        CameraPosition cameraPosition = new CameraPosition.Builder()
-//                                .target(ultimaPosicion)
-//                                .zoom(12)
-//                                .bearing(0)
-//                                .build();
-//                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                        /////////////////////////////////////////////////
                     }
                 }
             });
@@ -654,6 +555,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    //Muestro el calendario para que el usuario elija una fecha
     private void showDatePickerDialog(){
         DatePickerDialog datePickerDialog =new DatePickerDialog(this,this,
                 Calendar.getInstance().get(Calendar.YEAR),
@@ -663,7 +565,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         datePickerDialog.show();
     }
 
-
+    //Método que recoge la fecha elegida por el usuario y manda llama al método que muestra la ruta, pero con la fecha elegidoa
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
@@ -688,13 +590,13 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                //adaptador.notifyDataSetChanged();
                 recogeDatos(dia);
             }
         });
 
     }
 
+    //Método que dibuja el icono con el color correspondiente al tipo de vehículo y la acción que esté llevando a cabo en el momento
     public static void dibujaIcono(Vehiculo vehiculo, Marker marker){
         String marcha = vehiculo.getEstado();
         String tipo = vehiculo.getTipoVehiculo().trim();

@@ -17,35 +17,32 @@
 
     <LinearLayout
         android:id="@+id/linearLayout5"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:translationX="-10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/include">
 
         <Button
             android:id="@+id/btnDescargar"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/descargar"
-            android:textAlignment="center"
-            android:translationX="-10dp" />
+            android:translationX="-5dp" />
 
         <Button
             android:id="@+id/btnEnviar"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/enviar"
-            android:textAlignment="center"
-            android:translationX="10dp" />
+            android:translationX="5dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -130,9 +127,22 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
+        android:id="@+id/btnVisuali"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
+        android:background="@color/teal_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+    <ImageButton
         android:id="@+id/btnVuelve"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
         android:background="@color/teal_700"
         app:layout_constraintEnd_toEndOf="parent"

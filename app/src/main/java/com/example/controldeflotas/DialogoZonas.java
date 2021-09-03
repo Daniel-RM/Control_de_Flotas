@@ -15,16 +15,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.AsynchronousByteChannel;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
+
+//Clase que maneja el cuadro de diálogo que recoge los datos necesarios para crear una zona o editarla y guarda los datos en el servidor
 public class DialogoZonas {
 
     final String PLANTA = "Planta Hormigón";
@@ -35,8 +33,6 @@ public class DialogoZonas {
 
     String posiciones="";
 
-    String lat0, long0, lat1, long1, lat2, long2, lat3, long3 = "";
-
     URL url = null;
     URLConnection connection = null;
 
@@ -46,7 +42,7 @@ public class DialogoZonas {
         dialogo.setContentView(R.layout.dialogo_zonas);
 
         Button btnCancelar, btnGuardar;
-        EditText etCodigo, etDescripcion, etDireccion;//etTipo
+        EditText etCodigo, etDescripcion, etDireccion;
         Spinner spTipo;
 
         btnCancelar = dialogo.findViewById(R.id.btnCancelar);
@@ -87,7 +83,7 @@ public class DialogoZonas {
             etDireccion.setText(zona.getDireccion());
         }
 
-
+        //Botón que esconde el cuadro de diálogo
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +91,7 @@ public class DialogoZonas {
             }
         });
 
+        //Botón que guarda la zona creada o editada
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,6 +167,7 @@ public class DialogoZonas {
         dialogo.show();
     }
 
+    //Método que convierte el tipo de zona, en un código numérico que maneja el programa (no lo hace con el texto)
     public String trataTipo(String tipo){
         String tipoBueno = "";
         switch (tipo){

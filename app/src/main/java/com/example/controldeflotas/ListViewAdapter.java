@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+//Adaptador personalizado, para mostrar la hora, dirección postal y el comportamiento de un vehículo
 public class ListViewAdapter extends BaseAdapter {
 
     public ArrayList<Datos> datosList;

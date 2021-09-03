@@ -1,12 +1,8 @@
 package com.example.controldeflotas;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,11 +12,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static GoogleMap mMap;
@@ -29,7 +20,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -55,7 +45,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng spain = new LatLng(41, -1.36);
         mMap.addMarker(new MarkerOptions().position(spain).title("Marker in Spain"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40,-3.5),5.7f));
-
     }
 
     public static Marker addMarker(MarkerOptions options){

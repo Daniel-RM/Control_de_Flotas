@@ -127,22 +127,10 @@ public class Datos {
 
     @Override
     public String toString() {
-
-        /*return "Datos{" +
-                "matricula='" + matricula + '\'' +
-                ", fecha='" + fecha + '\'' +
-                ", hora='" + hora + '\'' +
-                ", comportamiento='" + comportamiento + '\'' +
-                ", velocidad='" + velocidad + '\'' +
-                ", distancia='" + distancia + '\'' +
-                '}';*/
-
-           // return hora + "   /   " + obtenerDireccion(latitud, longitud) + "   /   " + comportamiento + "\n";
-            //return hora + " / " + "<" + latitud + "/" + longitud + "> / " + comportamiento;
            return hora + "   /   " + obtenerDireccion(latitud, longitud) + "   /   " + comportamiento + "\n";
-
     }
 
+    //Método para obtener la dirección postal, en base a las coordenadas recibidas. Si no se crea la dirección, muestro la población
     public static String obtenerDireccion(double latitud, double longitud){
 
         String direccion = "";
@@ -153,8 +141,31 @@ public class Datos {
                 List<Address> list = geocoder.getFromLocation(latitud, longitud, 1);
                 if(!list.isEmpty()){
                     Address DirCalle = list.get(0);
-                    direccion = DirCalle.getLocality() + ", " + DirCalle.getThoroughfare() + ", " + DirCalle.getSubThoroughfare();
-                    //direccion = DirCalle.getAddressLine(0);
+                    String locality = "";
+                    String thoroughfare = "";
+                    String subThoroughfare = "";
+
+                    //Controlo que los datos recibidos, no sean null. En caso de serlo, dejo el campo en blanco
+                    if(DirCalle.getLocality() == null){
+                        locality = "";
+                    }else{
+                        locality = DirCalle.getLocality() + ", ";
+                    }
+
+                    if(DirCalle.getThoroughfare() == null){
+                        thoroughfare = "";
+                    }else{
+                        thoroughfare = DirCalle.getThoroughfare() + ", ";
+                    }
+
+                    if(DirCalle.getSubThoroughfare() == null){
+                        subThoroughfare = "";
+                    }else{
+                        subThoroughfare = DirCalle.getSubThoroughfare() + ", ";
+                    }
+
+                    direccion = locality + thoroughfare + subThoroughfare;
+
                 }
             }catch(IOException e){
                 e.printStackTrace();

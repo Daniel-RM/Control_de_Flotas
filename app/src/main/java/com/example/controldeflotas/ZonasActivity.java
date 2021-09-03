@@ -1,7 +1,6 @@
 package com.example.controldeflotas;
 
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
@@ -13,7 +12,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -26,24 +24,20 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,12 +45,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-
 import java.net.URL;
 import java.net.URLConnection;
-
 import java.util.ArrayList;
-
 import java.util.List;
 
 
@@ -121,6 +112,8 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         seleccionado = false;
 
+        etBuscar.setEnabled(false);
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -160,7 +153,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //adaptador.getFilter().filter(s);
                 adapter.getFilter().filter(s);
             }
 
@@ -244,10 +236,9 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     }
 
+    //Evito que puedan pulsar la tecla "hacia atrás"
     @Override
-    public void onBackPressed() {
-        //Evito que puedan pulsar la tecla "hacia atrás"
-    }
+    public void onBackPressed() {}
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -264,16 +255,9 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     //Cargo los datos al principio y relleno la listview
     public void cargaDatos(){
-//        URL url = null;
-//        URLConnection connection = null;
-//        BufferedReader reader = null;
-//        StringBuffer response = new StringBuffer();
-//        String linea, devuelve = "";
 
         try {
             url = new URL("http://" + LoginActivity.urlFinalLocal + "/ajaxZonas.action");
-
-            //url = new URL("http://" + LoginActivity.urlFinalLocal + "/gestionZonas.action");
             connection = url.openConnection();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -316,6 +300,7 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                     adapter = new ListViewZonasAdapter(zonasList, ZonasActivity.this);
                     listViewZonas.setAdapter(adapter);
                     pbZonas.setVisibility(View.INVISIBLE);
+                    etBuscar.setEnabled(true);
                     listViewZonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -341,35 +326,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                             mMap.animateCamera(centrarZonas);
                         }
                     });
-//                    adaptador = new ArrayAdapter<Zona>(getApplicationContext(), R.layout.lista_item, listaZonas);
-//                    listViewZonas.setAdapter(adaptador);
-//
-//                    listViewZonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                            seleccionado = true;
-//                            zonaElegida = adaptador.getItem(position);
-//
-//                            btnUpdate.setEnabled(true);
-//                            btnDelete.setEnabled(true);
-//
-//                            cargaInicial();
-//
-//                            //Centro la cámara, para que la zona, salga centrada en el mapa
-//                            LatLngBounds.Builder centraCamara = new LatLngBounds.Builder();
-//                            for(LatLng centros:latLngs) {
-//                                centraCamara.include(centros);
-//                            }
-//                            LatLngBounds limites = centraCamara.build();
-//                            int ancho = getResources().getDisplayMetrics().widthPixels;
-//                            int alto = getResources().getDisplayMetrics().heightPixels;
-//                            int padding = (int)(ancho/4);
-//
-//                            CameraUpdate centrarZonas = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
-//                            mMap.animateCamera(centrarZonas);
-//                        }
-//                   });
                 }
             });
 
@@ -445,7 +401,4 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
             poligono = mMap.addPolygon(poligonOptions);
         }
     }
-
-
-
 }
