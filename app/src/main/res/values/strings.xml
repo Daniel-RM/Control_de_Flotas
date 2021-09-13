@@ -25,7 +25,6 @@
     <string name="titulo">Control de Flotas</string>
     <string name="flota">Flota Arco</string>
     <string name="vehiculos">Vehículos</string>
-
     <string name="menu">Menú</string>
     <string name="estados">ESTADOS</string>
     <string name="ajustes">Ajustes</string>
@@ -33,6 +32,10 @@
     <string name="informes">Informes</string>
     <string name="zonas">Zonas</string>
     <string name="visualizar">Visualizar Mapa</string>
+    <string name="eventos">Eventos</string>
+    <string name="alarmas">Alarmas</string>
+    <string name="matricula">Matrícula</string>
+    <string name="evento">Evento</string>
 
     <!--Pantalla de Diálogo Datos-->
     <string name="informe">Informe</string>

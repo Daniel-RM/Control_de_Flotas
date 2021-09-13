@@ -25,9 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ControlDeFlotas"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AgregaActivity"
+        <activity android:name=".MenuPruebaActivity"></activity>
+        <activity
+            android:name=".AgregaActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -42,14 +44,14 @@
 
         <activity
             android:name=".EdicionActivity"
-            android:label="@string/title_activity_edicion"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:label="@string/title_activity_edicion"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ZonasActivity"
-            android:label="@string/title_activity_zonas"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:label="@string/title_activity_zonas"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -61,21 +63,25 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".DetallesActivity"
+        <activity
+            android:name=".DetallesActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MenuActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MapsActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".LoginActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>

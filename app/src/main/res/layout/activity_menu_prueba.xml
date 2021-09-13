@@ -52,16 +52,17 @@
             android:layout_weight="1"
             android:text="@string/alarmas"
             android:translationX="5dp" />
+
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/rcEventoAlarma"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcEvento"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_weight="1"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/include2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
@@ -82,8 +83,9 @@
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/rcEventoAlarma"
-        tools:layout_editor_absoluteX="206dp">
+        app:layout_constraintBottom_toTopOf="@+id/rcEvento"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/textView5"

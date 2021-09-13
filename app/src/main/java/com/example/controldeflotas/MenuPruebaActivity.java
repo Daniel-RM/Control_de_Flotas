@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -50,12 +50,12 @@ import java.util.List;
 import java.util.Map;
 
 //Clase que muestra un mapa con la flota entera y maneja el menú de opciones principal
-public class MenuActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MenuPruebaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     static Context context;
-    static boolean modo_normal;
+    static boolean modo_normal, primera;
 
     Map<String, Vehiculo> mapaVehiculos = new HashMap<>();
     Map<String, Marker> mapaMarcas = new HashMap<>();
@@ -84,7 +84,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     Button btnEvento, btnAlarma;
     ImageButton btnEsconde;
-    ListView lvEventos;
+    //ListView lvEventos;
     ListViewEventosAdapter adapter;
     LinearLayout linearTitulo;
 
@@ -94,9 +94,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_menu_prueba);
 
         flotas = LoginActivity.myObjects;
+        primera = true;
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -119,10 +120,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnAlarma = findViewById(R.id.btnAlarma);
         btnEvento = findViewById(R.id.btnEvento);
         btnEsconde = findViewById(R.id.btnEsconde);
-        lvEventos = findViewById(R.id.rcEventoAlarma);
+        recyclerEventos = findViewById(R.id.rcEvento);
         linearTitulo = findViewById(R.id.linearTitulo);
 
-        lvEventos.setVisibility(View.INVISIBLE);
+        recyclerEventos.setVisibility(View.INVISIBLE);
         btnEsconde.setVisibility(View.INVISIBLE);
         linearTitulo.setVisibility(View.INVISIBLE);
 
@@ -143,16 +144,21 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void run() {
                         sacaListView();
-                        adapter = new ListViewEventosAdapter(listaEventos, MenuActivity.this);
-                        lvEventos.setAdapter(adapter);
+//                        adapter = new ListViewEventosAdapter(listaEventos, MenuPruebaActivity.this);
+//                        lvEventos.setAdapter(adapter);
+
+                        recyclerEventos.setLayoutManager(new LinearLayoutManager(context));
+                        eventosAdapter = new RecyclerEventosAdapter(listaEventos, context);
+                        recyclerEventos.setAdapter(eventosAdapter);
+
                         btnEsconde.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 escondeListView();
                             }
                         });
-                     };
-                 });
+                    };
+                });
             }
         });
 
@@ -179,10 +185,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void trataDatos(){
 
         for (Flota flota : flotas){
-           for(Vehiculo vehiculo : flota.vehiculos){
-               mapaVehiculos.put(vehiculo.getIdentificador(),vehiculo);
-               listaVehiculos.add(vehiculo);
-           }
+            for(Vehiculo vehiculo : flota.vehiculos){
+                mapaVehiculos.put(vehiculo.getIdentificador(),vehiculo);
+                listaVehiculos.add(vehiculo);
+            }
         }
     }
 
@@ -356,10 +362,11 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onMessage(String s) {
                     try{
 
-                        listaEventos.clear();
-
                         JSONObject objeto = new JSONObject(s);
                         JSONArray mensaje = new JSONArray(objeto.getString("mensaje"));
+
+                        listaEventos.clear();
+
 
                         for(int x = 0;x<mensaje.length();x++){
                             Evento evento = new Evento();
@@ -373,8 +380,21 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             listaEventos.add(evento);
 
+                            if(!primera) {
+                                recyclerEventos.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        eventosAdapter.notifyItemInserted(0);
+                                        eventosAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+
                         }
 
+                        primera = false;
+                        //eventosAdapter.notifyItemInserted(0);
+                        //eventosAdapter.notifyDataSetChanged();
                     }catch(JSONException e){
                         e.printStackTrace();
                     }
@@ -442,13 +462,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         }
-            return true;
+        return true;
     }
 
     //Método que maneja la salida de la aplicación: decide si se guardan los datos del Login al salir o vuelve a esa pantalla de Login
     public void cerrar(View view){
 
-        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuPruebaActivity.this);
         alerta.setMessage("Desea salir de la aplicación o salir y cerrar la sesión?")
                 .setCancelable(true)
                 .setNegativeButton("Salir y cerrar sesión", new DialogInterface.OnClickListener() {
@@ -500,13 +520,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //Icono informes - abro cuadro de diálogo con las distintas opciones: informes, albaranes o cancelar.
     public void informes(View view){
-        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuPruebaActivity.this);
         alerta.setMessage("Qué tipo de informe quiere?")
                 .setCancelable(false)
                 .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new DialogoInforme(MenuActivity.this, listaVehiculos);
+                        new DialogoInforme(MenuPruebaActivity.this, listaVehiculos);
                     }
                 })
                 .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
@@ -528,7 +548,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //El usuario podrá seleccionar los datos a mostrar en el cuadro de diálogo
     public void ajustes(View view){
-        AlertDialog.Builder alert = new AlertDialog.Builder(MenuActivity.this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(MenuPruebaActivity.this);
         alert.setMessage("Elija los datos a mostrar:")
                 .setCancelable(false)
                 .setPositiveButton("Datos del vehículo", new DialogInterface.OnClickListener() {
@@ -558,13 +578,14 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         iniciarlizarWS();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                eventos();
-                alarmas();
-            }
-        });
+        eventos();
+        alarmas();
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
 
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -573,9 +594,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker.showInfoWindow();
                 Vehiculo vehi = mapaVehiculos.get(marker.getTitle());
                 if(datosCAN){
-                    new DialogoDatosCan(MenuActivity.this, vehi);
+                    new DialogoDatosCan(MenuPruebaActivity.this, vehi);
                 }else {
-                    new DialogoDatos(MenuActivity.this, vehi);
+                    new DialogoDatos(MenuPruebaActivity.this, vehi);
                 }
                 return true;
             }
@@ -594,13 +615,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void sacaListView(){
         btnEvento.setVisibility(View.INVISIBLE);
         btnAlarma.setVisibility(View.INVISIBLE);
-        lvEventos.setVisibility(View.VISIBLE);
+        recyclerEventos.setVisibility(View.VISIBLE);
         btnEsconde.setVisibility(View.VISIBLE);
         linearTitulo.setVisibility(View.VISIBLE);
     }
 
     public void escondeListView(){
-        lvEventos.setVisibility(View.INVISIBLE);
+        recyclerEventos.setVisibility(View.INVISIBLE);
         btnEsconde.setVisibility(View.INVISIBLE);
         btnEvento.setVisibility(View.VISIBLE);
         btnAlarma.setVisibility(View.VISIBLE);
