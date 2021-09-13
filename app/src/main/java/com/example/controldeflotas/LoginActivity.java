@@ -128,8 +128,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
                                 editor.commit();
                             }
                             List<Flota> flotas = recogerDatos();
-                            //Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                            Intent intent = new Intent(getApplicationContext(), MenuPruebaActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                             startActivity(intent);
                         } else {
                                 runOnUiThread(new Runnable() {

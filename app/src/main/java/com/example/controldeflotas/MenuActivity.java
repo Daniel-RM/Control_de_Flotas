@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -55,7 +55,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
 
     static Context context;
-    static boolean modo_normal;
+    static boolean modo_normal, primera;
 
     Map<String, Vehiculo> mapaVehiculos = new HashMap<>();
     Map<String, Marker> mapaMarcas = new HashMap<>();
@@ -84,7 +84,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     Button btnEvento, btnAlarma;
     ImageButton btnEsconde;
-    ListView lvEventos;
+    //ListView lvEventos;
     ListViewEventosAdapter adapter;
     LinearLayout linearTitulo;
 
@@ -97,6 +97,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_menu);
 
         flotas = LoginActivity.myObjects;
+        primera = true;
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -119,10 +120,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnAlarma = findViewById(R.id.btnAlarma);
         btnEvento = findViewById(R.id.btnEvento);
         btnEsconde = findViewById(R.id.btnEsconde);
-        lvEventos = findViewById(R.id.rcEventoAlarma);
+        recyclerEventos = findViewById(R.id.rcEvento);
         linearTitulo = findViewById(R.id.linearTitulo);
 
-        lvEventos.setVisibility(View.INVISIBLE);
+        recyclerEventos.setVisibility(View.INVISIBLE);
         btnEsconde.setVisibility(View.INVISIBLE);
         linearTitulo.setVisibility(View.INVISIBLE);
 
@@ -143,16 +144,21 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void run() {
                         sacaListView();
-                        adapter = new ListViewEventosAdapter(listaEventos, MenuActivity.this);
-                        lvEventos.setAdapter(adapter);
+//                        adapter = new ListViewEventosAdapter(listaEventos, MenuPruebaActivity.this);
+//                        lvEventos.setAdapter(adapter);
+
+                        recyclerEventos.setLayoutManager(new LinearLayoutManager(context));
+                        eventosAdapter = new RecyclerEventosAdapter(listaEventos, context);
+                        recyclerEventos.setAdapter(eventosAdapter);
+
                         btnEsconde.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 escondeListView();
                             }
                         });
-                     };
-                 });
+                    };
+                });
             }
         });
 
@@ -179,10 +185,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void trataDatos(){
 
         for (Flota flota : flotas){
-           for(Vehiculo vehiculo : flota.vehiculos){
-               mapaVehiculos.put(vehiculo.getIdentificador(),vehiculo);
-               listaVehiculos.add(vehiculo);
-           }
+            for(Vehiculo vehiculo : flota.vehiculos){
+                mapaVehiculos.put(vehiculo.getIdentificador(),vehiculo);
+                listaVehiculos.add(vehiculo);
+            }
         }
     }
 
@@ -356,10 +362,11 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onMessage(String s) {
                     try{
 
-                        listaEventos.clear();
-
                         JSONObject objeto = new JSONObject(s);
                         JSONArray mensaje = new JSONArray(objeto.getString("mensaje"));
+
+                        listaEventos.clear();
+
 
                         for(int x = 0;x<mensaje.length();x++){
                             Evento evento = new Evento();
@@ -373,7 +380,19 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             listaEventos.add(evento);
 
+                            if(!primera) {
+                                recyclerEventos.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        eventosAdapter.notifyItemInserted(0);
+                                        eventosAdapter.notifyDataSetChanged();
+                                        //Toast.makeText(getApplicationContext(), evento.getTipo(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
                         }
+
+                        primera = false;
 
                     }catch(JSONException e){
                         e.printStackTrace();
@@ -442,7 +461,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         }
-            return true;
+        return true;
     }
 
     //Método que maneja la salida de la aplicación: decide si se guardan los datos del Login al salir o vuelve a esa pantalla de Login
@@ -558,13 +577,14 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         iniciarlizarWS();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                eventos();
-                alarmas();
-            }
-        });
+        eventos();
+        alarmas();
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
 
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -594,13 +614,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void sacaListView(){
         btnEvento.setVisibility(View.INVISIBLE);
         btnAlarma.setVisibility(View.INVISIBLE);
-        lvEventos.setVisibility(View.VISIBLE);
+        recyclerEventos.setVisibility(View.VISIBLE);
         btnEsconde.setVisibility(View.VISIBLE);
         linearTitulo.setVisibility(View.VISIBLE);
     }
 
     public void escondeListView(){
-        lvEventos.setVisibility(View.INVISIBLE);
+        recyclerEventos.setVisibility(View.INVISIBLE);
         btnEsconde.setVisibility(View.INVISIBLE);
         btnEvento.setVisibility(View.VISIBLE);
         btnAlarma.setVisibility(View.VISIBLE);
@@ -608,4 +628,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 }
+
+
 

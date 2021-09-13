@@ -24,7 +24,6 @@ public class RecyclerEventosAdapter extends RecyclerView.Adapter<RecyclerEventos
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tarjeta_eventos, parent, false);
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_eventos, parent, false);
         return new ViewHolder(view);
     }
@@ -49,9 +48,6 @@ public class RecyclerEventosAdapter extends RecyclerView.Adapter<RecyclerEventos
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-//            tvHora = itemView.findViewById(R.id.tvHoraEventoTitle);
-//            tvMatricula = itemView.findViewById(R.id.tvMatriculaEventoTitle);
-//            tvEvento = itemView.findViewById(R.id.tvEventoTitle);
             tvHora = itemView.findViewById(R.id.tvHoraEvento);
             tvMatricula = itemView.findViewById(R.id.tvMatriculaEvento);
             tvEvento = itemView.findViewById(R.id.tvComportamientoEvento);
