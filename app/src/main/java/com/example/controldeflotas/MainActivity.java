@@ -2,7 +2,10 @@ package com.example.controldeflotas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
 
         btnEntrada = findViewById(R.id.btnEntrada);
         etCodigoEmpresa = findViewById(R.id.etCodigoEmpresa);
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo==null || !networkInfo.isConnected()){
+            Toast.makeText(getApplicationContext(), "Por favor, tiene que tener algún tipo de conexión a la red. Conéctese a red wifi, o con Datos móviles", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         //Comprueba que el código no sea null ni esté vacío y que esté entre los códigos de las empresas. Dependiendo del código introducido, se cargará una flota u otra
         btnEntrada.setOnClickListener(new View.OnClickListener() {

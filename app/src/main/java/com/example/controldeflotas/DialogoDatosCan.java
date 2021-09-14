@@ -15,34 +15,34 @@ public class DialogoDatosCan {
     @SuppressLint("ResourceAsColor")
     public DialogoDatosCan(Context context, Vehiculo vehiculo){
 
-        final Dialog dialogo = new Dialog(context);
-        dialogo.setCancelable(false);
-        dialogo.setContentView(R.layout.dialogo_datos_can);
+        final Dialog dialogoCAN = new Dialog(context);
+        dialogoCAN.setCancelable(false);
+        dialogoCAN.setContentView(R.layout.dialogo_datos_can);
 
         TextView tvMatricula, tvDireccion, tvFechaHora, tvVelocidad, tvDistancia, tvAltitud, tvRpm, tvTemperatura, tvPresion;
         TextView tvOdometro, tvCombustibleUsado, tvHorasMotor, tvCombustibleNivel, tvTemperaturaMotor, tvDistanciaServicio;
         Button btnDetalle, btnCancel;
 
-        tvMatricula = dialogo.findViewById(R.id.tvMatricula);
-        tvDireccion = dialogo.findViewById(R.id.tvDireccion);
-        tvFechaHora = dialogo.findViewById(R.id.tvFechaHora);
+        tvMatricula = dialogoCAN.findViewById(R.id.tvMatricula);
+        tvDireccion = dialogoCAN.findViewById(R.id.tvDireccion);
+        tvFechaHora = dialogoCAN.findViewById(R.id.tvFechaHora);
 
-        tvVelocidad = dialogo.findViewById(R.id.tvVelocidad);
-        tvDistancia = dialogo.findViewById(R.id.tvDistancia);
-        tvAltitud = dialogo.findViewById(R.id.tvAltitud);
-        tvRpm = dialogo.findViewById(R.id.tvRpm);
-        tvTemperatura = dialogo.findViewById(R.id.tvTemperatura);
-        tvPresion = dialogo.findViewById(R.id.tvPresion);
+        tvVelocidad = dialogoCAN.findViewById(R.id.tvVelocidad);
+        tvDistancia = dialogoCAN.findViewById(R.id.tvDistancia);
+        tvAltitud = dialogoCAN.findViewById(R.id.tvAltitud);
+        tvRpm = dialogoCAN.findViewById(R.id.tvRpm);
+        tvTemperatura = dialogoCAN.findViewById(R.id.tvTemperatura);
+        tvPresion = dialogoCAN.findViewById(R.id.tvPresion);
 
-        tvOdometro = dialogo.findViewById(R.id.tvOdometro);
-        tvCombustibleUsado = dialogo.findViewById(R.id.tvCombustibleUsado);
-        tvHorasMotor = dialogo.findViewById(R.id.tvHorasMotor);
-        tvCombustibleNivel = dialogo.findViewById(R.id.tvCombustibleNivel);
-        tvTemperaturaMotor = dialogo.findViewById(R.id.tvTemperaturaMotor);
-        tvDistanciaServicio = dialogo.findViewById(R.id.tvDistanciaServicio);
+        tvOdometro = dialogoCAN.findViewById(R.id.tvOdometro);
+        tvCombustibleUsado = dialogoCAN.findViewById(R.id.tvCombustibleUsado);
+        tvHorasMotor = dialogoCAN.findViewById(R.id.tvHorasMotor);
+        tvCombustibleNivel = dialogoCAN.findViewById(R.id.tvCombustibleNivel);
+        tvTemperaturaMotor = dialogoCAN.findViewById(R.id.tvTemperaturaMotor);
+        tvDistanciaServicio = dialogoCAN.findViewById(R.id.tvDistanciaServicio);
 
-        btnDetalle = dialogo.findViewById(R.id.btnDetalle);
-        btnCancel = dialogo.findViewById(R.id.btnCancel);
+        btnDetalle = dialogoCAN.findViewById(R.id.btnDetalle);
+        btnCancel = dialogoCAN.findViewById(R.id.btnCancel);
 
         switch (vehiculo.getEstado()){
             case "0":
@@ -145,7 +145,8 @@ public class DialogoDatosCan {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogo.dismiss();
+                new DialogoDatosPrueba(context,vehiculo);
+                dialogoCAN.dismiss();
             }
         });
 
@@ -156,10 +157,10 @@ public class DialogoDatosCan {
                 Intent intento = new Intent(context, DetallesActivity.class);
                 intento.putExtra("Vehiculo", vehiculo);
                 context.startActivity(intento);
-                dialogo.dismiss();
+                dialogoCAN.dismiss();
             }
         });
 
-        dialogo.show();
+        dialogoCAN.show();
     }
 }

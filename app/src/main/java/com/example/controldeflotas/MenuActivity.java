@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,13 +51,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static android.R.color.*;
+
 //Clase que muestra un mapa con la flota entera y maneja el menú de opciones principal
 public class MenuActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     static Context context;
-    static boolean modo_normal, primera;
+    static boolean modo_normal;
+
+    static boolean primerEvento, primeraAlarma;
 
     Map<String, Vehiculo> mapaVehiculos = new HashMap<>();
     Map<String, Marker> mapaMarcas = new HashMap<>();
@@ -90,6 +96,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     RecyclerView recyclerEventos;
     RecyclerEventosAdapter eventosAdapter;
+    RecyclerAlarmasAdapter alarmasAdapter;
+    int cuentas, cuentasAlarmas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +105,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_menu);
 
         flotas = LoginActivity.myObjects;
-        primera = true;
+        primerEvento = true;
+        primeraAlarma = true;
+        cuentas = 0;
+        cuentasAlarmas = 0;
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -127,7 +138,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnEsconde.setVisibility(View.INVISIBLE);
         linearTitulo.setVisibility(View.INVISIBLE);
 
+        eventosAdapter = new RecyclerEventosAdapter(listaEventos, context);
+        alarmasAdapter = new RecyclerAlarmasAdapter(listaAlarmas, context);
+
         trataDatos();
+        eventos();
+        alarmas();
+        viajes();
 
         borraDatos = false;
 
@@ -140,15 +157,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 runOnUiThread(new Runnable() {
+
                     @Override
                     public void run() {
                         sacaListView();
-//                        adapter = new ListViewEventosAdapter(listaEventos, MenuPruebaActivity.this);
-//                        lvEventos.setAdapter(adapter);
-
                         recyclerEventos.setLayoutManager(new LinearLayoutManager(context));
-                        eventosAdapter = new RecyclerEventosAdapter(listaEventos, context);
                         recyclerEventos.setAdapter(eventosAdapter);
 
                         btnEsconde.setOnClickListener(new View.OnClickListener() {
@@ -165,12 +180,20 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnAlarma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sacaListView();
+                runOnUiThread(new Runnable() {
 
-                btnEsconde.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        escondeListView();
+                    public void run() {
+                        sacaListView();
+                        recyclerEventos.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerEventos.setAdapter(alarmasAdapter);
+
+                        btnEsconde.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                escondeListView();
+                            }
+                        });
                     }
                 });
             }
@@ -237,6 +260,28 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if(jVehiculo.has("tipoVehiculo")){
                                 vehiculo.setTipoVehiculo(jVehiculo.getString("tipoVehiculo"));
                             }
+
+                            ////////////////////   DATOS VIAJE   ////////////////////////////////////
+                            if(jVehiculo.has("viaje")){
+                                //Log.e("Viaje:", "Tenemos opción de viaje: " + vehiculo.getMatricula());
+                                JSONObject viaje = new JSONObject(jVehiculo.getString("viaje"));
+
+                                    vehiculo.setCarga_descarga_viaje(String.valueOf(viaje.getInt("carga_descarga")));
+                                    vehiculo.setAgua_total_viaje(String.valueOf(viaje.getInt("agua_total")));
+                                    vehiculo.setHora_viaje(viaje.getString("hora"));
+                                    vehiculo.setM3_viaje(viaje.getString("m3"));
+                                    vehiculo.setCliente_promsa_viaje(viaje.getString("cliente_promsa"));
+                                    vehiculo.setIdviaje(String.valueOf(viaje.getInt("idviaje")));
+                                    vehiculo.setCaducado_viaje(String.valueOf(viaje.getBoolean("caducado")));
+                                    vehiculo.setAlbaran_viaje(viaje.getString("albaran"));
+                                    vehiculo.setObra_promsa_viaje(viaje.getString("obra_promsa"));
+                                    vehiculo.setCliente_viaje(viaje.getString("cliente"));
+                                    vehiculo.setObra_viaje(viaje.getString("obra"));
+                                    vehiculo.setZona_viaje(viaje.getString("zona"));
+                                    vehiculo.setAgua_viaje(String.valueOf(viaje.getInt("agua")));
+
+                            }
+                            /////////////////////////////////////////////////////////////////////////
 
                             ////////////////////   DATOS CAN   //////////////////////////////////////
                             if(jVehiculo.has("odometro")){
@@ -380,19 +425,21 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             listaEventos.add(evento);
 
-                            if(!primera) {
+                            if(!primerEvento) {
                                 recyclerEventos.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        eventosAdapter.notifyItemInserted(0);
-                                        eventosAdapter.notifyDataSetChanged();
-                                        //Toast.makeText(getApplicationContext(), evento.getTipo(), Toast.LENGTH_LONG).show();
+                                        if(listaEventos.size()!=cuentas) {
+                                            eventosAdapter.notifyItemInserted(0);
+                                            eventosAdapter.notifyDataSetChanged();
+                                            Toast.makeText(getApplicationContext(), evento.toString(), Toast.LENGTH_LONG).show();
+                                        }
                                     }
                                 });
                             }
                         }
-
-                        primera = false;
+                        cuentas = listaEventos.size();
+                        primerEvento = false;
 
                     }catch(JSONException e){
                         e.printStackTrace();
@@ -413,8 +460,110 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //////////////////////////////////////////////////////////////////
     public void alarmas(){
+        try {
+            WebSocketClient webSocketAlarma = new WebSocketClient(new URI("ws://" + LoginActivity.urlFinalLocal + "/ws/comunicaciones/1")) {
+                @Override
+                public void onOpen(ServerHandshake serverHandshake) {
+                    this.send("latidoEventosAlertas");
+                }
 
+                @Override
+                public void onMessage(String s) {
+                    try {
+                        JSONObject objeto = new JSONObject(s);
+                        JSONArray mensajeAlerta = new JSONArray(objeto.getString("mensaje"));
+
+                        listaAlarmas.clear();
+
+                        for(int y = 0;y<mensajeAlerta.length();y++){
+                            Alarma alarma = new Alarma();
+                            JSONObject trama = mensajeAlerta.getJSONObject(y);
+                            alarma.setFecha((String)trama.get("fecha"));
+                            alarma.setTipo(trama.getInt("tipo"));
+                            alarma.setOpcion((String)trama.get("opcion"));
+                            alarma.setIdmodulo((String) trama.get("idmodulo"));
+                            alarma.setCantidad(trama.getInt("cantidad"));
+                            alarma.setAlbaran((String) trama.get("albaran"));
+
+                            listaAlarmas.add(alarma);
+
+                            if(!primeraAlarma){
+                                recyclerEventos.post(new Runnable() {
+                                    @SuppressLint("ResourceAsColor")
+                                    @Override
+                                    public void run() {
+                                        if(listaAlarmas.size()!=cuentasAlarmas){
+                                            alarmasAdapter.notifyItemInserted(0);
+                                            alarmasAdapter.notifyDataSetChanged();
+                                            Toast toast = Toast.makeText(getApplicationContext(), alarma.toString(), Toast.LENGTH_LONG);
+                                            View view = toast.getView();
+                                            view.setBackgroundColor(holo_orange_light);
+                                            toast.show();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        cuentasAlarmas = listaAlarmas.size();
+                        primeraAlarma = false;
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onClose(int i, String s, boolean b) {}
+
+                @Override
+                public void onError(Exception e) {}
+
+            };
+
+            webSocketAlarma.connect();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
+
+    //////////////////////////////////////////////////////////////////////////
+    public void viajes() {
+        try {
+            WebSocketClient webSocketViaje = new WebSocketClient(new URI("ws://" + LoginActivity.urlFinalLocal + "/ws/comunicaciones/1")) {
+                @Override
+                public void onOpen(ServerHandshake serverHandshake) {
+                    this.send("latidoViajesFlotas");
+                }
+
+                @Override
+                public void onMessage(String s) {
+                    try{
+                        JSONObject objeto = new JSONObject(s);
+                        JSONObject mensaje = new JSONObject(objeto.getString("mensaje"));
+                        int x = 0;
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onClose(int i, String s, boolean b) {}
+
+                @Override
+                public void onError(Exception e) {}
+
+            };
+
+            webSocketViaje.connect();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////
 
     //Método que añade opciones al menú
     @Override
@@ -577,15 +726,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         iniciarlizarWS();
-        eventos();
-        alarmas();
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        });
-
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -595,7 +735,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(datosCAN){
                     new DialogoDatosCan(MenuActivity.this, vehi);
                 }else {
-                    new DialogoDatos(MenuActivity.this, vehi);
+                    new DialogoDatosPrueba(MenuActivity.this, vehi);
                 }
                 return true;
             }

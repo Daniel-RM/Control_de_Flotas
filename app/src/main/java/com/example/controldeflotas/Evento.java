@@ -81,16 +81,21 @@ public class Evento {
         return partes;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Evento{" +
+//                "fecha='" + fecha + '\'' +
+//                ", tipo='" + tipo + '\'' +
+//                ", opcion='" + opcion + '\'' +
+//                ", idmodulo='" + idmodulo + '\'' +
+//                ", cantidad='" + cantidad + '\'' +
+//                ", albaran='" + albaran + '\'' +
+//                '}';
+//    }
+
     @Override
     public String toString() {
-        return "Evento{" +
-                "fecha='" + fecha + '\'' +
-                ", tipo='" + tipo + '\'' +
-                ", opcion='" + opcion + '\'' +
-                ", idmodulo='" + idmodulo + '\'' +
-                ", cantidad='" + cantidad + '\'' +
-                ", albaran='" + albaran + '\'' +
-                '}';
+        return dameMatricula(idmodulo).trim() + ": " + trataTipo(tipo);
     }
 
     public String trataTipo(int tipo){
@@ -200,5 +205,15 @@ public class Evento {
                 break;
         }
         return tipe;
+    }
+
+    public static String dameMatricula(String id){
+        String matricula = "";
+        for(int x=0;x<MenuActivity.listaVehiculos.size();x++){
+            if(id.equals(MenuActivity.listaVehiculos.get(x).getIdentificador())){
+                matricula = MenuActivity.listaVehiculos.get(x).getMatricula();
+            }
+        }
+        return matricula;
     }
 }

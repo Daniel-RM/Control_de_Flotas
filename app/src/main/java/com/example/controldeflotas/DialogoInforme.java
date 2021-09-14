@@ -53,7 +53,7 @@ public class DialogoInforme {
                 if(MenuActivity.datosCAN){
                     new DialogoDatosCan(MenuActivity.context, lista.get(position));
                 }else{
-                    new DialogoDatos(MenuActivity.context, lista.get(position));
+                    new DialogoDatosPrueba(MenuActivity.context, lista.get(position));
                 }
                 dialogo.dismiss();
             }

@@ -1,7 +1,6 @@
 package com.example.controldeflotas;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class RecyclerEventosAdapter extends RecyclerView.Adapter<RecyclerEventosAdapter.ViewHolder>{
+public class RecyclerAlarmasAdapter extends RecyclerView.Adapter<RecyclerAlarmasAdapter.ViewHolder>{
 
-    private List<Evento> eventosList;
+    private List<Alarma> alarmaList;
     private Context context;
 
-    public RecyclerEventosAdapter(List<Evento> eventosList, Context context) {
-        this.eventosList = eventosList;
+    public RecyclerAlarmasAdapter(List<Alarma> alarmaList, Context context) {
+        this.alarmaList = alarmaList;
         this.context = context;
     }
 
@@ -26,21 +25,20 @@ public class RecyclerEventosAdapter extends RecyclerView.Adapter<RecyclerEventos
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_eventos, parent, false);
-        parent.setBackgroundColor(context.getColor( R.color.white));
+        parent.setBackgroundColor(context.getColor(android.R.color.holo_orange_light));
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvHora.setText(eventosList.get(position).getFecha());
-        holder.tvMatricula.setText(Evento.dameMatricula(eventosList.get(position).getIdmodulo()));
-        holder.tvEvento.setText(eventosList.get(position).getTipo());
-
+        holder.tvHora.setText(alarmaList.get(position).getFecha());
+        holder.tvMatricula.setText(Alarma.dameMatricula(alarmaList.get(position).getIdmodulo()));
+        holder.tvEvento.setText(alarmaList.get(position).getTipo());
     }
 
     @Override
     public int getItemCount() {
-        return eventosList.size();
+        return alarmaList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -53,7 +51,6 @@ public class RecyclerEventosAdapter extends RecyclerView.Adapter<RecyclerEventos
             tvHora = itemView.findViewById(R.id.tvHoraEvento);
             tvMatricula = itemView.findViewById(R.id.tvMatriculaEvento);
             tvEvento = itemView.findViewById(R.id.tvComportamientoEvento);
-
         }
     }
 

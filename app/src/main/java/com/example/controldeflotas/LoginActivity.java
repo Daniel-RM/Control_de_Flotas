@@ -88,6 +88,10 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//        if(networkInfo==null || !networkInfo.isConnected()){
+//            Toast.makeText(getApplicationContext(), "Por favor, tiene que tener algún tipo de conexión a la red. Conéctese a red wifi, o con Datos móviles", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         int tipoConexion = networkInfo.getType();
 
@@ -127,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
                                 editor.putString("pass", password);
                                 editor.commit();
                             }
-                            List<Flota> flotas = recogerDatos();
+                            List<Flota> flotas = recogerDatos();//NO QUITAR esta línea. flotas, no se usa en esta Activity, pero sí en MenuActivity
                             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                             startActivity(intent);
                         } else {

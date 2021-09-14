@@ -57,6 +57,18 @@
     <string name="tempMotor">Temperatura motor:</string>
     <string name="servicio">Distancia servicio:</string>
 
+    <string name="viaje">Viaje:</string>
+    <string name="planta">Planta:</string>
+    <string name="cliente">Cliente:</string>
+    <string name="obra">Obra:</string>
+    <string name="albaran">Albarán:</string>
+    <string name="m3">M3:</string>
+    <string name="aguaAd">Agua Añadida:</string>
+
+    <string name="infoCAN">info CAN</string>
+    <string name="eventoVehiculo">Eventos</string>
+    <string name="alarmaVehiculo">Alertas</string>
+
     <!--Pantalla de Detalles-->
     <string name="hora">Hora</string>
     <string name="direc">Dirección</string>
