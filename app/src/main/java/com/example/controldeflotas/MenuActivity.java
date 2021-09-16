@@ -90,8 +90,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     Button btnEvento, btnAlarma;
     ImageButton btnEsconde;
-    //ListView lvEventos;
-    ListViewEventosAdapter adapter;
     LinearLayout linearTitulo;
 
     RecyclerView recyclerEventos;
@@ -674,7 +672,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new DialogoInforme(MenuActivity.this, listaVehiculos);
+                        new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas);
                     }
                 })
                 .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
@@ -733,9 +731,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker.showInfoWindow();
                 Vehiculo vehi = mapaVehiculos.get(marker.getTitle());
                 if(datosCAN){
-                    new DialogoDatosCan(MenuActivity.this, vehi);
+                    new DialogoDatosCan(MenuActivity.this, vehi, listaEventos, listaAlarmas);
                 }else {
-                    new DialogoDatosPrueba(MenuActivity.this, vehi);
+                    new DialogoDatosPrueba(MenuActivity.this, vehi, listaEventos, listaAlarmas);
                 }
                 return true;
             }

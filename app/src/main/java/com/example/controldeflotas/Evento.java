@@ -39,6 +39,10 @@ public class Evento {
         return trataTipo(tipo);
     }
 
+    public int getTipoNum() {
+        return tipo;
+    }
+
     public void setTipo(int tipo) {
         this.tipo = tipo;
     }

@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="364dp"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bluefondo">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/bluefondo"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +28,7 @@
         <TextView
             android:id="@+id/tvDireccion"
             android:layout_width="match_parent"
-            android:layout_height="63dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:drawableLeft="@drawable/icon_direccion"
             android:drawablePadding="10dp"
@@ -43,7 +44,7 @@
         <TextView
             android:id="@+id/tvFechaHora"
             android:layout_width="match_parent"
-            android:layout_height="63dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:drawableLeft="@drawable/icon_reloj"
             android:drawablePadding="10dp"
@@ -225,7 +226,8 @@
                     android:layout_weight="0.50"
                     android:gravity="center"
                     android:text="@string/viaje"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tvViaje"
@@ -233,7 +235,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/teal_200"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -389,7 +392,7 @@
                 android:layout_width="20dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="@string/cancel"
+                android:text="@string/salir"
                 android:translationX="-5dp" />
 
             <Button
@@ -404,11 +407,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="10dp">
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp">
 
             <Button
                 android:id="@+id/btnInfo"
@@ -433,6 +436,11 @@
                 android:text="@string/alarmaVehiculo"
                 android:translationX="5dp" />
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEventos"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
 
     </LinearLayout>
 

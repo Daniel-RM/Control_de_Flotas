@@ -11,7 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,22 +24,34 @@ import java.util.Date;
 //Clase que maneja el cuadro de diálogo de los datos del coche sin los datos del CAN
 public class DialogoDatosPrueba  {
 
+    boolean sacado = false;
+
     @SuppressLint("ResourceAsColor")
-    public DialogoDatosPrueba(Context context, Vehiculo vehiculo){
+    public DialogoDatosPrueba(Context context, Vehiculo vehiculo, ArrayList<Evento> listaEv, ArrayList<Alarma> listaAl){
 
         final Dialog dialogo = new Dialog(context);
         dialogo.setCancelable(false);
         dialogo.setContentView(R.layout.dialogo_datos_prueba);
 
-        Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        String fecha = format.format(currentDate);
+//        Date currentDate = Calendar.getInstance().getTime();
+//        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+//        String fecha = format.format(currentDate);
 
         TextView  tvMatricula, tvDireccion, tvFechaHora, tvVelocidad, tvDistancia, tvAltitud, tvRpm, tvTemperatura, tvPresion;
         TextView tvViaje, tvPlanta, tvCliente, tvObra, tvAlbaran, tvM3, tvAgua;
         View llViaje;
         Button btnDetalle, btnCancel;
         Button btnInfo, btnEventos, btnAlertas;
+        RecyclerView rvEventos;
+        RecyclerEventosVehiculosAdapter adapter;
+        RecyclerAlarmasVehiculosAdapter adapterAl;
+        ArrayList<Evento> listaEventos = listaEv;
+        ArrayList<Alarma> listaAlarmas = listaAl;
+        ArrayList<Evento> listaEventoVehiculo = new ArrayList<>();
+        ArrayList<Alarma> listaAlarmaVehiculo = new ArrayList<>();
+        int tipoViaje = 0;
+        int cuentas, cuentasAl;
+
 
         tvMatricula = dialogo.findViewById(R.id.tvMatricula);
         tvDireccion = dialogo.findViewById(R.id.tvDireccion);
@@ -57,9 +74,28 @@ public class DialogoDatosPrueba  {
         btnInfo = dialogo.findViewById(R.id.btnInfo);
         btnEventos = dialogo.findViewById(R.id.btnEventos);
         btnAlertas = dialogo.findViewById(R.id.btnAlertas);
+        rvEventos = dialogo.findViewById(R.id.rvEventos);
+        adapter = new RecyclerEventosVehiculosAdapter(listaEventoVehiculo, context);
+        adapterAl = new RecyclerAlarmasVehiculosAdapter(listaAlarmaVehiculo, context);
+
 
         btnDetalle = dialogo.findViewById(R.id.btnDetalle);
         btnCancel = dialogo.findViewById(R.id.btnCancel);
+
+        for(int x = 0;x<listaEventos.size();x++){
+            if(listaEventos.get(x).getIdmodulo().equals(vehiculo.getIdentificador())){
+                listaEventoVehiculo.add(listaEventos.get(x));
+            }
+        }
+
+        for(int z =0;z<listaAlarmas.size();z++){
+            if(listaAlarmas.get(z).getIdmodulo().equals(vehiculo.getIdentificador())){
+                listaAlarmaVehiculo.add(listaAlarmas.get(z));
+            }
+        }
+
+        cuentas = listaEventoVehiculo.size();
+        cuentasAl = listaAlarmaVehiculo.size();
 
         //Si hay datos de "viaje", los muestro en el Cuadro de Diálogo
         if(vehiculo.getIdviaje() == null){
@@ -72,6 +108,8 @@ public class DialogoDatosPrueba  {
             tvM3.setText(vehiculo.getM3_viaje());
             tvAgua.setText(vehiculo.getAgua_total_viaje() + " Lts.");
         }
+
+        rvEventos.setVisibility(View.GONE);
 
         switch (vehiculo.getEstado()){
             case "0":
@@ -133,6 +171,12 @@ public class DialogoDatosPrueba  {
             tvPresion.setText("No hay datos");
         }
 
+        if(listaEventoVehiculo.size()!=0) {
+            tipoViaje = listaEventoVehiculo.get(0).getTipoNum();
+        }
+
+        tvViaje.setText(trataViaje(tipoViaje));
+
         //Botón que esconde el cuadro de diálogo
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,23 +201,52 @@ public class DialogoDatosPrueba  {
             @Override
             public void onClick(View v) {
                 dialogo.dismiss();
-                new DialogoDatosCan(context, vehiculo);
+                new DialogoDatosCan(context, vehiculo, listaEventos, listaAlarmas);
             }
         });
 
         btnEventos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                llViaje.setVisibility(View.GONE);
-                Toast.makeText(context, "Ha pulsado sacar los eventos", Toast.LENGTH_SHORT).show();
+                if(sacado){
+                    llViaje.setVisibility(View.VISIBLE);
+                    rvEventos.setVisibility(View.GONE);
+                    sacado = false;
+                }else {
+                    llViaje.setVisibility(View.GONE);
+                    rvEventos.setVisibility(View.VISIBLE);
+                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
+                    rvEventos.setAdapter(adapter);
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
+                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
+                    rvEventos.addItemDecoration(dividerItemDecoration);
+                    if (listaEventoVehiculo.size() != cuentas) {
+                        adapter.notifyItemInserted(0);
+                        adapter.notifyDataSetChanged();
+                    }
+                    sacado = true;
+                }
             }
         });
 
         btnAlertas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                llViaje.setVisibility(View.GONE);
-                Toast.makeText(context, "Ha pulsado sacar las alertas", Toast.LENGTH_SHORT).show();
+                if(sacado){
+                    llViaje.setVisibility(View.VISIBLE);
+                    rvEventos.setVisibility(View.GONE);
+                    sacado = false;
+                }else {
+                    llViaje.setVisibility(View.GONE);
+                    rvEventos.setVisibility(View.VISIBLE);
+                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
+                    rvEventos.setAdapter(adapterAl);
+                    if (listaAlarmaVehiculo.size() != cuentasAl) {
+                        adapterAl.notifyItemInserted(0);
+                        adapterAl.notifyDataSetChanged();
+                    }
+                    sacado = true;
+                }
             }
         });
 
@@ -181,8 +254,25 @@ public class DialogoDatosPrueba  {
 
     }
 
-    public void trataViaje(){
+    public String trataViaje(int tipo){
+        String tipoV = "";
+        switch (tipo){
 
+            case 6:
+                tipoV = "Descargando en obra";
+                break;
+            case 13:
+                tipoV = "Volviendo de obra";
+                break;
+            case 8:
+            case 14:
+            case 15:
+            case 18:
+                tipoV = "En dirección a obra";
+                break;
+
+        }
+        return tipoV;
     }
 
 }

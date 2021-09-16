@@ -146,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/grey"
-            android:text="@string/cancel"
+            android:text="@string/cancelar"
             android:textAlignment="center"
             android:translationX="-5dp" />
 

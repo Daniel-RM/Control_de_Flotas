@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 //Clase que maneja el cuadro de diálogo de los datos del coche con los datos del CAN
 public class DialogoDatosCan {
 
     @SuppressLint("ResourceAsColor")
-    public DialogoDatosCan(Context context, Vehiculo vehiculo){
+    public DialogoDatosCan(Context context, Vehiculo vehiculo, ArrayList<Evento> listaEventos, ArrayList<Alarma> listaAlarmas){
 
         final Dialog dialogoCAN = new Dialog(context);
         dialogoCAN.setCancelable(false);
@@ -145,7 +147,7 @@ public class DialogoDatosCan {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogoDatosPrueba(context,vehiculo);
+                new DialogoDatosPrueba(context,vehiculo, listaEventos, listaAlarmas);
                 dialogoCAN.dismiss();
             }
         });
