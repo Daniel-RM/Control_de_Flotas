@@ -39,52 +39,67 @@ public class DialogoZonas {
     public DialogoZonas(Context context, Zona zona, List<LatLng> listaPuntos, boolean edicion){
         final Dialog dialogo = new Dialog(context);
         dialogo.setCancelable(false);
-        dialogo.setContentView(R.layout.dialogo_zonas);
+        //dialogo.setContentView(R.layout.dialogo_zonas);
+        dialogo.setContentView(R.layout.dialogo_zonas_prueba);
 
-        Button btnCancelar, btnGuardar;
-        EditText etCodigo, etDescripcion, etDireccion;
-        Spinner spTipo;
+//        Button btnCancelar, btnGuardar;
+//        EditText etCodigo, etDescripcion, etDireccion;
+//        Spinner spTipo;
 
-        btnCancelar = dialogo.findViewById(R.id.btnCancelar);
-        btnGuardar = dialogo.findViewById(R.id.btnGuardar);
+        Button btnSalir, btnNueva;
+        EditText edtCodigo, edtDescripcion, edtDireccion;
+        Spinner spiTipo;
 
-        etCodigo = dialogo.findViewById(R.id.etCodigo);
-        etDescripcion = dialogo.findViewById(R.id.etDescripcion);
-        etDireccion = dialogo.findViewById(R.id.etDireccion);
-        spTipo = dialogo.findViewById(R.id.spTipo);
+//        btnCancelar = dialogo.findViewById(R.id.btnCancelar);
+//        btnGuardar = dialogo.findViewById(R.id.btnGuardar);
+//
+//        etCodigo = dialogo.findViewById(R.id.etCodigo);
+//        etDescripcion = dialogo.findViewById(R.id.etDescripcion);
+//        etDireccion = dialogo.findViewById(R.id.etDireccion);
+//        spTipo = dialogo.findViewById(R.id.spTipo);
+
+        btnSalir = dialogo.findViewById(R.id.btnSalir);
+        btnNueva = dialogo.findViewById(R.id.btnNueva);
+
+        edtCodigo = dialogo.findViewById(R.id.edtCodigo);
+        edtDescripcion = dialogo.findViewById(R.id.edtDescripcion);
+        edtDireccion = dialogo.findViewById(R.id.edtDireccion);
+        spiTipo = dialogo.findViewById(R.id.spiTipo);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,R.array.tiposZonas, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spTipo.setAdapter(adapter);
+        //spTipo.setAdapter(adapter);
+        spiTipo.setAdapter(adapter);
 
         if(zona.getCodigo()!=null){
-            etCodigo.setText(zona.getCodigo());
-            etDescripcion.setText(zona.getDescripcion());
-            etDireccion.setText(zona.getDireccion());
+            edtCodigo.setText(zona.getCodigo());
+            edtDescripcion.setText(zona.getDescripcion());
+            edtDireccion.setText(zona.getDireccion());
             switch (zona.getTipo()){
                 case PLANTA:
-                    spTipo.setSelection(0);
+                    spiTipo.setSelection(0);
                     break;
                 case OBRA:
-                    spTipo.setSelection(1);
+                    spiTipo.setSelection(1);
                     break;
                 case OFICINA:
-                    spTipo.setSelection(2);
+                    spiTipo.setSelection(2);
                     break;
                 case ZONA:
-                    spTipo.setSelection(3);
+                    spiTipo.setSelection(3);
                     break;
                 case TALLERES:
-                    spTipo.setSelection(4);
+                    spiTipo.setSelection(4);
                     break;
             }
         }
 
         if(zona.getDireccion()!=null){
-            etDireccion.setText(zona.getDireccion());
+            edtDireccion.setText(zona.getDireccion());
         }
 
         //Botón que esconde el cuadro de diálogo
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
+        btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogo.dismiss();
@@ -92,11 +107,11 @@ public class DialogoZonas {
         });
 
         //Botón que guarda la zona creada o editada
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
+        btnNueva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(context);
-                alerta.setMessage("Guardar los datos de " + etCodigo.getText().toString() + "?")
+                alerta.setMessage("Guardar los datos de " + edtCodigo.getText().toString() + "?")
                         .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -106,15 +121,15 @@ public class DialogoZonas {
                         .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(etCodigo.getText().toString().isEmpty() || etDescripcion.getText().toString().isEmpty() || etDireccion.getText().toString().isEmpty()){
+                                if(edtCodigo.getText().toString().isEmpty() || edtDescripcion.getText().toString().isEmpty() || edtDireccion.getText().toString().isEmpty()){
                                     Toast.makeText(context, "Por favor, no deje ningún dato vacío", Toast.LENGTH_SHORT).show();
                                 }else {
                                     dialogo.dismiss();
 
-                                    zona.setCodigo(etCodigo.getText().toString());
-                                    zona.setDescripcion(etDescripcion.getText().toString());
-                                    zona.setDireccion(etDireccion.getText().toString());
-                                    zona.setTipo(trataTipo(spTipo.getSelectedItem().toString()));
+                                    zona.setCodigo(edtCodigo.getText().toString());
+                                    zona.setDescripcion(edtDescripcion.getText().toString());
+                                    zona.setDireccion(edtDireccion.getText().toString());
+                                    zona.setTipo(trataTipo(spiTipo.getSelectedItem().toString()));
 
 
                                     for(int cont=0; cont<listaPuntos.size();cont++){

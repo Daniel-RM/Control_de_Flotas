@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -163,7 +164,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         sacaListView();
                         recyclerEventos.setLayoutManager(new LinearLayoutManager(context));
                         recyclerEventos.setAdapter(eventosAdapter);
-
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
+                        dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider_evento));
+                        recyclerEventos.addItemDecoration(dividerItemDecoration);
                         btnEsconde.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -185,7 +188,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         sacaListView();
                         recyclerEventos.setLayoutManager(new LinearLayoutManager(context));
                         recyclerEventos.setAdapter(alarmasAdapter);
-
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
+                        dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
+                        recyclerEventos.addItemDecoration(dividerItemDecoration);
                         btnEsconde.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -338,7 +343,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     LatLngBounds.Builder centraCamara = new LatLngBounds.Builder();
                                     for(Vehiculo vehiculo:mapaVehiculos.values()) {
                                         Marker marca = null;
-                                        if (vehiculo.getLatitud() != 0.0 && vehiculo.getLongitud() != 0.0) {
+                                        if (vehiculo.getLatitud() != 0.0 && vehiculo.getLongitud() != 0.0 ) {
                                             LatLng posicion = new LatLng(vehiculo.getLatitud(), vehiculo.getLongitud());
                                             marca = mMap.addMarker(new MarkerOptions().position(posicion).title(vehiculo.getIdentificador()));
 
@@ -430,7 +435,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         if(listaEventos.size()!=cuentas) {
                                             eventosAdapter.notifyItemInserted(0);
                                             eventosAdapter.notifyDataSetChanged();
-                                            Toast.makeText(getApplicationContext(), evento.toString(), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(context, evento.toString(), Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -438,6 +443,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                         cuentas = listaEventos.size();
                         primerEvento = false;
+
 
                     }catch(JSONException e){
                         e.printStackTrace();
@@ -584,27 +590,29 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if(!item.getTitle().toString().equals(TITULO)) {
             for (Vehiculo coche : mapaVehiculos.values()) {
-                if(coche.getEstado()==null){
+                if (coche.getEstado() == null) {
                     continue;
                 }
                 Marker marker = mapaMarcas.get(coche.getIdentificador());
-                switch (item.getTitle().toString()) {
+                if (marker != null){
+                    switch (item.getTitle().toString()) {
 
-                    case ESTADO_MARCHA:
-                        marker.setVisible(coche.getEstado().equals("0"));
-                        break;
-                    case ESTADO_PARADO:
-                        marker.setVisible(coche.getEstado().equals("1"));
-                        break;
-                    case ESTADO_RALENTI:
-                        marker.setVisible(coche.getEstado().equals("2"));
-                        break;
-                    case ESTADO_DESCARGANDO:
-                        marker.setVisible(coche.getEstado().equals("3"));
-                        break;
-                    case TODOS:
-                        marker.setVisible(true);
-                        break;
+                        case ESTADO_MARCHA:
+                            marker.setVisible(coche.getEstado().equals("0"));
+                            break;
+                        case ESTADO_PARADO:
+                            marker.setVisible(coche.getEstado().equals("1"));
+                            break;
+                        case ESTADO_RALENTI:
+                            marker.setVisible(coche.getEstado().equals("2"));
+                            break;
+                        case ESTADO_DESCARGANDO:
+                            marker.setVisible(coche.getEstado().equals("3"));
+                            break;
+                        case TODOS:
+                            marker.setVisible(true);
+                            break;
+                    }
                 }
             }
         }
@@ -675,13 +683,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas);
                     }
                 })
-                .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"Ver albaranes", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+//                .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(getApplicationContext(),"Ver albaranes", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

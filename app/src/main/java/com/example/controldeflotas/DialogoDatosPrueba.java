@@ -7,18 +7,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 
 //Clase que maneja el cuadro de diálogo de los datos del coche sin los datos del CAN
@@ -31,11 +26,9 @@ public class DialogoDatosPrueba  {
 
         final Dialog dialogo = new Dialog(context);
         dialogo.setCancelable(false);
-        dialogo.setContentView(R.layout.dialogo_datos_prueba);
+        //dialogo.setContentView(R.layout.dialogo_datos_prueba);
+        dialogo.setContentView(R.layout.dialogo_datos);
 
-//        Date currentDate = Calendar.getInstance().getTime();
-//        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-//        String fecha = format.format(currentDate);
 
         TextView  tvMatricula, tvDireccion, tvFechaHora, tvVelocidad, tvDistancia, tvAltitud, tvRpm, tvTemperatura, tvPresion;
         TextView tvViaje, tvPlanta, tvCliente, tvObra, tvAlbaran, tvM3, tvAgua;
@@ -209,7 +202,9 @@ public class DialogoDatosPrueba  {
             @Override
             public void onClick(View v) {
                 if(sacado){
-                    llViaje.setVisibility(View.VISIBLE);
+                    if(vehiculo.getIdviaje()!=null) {
+                        llViaje.setVisibility(View.VISIBLE);
+                    }
                     rvEventos.setVisibility(View.GONE);
                     sacado = false;
                 }else {
@@ -233,7 +228,9 @@ public class DialogoDatosPrueba  {
             @Override
             public void onClick(View v) {
                 if(sacado){
-                    llViaje.setVisibility(View.VISIBLE);
+                    if(vehiculo.getIdviaje()!=null) {
+                        llViaje.setVisibility(View.VISIBLE);
+                    }
                     rvEventos.setVisibility(View.GONE);
                     sacado = false;
                 }else {

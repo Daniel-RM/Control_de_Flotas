@@ -52,7 +52,7 @@ public class AgregaActivity extends AppCompatActivity implements OnMapReadyCallb
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        Toast.makeText(getApplicationContext(), "Pulse el botón \"Añadir\" para comenzar", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Pulse el botón \"Nueva\" para comenzar", Toast.LENGTH_SHORT).show();
 
         zonaNueva = new Zona();
 

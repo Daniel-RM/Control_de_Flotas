@@ -63,9 +63,9 @@
     <string name="obra">Obra:</string>
     <string name="albaran">Albarán:</string>
     <string name="m3">M3:</string>
-    <string name="aguaAd">Agua Añadida:</string>
+    <string name="aguaAd">Agua Ad.:</string>
 
-    <string name="infoCAN">info CAN</string>
+    <string name="infoCAN">CAN</string>
     <string name="eventoVehiculo">Eventos</string>
     <string name="alarmaVehiculo">Alertas</string>
 
@@ -90,9 +90,10 @@
     <string name="update">Editar</string>
     <string name="delete">Borrar</string>
     <string name="guardar">Guardar</string>
-    <string name="finalizar">Finalizar</string>
+    <string name="fin">Fin</string>
     <string name="cancelar">Cancelar</string>
-    <string name="agrega">Añadir</string>
+    <string name="agrega">Nueva</string>
+    <string name="finalizar">Finalizar</string>
 
     <string-array name="tiposZonas">
         <item>Planta Hormigón</item>

@@ -336,7 +336,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
         if(envio == true){
 
-            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), BuildConfig.APPLICATION_ID + ".provider", file);
+            //Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), BuildConfig.APPLICATION_ID + ".provider", file);
+            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), "com.example.controldeflotas" + ".provider", file);
 
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

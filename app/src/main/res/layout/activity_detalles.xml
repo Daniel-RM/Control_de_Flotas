@@ -10,15 +10,15 @@
         android:id="@+id/include"
         layout="@layout/activity_maps"
         android:layout_width="match_parent"
-        android:layout_height="460dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout5"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:paddingLeft="20dp"
@@ -29,7 +29,7 @@
 
         <Button
             android:id="@+id/btnDescargar"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/descargar"
@@ -37,8 +37,8 @@
 
         <Button
             android:id="@+id/btnEnviar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/enviar"
             android:translationX="5dp" />
@@ -48,7 +48,7 @@
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="460dp"
         android:background="@color/design_default_color_primary_dark"
         android:orientation="horizontal"
@@ -87,7 +87,7 @@
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="410dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -110,7 +110,7 @@
         android:focusable="false"
         android:hint="@string/solo_fecha"
         android:inputType="date"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
+        app:layout_constraintBottom_toTopOf="@+id/linear"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
@@ -123,7 +123,7 @@
         android:textAlignment="gravity"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
+        app:layout_constraintBottom_toTopOf="@+id/linear"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
