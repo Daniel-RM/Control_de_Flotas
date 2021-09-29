@@ -12,9 +12,9 @@
         android:id="@+id/tvHoraVehiculo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:gravity="center"
+        android:layout_weight="0.8"
         android:padding="5dp"
+        android:textAlignment="textStart"
         android:textColor="@color/teal_200" />
 
     <TextView
@@ -22,8 +22,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center"
         android:padding="5dp"
         android:singleLine="false"
+        android:textAlignment="textStart"
         android:textColor="@color/teal_200" />
 </LinearLayout>

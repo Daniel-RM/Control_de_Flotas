@@ -33,6 +33,7 @@ public class RecyclerEventosVehiculosAdapter extends RecyclerView.Adapter<Recycl
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tvHora.setText(eventosList.get(position).getFecha());
         holder.tvEvento.setText(eventosList.get(position).getTipo());
+        holder.setIsRecyclable(false);
     }
 
     @Override

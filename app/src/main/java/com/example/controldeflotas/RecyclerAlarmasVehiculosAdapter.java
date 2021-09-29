@@ -24,7 +24,7 @@ public class RecyclerAlarmasVehiculosAdapter extends RecyclerView.Adapter<Recycl
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_eventos_vehiculo, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_alertas_vehiculo, parent, false);
         parent.setBackgroundColor(context.getColor(R.color.bluefondo));
         return new ViewHolder(view);
     }

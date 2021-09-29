@@ -220,6 +220,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
@@ -253,54 +254,66 @@
 
             <TextView
                 android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="57dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:singleLine="true"
                 android:text="@string/planta"
-                android:textAlignment="center"
                 android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tvPlanta"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/teal_200" />
 
             <TextView
                 android:id="@+id/textView14"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="57dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:singleLine="true"
                 android:text="@string/cliente"
-                android:textAlignment="center"
                 android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tvCliente"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/teal_200" />
 
             <TextView
                 android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="57dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:singleLine="true"
                 android:text="@string/obra"
-                android:textAlignment="center"
                 android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:id="@+id/tvPlanta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/teal_200"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvObra"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -318,7 +331,7 @@
             <TextView
                 android:id="@+id/textView18"
                 android:layout_width="57dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/albaran"
@@ -328,7 +341,7 @@
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="57dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/m3"
@@ -338,7 +351,7 @@
             <TextView
                 android:id="@+id/textView17"
                 android:layout_width="57dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/aguaAd"
@@ -356,8 +369,8 @@
 
             <TextView
                 android:id="@+id/tvAlbaran"
-                android:layout_width="57dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -365,8 +378,8 @@
 
             <TextView
                 android:id="@+id/tvM3"
-                android:layout_width="57dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -374,8 +387,8 @@
 
             <TextView
                 android:id="@+id/tvAgua"
-                android:layout_width="57dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/teal_200"
@@ -444,8 +457,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEventos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="350dp"
+        android:layout_height="0dp"
         android:layout_weight="1" />
 
 

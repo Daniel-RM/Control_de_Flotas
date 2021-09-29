@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_700"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gris_oscuro"
+            android:gravity="center"
+            android:text="@string/datos_mostrar"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            tools:textColor="#FFFFFF" />
+
+        <CheckBox
+            android:id="@+id/chkOdometro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/odometroAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkCombustible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/combustibleAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkTemp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/temperaturaAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkRalenti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/ralentiAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkCombustibleRalenti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/combralentiAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkFrenadas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/frenadasAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkSobrefrenadas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/sobrefrenadasAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkVelocidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/sobrevelocidadAjustes"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/chkAceleracion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/sobreaceleraAjustes"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/teal_700"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
+
+        <Button
+            android:id="@+id/btnGuardaDatos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/gris_oscuro"
+            android:text="@string/confirmar"
+            android:translationX="-5dp" />
+
+        <Button
+            android:id="@+id/btnCancelaDatos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/gris_oscuro"
+            android:text="@string/cancela"
+            android:translationX="5dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

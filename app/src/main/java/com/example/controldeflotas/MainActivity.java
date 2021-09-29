@@ -1,15 +1,19 @@
 package com.example.controldeflotas;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         btnEntrada = findViewById(R.id.btnEntrada);
         etCodigoEmpresa = findViewById(R.id.etCodigoEmpresa);
 
+
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if(networkInfo==null || !networkInfo.isConnected()){
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         btnEntrada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                codigo = etCodigoEmpresa.getText().toString();
+                codigo = etCodigoEmpresa.getText().toString().trim();
                 if(codigo.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Por favor, introduzca un código para poder arrancar la aplicación", Toast.LENGTH_SHORT).show();
                     return;

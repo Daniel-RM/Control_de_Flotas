@@ -17,7 +17,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
-        android:singleLine="false" />
+        android:singleLine="false"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvDireccionDatos"
@@ -26,7 +27,8 @@
         android:layout_weight="2"
         android:gravity="center"
         android:padding="5dp"
-        android:singleLine="false" />
+        android:singleLine="false"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvAccionDatos"
@@ -35,5 +37,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
-        android:singleLine="false" />
+        android:singleLine="false"
+        android:textColor="@color/black" />
 </LinearLayout>

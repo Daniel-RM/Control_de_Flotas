@@ -40,24 +40,29 @@
             android:id="@+id/etCodigoEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:ems="10"
             android:hint="@string/usuario"
             android:inputType="textPersonName"
+            android:textColor="@color/black"
             android:textColorHint="@color/gris_oscuro" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            android:textColorHint="@color/gris_oscuro"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/teal_700">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:ems="10"
                 android:hint="@string/contraseña"
                 android:inputType="textPassword"
-                android:textColorHint="@color/gris_oscuro"
+                android:textColor="@color/black"
                 app:passwordToggleEnabled="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -66,7 +71,8 @@
             android:id="@+id/tvCheck"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/recordar" />
+            android:text="@string/recordar"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/btnEntrada"

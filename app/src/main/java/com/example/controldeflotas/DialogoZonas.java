@@ -66,9 +66,14 @@ public class DialogoZonas {
         edtDireccion = dialogo.findViewById(R.id.edtDireccion);
         spiTipo = dialogo.findViewById(R.id.spiTipo);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,R.array.tiposZonas, android.R.layout.simple_spinner_item);
+        edtCodigo.setTextColor(context.getResources().getColor(R.color.black));
+        edtDescripcion.setTextColor(context.getResources().getColor(R.color.black));
+        edtDireccion.setTextColor(context.getResources().getColor(R.color.black));
+
+
+        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,R.array.tiposZonas, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,R.array.tiposZonas, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //spTipo.setAdapter(adapter);
         spiTipo.setAdapter(adapter);
 
         if(zona.getCodigo()!=null){

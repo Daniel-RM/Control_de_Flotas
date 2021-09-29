@@ -19,12 +19,21 @@ public class Vehiculo implements Serializable {
     private String rpm;
     private String temperatura;
     private String presion;
-    private String odometro;
-    private String combustibleTotalUsado;
     private String horasMotor;
     private String combustibleNivel;
-    private String tmpMotor;
     private String distanciaServicio;
+
+    ////////////////////Datos CAN
+    private String odometro;
+    private String combustibleTotalUsado;
+    private String tmpMotor;
+    private String ralenti;
+    private String combustibleRalenti;
+    private String freno;
+    private String sobrefreno;
+    private String sobrevelocidad;
+    private String sobreaceleracion;
+
 
     /////////////////////Datos de viaje
     private String carga_descarga_viaje;
@@ -302,6 +311,40 @@ public class Vehiculo implements Serializable {
 
     public void setAgua_viaje(String agua_viaje) {
         this.agua_viaje = agua_viaje;
+    }
+
+    public String getRalenti() {return ralenti;}
+
+    public void setRalenti(String ralenti) {this.ralenti = ralenti;}
+
+    public String getCombustibleRalenti() {return combustibleRalenti;}
+
+    public void setCombustibleRalenti(String combustibleRalenti) {
+        this.combustibleRalenti = combustibleRalenti;
+    }
+
+    public String getFreno() {return freno;}
+
+    public void setFreno(String freno) {this.freno = freno;}
+
+    public String getSobrefreno() {return sobrefreno;}
+
+    public void setSobrefreno(String sobrefreno) {
+        this.sobrefreno = sobrefreno;
+    }
+
+    public String getSobrevelocidad() {return sobrevelocidad;}
+
+    public void setSobrevelocidad(String sobrevelocidad) {
+        this.sobrevelocidad = sobrevelocidad;
+    }
+
+    public String getSobreaceleracion() {
+        return sobreaceleracion;
+    }
+
+    public void setSobreaceleracion(String sobreaceleracion) {
+        this.sobreaceleracion = sobreaceleracion;
     }
 
     @Override

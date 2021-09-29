@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/recorte"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -54,6 +54,7 @@
             android:ems="10"
             android:hint="@string/codigo"
             android:inputType="textPersonName"
+            android:textColor="@color/black"
             android:textColorHint="@color/gris_oscuro" />
 
         <Button

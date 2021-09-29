@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="350dp"
     android:layout_height="match_parent"
     android:background="@color/bluefondo"
     android:orientation="vertical"
@@ -141,7 +141,7 @@
 
         <TextView
             android:id="@+id/tvRpmTitle"
-            android:layout_width="57dp"
+            android:layout_width="65dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -152,7 +152,7 @@
 
         <TextView
             android:id="@+id/tvTemperaturaTitle"
-            android:layout_width="57dp"
+            android:layout_width="65dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -163,7 +163,7 @@
 
         <TextView
             android:id="@+id/tvPresionTitle"
-            android:layout_width="57dp"
+            android:layout_width="65dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -221,6 +221,7 @@
         android:textColor="@color/white" />
 
     <LinearLayout
+        android:id="@+id/lltvTitle3"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/black"
@@ -231,38 +232,39 @@
         <TextView
             android:id="@+id/tvTitle1"
             android:layout_width="57dp"
-            android:layout_height="match_parent"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/odometro"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvTitle2"
             android:layout_width="57dp"
-            android:layout_height="match_parent"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/combustibleUsado"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvTitle3"
             android:layout_width="57dp"
-            android:layout_height="match_parent"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/horasMotor"
+            android:text="@string/tempMotor"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lltvDato3"
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:background="@color/black"
@@ -299,6 +301,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lltvTitle6"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/black"
@@ -308,39 +311,40 @@
 
         <TextView
             android:id="@+id/tvTitle4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="57dp"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/nivelCombustible"
+            android:text="@string/ralentiAjustes"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvTitle5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="57dp"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/tempMotor"
+            android:text="@string/combralentiAjustes"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvTitle6"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="57dp"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/servicio"
+            android:text="@string/frenadasAjustes"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lltvDato6"
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:background="@color/black"
@@ -368,6 +372,83 @@
 
         <TextView
             android:id="@+id/tvDato6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/teal_200"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lltvTitle9"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/black"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <TextView
+            android:id="@+id/tvTitle7"
+            android:layout_width="57dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sobrefrenadasAjustes"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvTitle8"
+            android:layout_width="57dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sobrevelocidadAjustes"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvTitle9"
+            android:layout_width="57dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sobreaceleraAjustes"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lltvDato9"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:background="@color/black"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <TextView
+            android:id="@+id/tvDato7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/teal_200"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvDato8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/teal_200"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvDato9"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

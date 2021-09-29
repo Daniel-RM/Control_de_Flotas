@@ -36,12 +36,12 @@ public class DialogoDatosCan {
         tvTemperatura = dialogoCAN.findViewById(R.id.tvTemperatura);
         tvPresion = dialogoCAN.findViewById(R.id.tvPresion);
 
-        tvOdometro = dialogoCAN.findViewById(R.id.tvOdometro);
-        tvCombustibleUsado = dialogoCAN.findViewById(R.id.tvCombustibleUsado);
-        tvHorasMotor = dialogoCAN.findViewById(R.id.tvHorasMotor);
-        tvCombustibleNivel = dialogoCAN.findViewById(R.id.tvCombustibleNivel);
-        tvTemperaturaMotor = dialogoCAN.findViewById(R.id.tvTemperaturaMotor);
-        tvDistanciaServicio = dialogoCAN.findViewById(R.id.tvDistanciaServicio);
+        tvOdometro = dialogoCAN.findViewById(R.id.tvDato1);
+        tvCombustibleUsado = dialogoCAN.findViewById(R.id.tvDato2);
+        tvHorasMotor = dialogoCAN.findViewById(R.id.tvDato3);
+        tvCombustibleNivel = dialogoCAN.findViewById(R.id.tvDato4);
+        tvTemperaturaMotor = dialogoCAN.findViewById(R.id.tvDato5);
+        tvDistanciaServicio = dialogoCAN.findViewById(R.id.tvDato6);
 
         btnDetalle = dialogoCAN.findViewById(R.id.btnDetalle);
         btnCancel = dialogoCAN.findViewById(R.id.btnCancel);
@@ -147,7 +147,7 @@ public class DialogoDatosCan {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogoDatosPrueba(context,vehiculo, listaEventos, listaAlarmas);
+                new DialogoDatos(context,vehiculo, listaEventos, listaAlarmas);
                 dialogoCAN.dismiss();
             }
         });

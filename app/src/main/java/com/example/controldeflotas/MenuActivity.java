@@ -41,8 +41,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,7 +67,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     Map<String, Vehiculo> mapaVehiculos = new HashMap<>();
     Map<String, Marker> mapaMarcas = new HashMap<>();
     List<Flota> flotas = null;
-    static List<Vehiculo> listaVehiculos = new ArrayList<>();
+    static ArrayList<Vehiculo> listaVehiculos = new ArrayList<>();
     ArrayList<Evento> listaEventos = new ArrayList<>();
     ArrayList<Alarma> listaAlarmas = new ArrayList<Alarma>();
 
@@ -97,6 +97,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     RecyclerEventosAdapter eventosAdapter;
     RecyclerAlarmasAdapter alarmasAdapter;
     int cuentas, cuentasAlarmas;
+
+    public static List<String> datos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,6 +307,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if(jVehiculo.has("distancia_servicio")){
                                 vehiculo.setDistanciaServicio(jVehiculo.getString("distancia_servicio"));
                             }
+                            /////////////////////////////////////////////////////////////////////////
 
                             mapaVehiculos.put(identificador,vehiculo);
 
@@ -435,7 +438,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         if(listaEventos.size()!=cuentas) {
                                             eventosAdapter.notifyItemInserted(0);
                                             eventosAdapter.notifyDataSetChanged();
-                                            Toast.makeText(context, evento.toString(), Toast.LENGTH_LONG).show();
+                                           // Toast.makeText(context, evento.toString(), Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -674,52 +677,56 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //Icono informes - abro cuadro de diálogo con las distintas opciones: informes, albaranes o cancelar.
     public void informes(View view){
-        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
-        alerta.setMessage("Qué tipo de informe quiere?")
-                .setCancelable(false)
-                .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas);
-                    }
-                })
-//                .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
+        new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas, MenuActivity.this);
+//        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
+//        alerta.setMessage("Qué tipo de informe quiere?")
+//                .setCancelable(false)
+//                .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener() {
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
-//                        Toast.makeText(getApplicationContext(),"Ver albaranes", Toast.LENGTH_SHORT).show();
+//                        new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas);
 //                    }
 //                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog titulo = alerta.create();
-        titulo.setTitle("Informes y albaranes");
-        titulo.show();
+////                .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
+////                    @Override
+////                    public void onClick(DialogInterface dialog, int which) {
+////                        Toast.makeText(getApplicationContext(),"Ver albaranes", Toast.LENGTH_SHORT).show();
+////                    }
+////                })
+//                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+//        AlertDialog titulo = alerta.create();
+//        titulo.setTitle("Informes y albaranes");
+//        titulo.show();
     }
 
     //El usuario podrá seleccionar los datos a mostrar en el cuadro de diálogo
     public void ajustes(View view){
-        AlertDialog.Builder alert = new AlertDialog.Builder(MenuActivity.this);
-        alert.setMessage("Elija los datos a mostrar:")
-                .setCancelable(false)
-                .setPositiveButton("Datos del vehículo", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        datosCAN = false;
-                    }
-                })
-                .setNegativeButton("Datos del vehículo y su estado", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        datosCAN = true;
-                    }
-                });
-        AlertDialog titulo = alert.create();
-        titulo.setTitle("Datos a mostrar");
-        titulo.show();
+
+        new DialogoAjustes(context);
+
+//        AlertDialog.Builder alert = new AlertDialog.Builder(MenuActivity.this);
+//        alert.setMessage("Elija los datos a mostrar:")
+//                .setCancelable(false)
+//                .setPositiveButton("Datos del vehículo", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        datosCAN = false;
+//                    }
+//                })
+//                .setNegativeButton("Datos del vehículo y su estado", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        datosCAN = true;
+//                    }
+//                });
+//        AlertDialog titulo = alert.create();
+//        titulo.setTitle("Datos a mostrar");
+//        titulo.show();
     }
 
     public void toggleMenu(View view){
@@ -741,7 +748,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(datosCAN){
                     new DialogoDatosCan(MenuActivity.this, vehi, listaEventos, listaAlarmas);
                 }else {
-                    new DialogoDatosPrueba(MenuActivity.this, vehi, listaEventos, listaAlarmas);
+                    new DialogoDatos(MenuActivity.this, vehi, listaEventos, listaAlarmas);
                 }
                 return true;
             }

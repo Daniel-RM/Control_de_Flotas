@@ -17,16 +17,15 @@ import java.util.ArrayList;
 
 
 //Clase que maneja el cuadro de diálogo de los datos del coche sin los datos del CAN
-public class DialogoDatosPrueba  {
+public class DialogoDatos {
 
     boolean sacado = false;
 
     @SuppressLint("ResourceAsColor")
-    public DialogoDatosPrueba(Context context, Vehiculo vehiculo, ArrayList<Evento> listaEv, ArrayList<Alarma> listaAl){
+    public DialogoDatos(Context context, Vehiculo vehiculo, ArrayList<Evento> listaEv, ArrayList<Alarma> listaAl){
 
         final Dialog dialogo = new Dialog(context);
         dialogo.setCancelable(false);
-        //dialogo.setContentView(R.layout.dialogo_datos_prueba);
         dialogo.setContentView(R.layout.dialogo_datos);
 
 
@@ -194,7 +193,8 @@ public class DialogoDatosPrueba  {
             @Override
             public void onClick(View v) {
                 dialogo.dismiss();
-                new DialogoDatosCan(context, vehiculo, listaEventos, listaAlarmas);
+                //new DialogoDatosCan(context, vehiculo, listaEventos, listaAlarmas);
+                new DialogoDatosCanPrueba(context, vehiculo, listaEventos, listaAlarmas);
             }
         });
 

@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Picture;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -125,6 +127,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         pbDetalles = findViewById(R.id.pbDetalles);
         btnVisual = findViewById(R.id.btnVisuali);
 
+        editText.setTextColor(getResources().getColor(R.color.black));
+
 
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -182,7 +186,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View v) {
                 lineas = listaDatos.size();
                 crearPDF(true, editText.getText().toString());
-                Toast.makeText(getApplicationContext(), "Ha pulsado enviar", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Ha pulsado enviar", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -244,16 +248,18 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 myPaint.setColor(Color.rgb(122, 119, 119));
                 canvas.drawText("Pol. Ind. La Cuesta, c/ Castilla y León, 5 ; La Almunia de Dª Godina", myPageInfo.getPageWidth() / 2, 40, myPaint);
 
+
+
                 myPaint.setTextAlign(Paint.Align.LEFT);
                 myPaint.setTextSize(9.0f);
                 myPaint.setColor(Color.rgb(81, 164, 157));
                 canvas.drawText("Informe de " + vehiculo.getMatricula(), 10, 70, myPaint);
                 canvas.drawText("Fecha: " + cuando, 400, 70, myPaint);
-                //canvas.drawText("Fecha: " + fecha, 400, 70, myPaint);
+
 
                 canvas.drawText("Hora:", 10, 90, myPaint);
                 canvas.drawText("| Dirección:", 55, 90, myPaint);
-                canvas.drawText("| Comportamiento:", 340, 90, myPaint);
+                canvas.drawText("| Comportamiento:", 225, 90, myPaint);
                 canvas.drawLine(10, 93, myPageInfo.getPageWidth() - 10, 93, myPaint);
 
                 myPaint.setTextAlign(Paint.Align.LEFT);
@@ -311,6 +317,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         } while (lineas > 0);
 
         //Creo el fichero. Si existe uno previo, lo borro
+        NOMBRE_DOCUMENTO = vehiculo.getMatricula().trim() + ".pdf";
         file = new File(NOMBRE_DIRECTORIO, NOMBRE_DOCUMENTO);
 
         if (!file.exists()) {
@@ -343,7 +350,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             emailIntent.putExtra(Intent.EXTRA_EMAIL,"");
             emailIntent.putExtra(Intent.EXTRA_SUBJECT,"Informe de " + vehiculo.getIdentificador());//Asunto - título mensaje
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "Hola.\nLe adjunto PDF con el informe de " + vehiculo.getIdentificador());//Mensaje
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Hola.\nLe adjunto PDF con el informe de " + vehiculo.getIdentificador() + "\nUn saludo.");//Mensaje
             emailIntent.setType("application/pdf");
             emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(emailIntent, "Enviar email usando:"));

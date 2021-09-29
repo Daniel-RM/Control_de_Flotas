@@ -49,6 +49,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.google.maps.android:android-maps-utils:0.4+'
     compileOnly 'com.google.android.wearable:wearable:2.6.0'
-
     implementation files('libs/droidText.0.4.jar')
 }
