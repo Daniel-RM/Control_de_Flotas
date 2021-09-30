@@ -20,6 +20,8 @@ public class DialogoDatosCanPrueba {
         dialogoCAN.setCancelable(false);
         dialogoCAN.setContentView(R.layout.dialogo_datos_can_prueba);
 
+        LinearLayout llFuera1, llFuera2, llFuera3, llFuera4;
+
         LinearLayout lltvTitle3, lltvTitle6, lltvTitle9, lltvDato3, lltvDato6, lltvDato9;
         TextView tvMatricula, tvDireccion, tvFechaHora, tvVelocidad, tvDistancia, tvAltitud, tvRpm, tvTemperatura, tvPresion;
         TextView tvTitle1, tvTitle2, tvTitle3, tvTitle4, tvTitle5, tvTitle6, tvTitle7, tvTitle8, tvTitle9;
@@ -27,6 +29,10 @@ public class DialogoDatosCanPrueba {
         Button btnDetalle, btnCancel;
         int numDatos = 0;
 
+        llFuera1 = dialogoCAN.findViewById(R.id.llFuera1);
+        llFuera2 = dialogoCAN.findViewById(R.id.llFuera2);
+        llFuera3 = dialogoCAN.findViewById(R.id.llFuera3);
+        llFuera4 = dialogoCAN.findViewById(R.id.llFuera4);
 
         lltvTitle3 = dialogoCAN.findViewById(R.id.lltvTitle3);
         lltvTitle6 = dialogoCAN.findViewById(R.id.lltvTitle6);
@@ -67,6 +73,11 @@ public class DialogoDatosCanPrueba {
 
         btnDetalle = dialogoCAN.findViewById(R.id.btnDetalle);
         btnCancel = dialogoCAN.findViewById(R.id.btnCancel);
+
+        llFuera1.setVisibility(View.GONE);
+        llFuera2.setVisibility(View.GONE);
+        llFuera3.setVisibility(View.GONE);
+        llFuera4.setVisibility(View.GONE);
 
         switch (vehiculo.getEstado()){
             case "0":
@@ -263,37 +274,37 @@ public class DialogoDatosCanPrueba {
         if(!vehiculo.getVelocidad().equals("null")){
             tvVelocidad.setText(vehiculo.getVelocidad() + " km/h");
         }else{
-            tvVelocidad.setText("No hay datos");
+            tvVelocidad.setText("Sin datos");
         }
 
         if(!vehiculo.getDistancia().equals("null")){
             tvDistancia.setText(vehiculo.getDistancia() + " kms");
         }else{
-            tvDistancia.setText("No hay datos");
+            tvDistancia.setText("Sin datos");
         }
 
         if(!vehiculo.getAltitud().equals("null")){
             tvAltitud.setText(vehiculo.getAltitud() + " mts");
         }else{
-            tvAltitud.setText("No hay datos");
+            tvAltitud.setText("Sin datos");
         }
 
         if(!vehiculo.getRpm().equals("null")){
             tvRpm.setText(vehiculo.getRpm() + " rpm");
         }else{
-            tvRpm.setText("No hay datos");
+            tvRpm.setText("Sin datos");
         }
 
         if(!vehiculo.getTemperatura().equals("null")){
             tvTemperatura.setText(vehiculo.getTemperatura() + " °C");
         }else{
-            tvTemperatura.setText("No hay datos");
+            tvTemperatura.setText("Sin datos");
         }
 
         if(!vehiculo.getPresion().equals("null")){
             tvPresion.setText(vehiculo.getPresion().substring(0,3) + " mbar");
         }else{
-            tvPresion.setText("No hay datos");
+            tvPresion.setText("Sin datos");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,55 +313,55 @@ public class DialogoDatosCanPrueba {
         if(!vehiculo.getOdometro().equals("null")){
             tvDato1.setText(vehiculo.getOdometro() + " kms");
         }else{
-            tvDato1.setText("No hay datos");
+            tvDato1.setText("Sin datos");
         }
 
         if(!vehiculo.getCombustibleTotalUsado().equals("null")){
             tvDato2.setText(vehiculo.getCombustibleTotalUsado() + " lts");
         }else{
-            tvDato2.setText("No hay datos");
+            tvDato2.setText("Sin datos");
         }
 
         if(!vehiculo.getTmpMotor().equals("null")){
             tvDato3.setText(vehiculo.getTmpMotor() + " °C");
         }else{
-            tvDato3.setText("No hay datos");
+            tvDato3.setText("Sin datos");
         }
 
         if(vehiculo.getRalenti()!=null){
             tvDato4.setText(vehiculo.getRalenti() + " seg");
         }else{
-            tvDato4.setText("No hay datos");
+            tvDato4.setText("Sin datos");
         }
 
         if(vehiculo.getCombustibleRalenti()!=null){
             tvDato5.setText(vehiculo.getCombustibleRalenti() + " lts");
         }else{
-            tvDato5.setText("No hay datos");
+            tvDato5.setText("Sin datos");
         }
 
         if(vehiculo.getFreno()!=null){
             tvDato6.setText(vehiculo.getFreno() + " veces");
         }else{
-            tvDato6.setText("No hay datos");
+            tvDato6.setText("Sin datos");
         }
 
         if(vehiculo.getSobrefreno()!=null){
             tvDato7.setText(vehiculo.getSobrefreno() + " veces");
         }else{
-            tvDato7.setText("No hay datos");
+            tvDato7.setText("Sin datos");
         }
 
         if(vehiculo.getSobrevelocidad()!=null){
             tvDato8.setText(vehiculo.getSobrevelocidad() + " veces");
         }else{
-            tvDato8.setText("No hay datos");
+            tvDato8.setText("Sin datos");
         }
 
         if(vehiculo.getSobreaceleracion()!=null){
             tvDato9.setText(vehiculo.getSobreaceleracion() + " veces");
         }else{
-            tvDato9.setText("No hay datos");
+            tvDato9.setText("Sin datos");
         }
 */
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -389,7 +400,7 @@ public class DialogoDatosCanPrueba {
         }else if(dato.equals("tiempo_ralenti")){
             dato = "Tiempo en ralentí:";
         }else if(dato.equals("combustible_ralenti")){
-            dato = "Cobustible durante ralentí";
+            dato = "Cobustible en ralentí";
         }else if(dato.equals("aplicaciones_freno")){
             dato = "Aplicaciones de freno:";
         }else if(dato.equals("aplicaciones_sobrefrenado")){
@@ -409,55 +420,55 @@ public class DialogoDatosCanPrueba {
             if(!vehiculo.getOdometro().equals("null")) {
                 dato = vehiculo.getOdometro() + " kms.";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if(dato.equals("combustibleTot")){
             if(!vehiculo.getCombustibleTotalUsado().equals("null")) {
                 dato = vehiculo.getCombustibleTotalUsado() + " lts.";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if (dato.equals("tmp_motor")){
             if(!vehiculo.getTmpMotor().equals("null")) {
                 dato = vehiculo.getTmpMotor() + " °C";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if(dato.equals("tiempo_ralenti")){
             if(vehiculo.getRalenti()!=null) {
                 dato = vehiculo.getRalenti() + " seg.";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if(dato.equals("combustible_ralenti")){
             if(vehiculo.getCombustibleRalenti()!=null) {
                 dato = vehiculo.getCombustibleRalenti() + " lts.";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if(dato.equals("aplicaciones_freno")){
             if(vehiculo.getFreno()!=null) {
                 dato = vehiculo.getFreno() + " veces";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if(dato.equals("aplicaciones_sobrefrenado")){
             if(vehiculo.getSobrefreno()!=null) {
                 dato = vehiculo.getSobrefreno() + " veces";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if(dato.equals("duracion_sobrevelocidad")){
             if(vehiculo.getSobrevelocidad()!=null) {
                 dato = vehiculo.getSobrevelocidad() + " seg.";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }else if(dato.equals("duracion_sobreaceleracion")){
             if(vehiculo.getSobreaceleracion()!=null) {
                 dato = vehiculo.getSobreaceleracion() + " seg.";
             }else{
-                dato = "No hay datos";
+                dato = "Sin datos";
             }
         }
 

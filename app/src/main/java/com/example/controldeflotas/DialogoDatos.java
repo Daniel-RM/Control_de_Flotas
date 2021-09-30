@@ -165,6 +165,7 @@ public class DialogoDatos {
 
         if(listaEventoVehiculo.size()!=0) {
             tipoViaje = listaEventoVehiculo.get(0).getTipoNum();
+            int y = 0;
         }
 
         tvViaje.setText(trataViaje(tipoViaje));
@@ -224,6 +225,8 @@ public class DialogoDatos {
             }
         });
 
+
+
         btnAlertas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,6 +259,7 @@ public class DialogoDatos {
         switch (tipo){
 
             case 6:
+
                 tipoV = "Descargando en obra";
                 break;
             case 13:
@@ -265,6 +269,7 @@ public class DialogoDatos {
             case 14:
             case 15:
             case 18:
+            case 24:
                 tipoV = "En dirección a obra";
                 break;
 

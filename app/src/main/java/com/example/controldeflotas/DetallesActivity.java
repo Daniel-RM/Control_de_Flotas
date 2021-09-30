@@ -127,7 +127,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         pbDetalles = findViewById(R.id.pbDetalles);
         btnVisual = findViewById(R.id.btnVisuali);
 
-        editText.setTextColor(getResources().getColor(R.color.black));
+        //editText.setTextColor(getResources().getColor(R.color.black));
 
 
         Date currentDate = Calendar.getInstance().getTime();

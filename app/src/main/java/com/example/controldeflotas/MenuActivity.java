@@ -125,6 +125,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         modo_normal = true;
 
+        listaVehiculos = new ArrayList<>();
+
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
         String fecha = format.format(currentDate);
@@ -265,6 +267,9 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if(jVehiculo.has("tipoVehiculo")){
                                 vehiculo.setTipoVehiculo(jVehiculo.getString("tipoVehiculo"));
                             }
+//                            else{
+//                                vehiculo.setTipoVehiculo("HORMIGONERA");
+//                            }
 
                             ////////////////////   DATOS VIAJE   ////////////////////////////////////
                             if(jVehiculo.has("viaje")){
@@ -438,7 +443,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         if(listaEventos.size()!=cuentas) {
                                             eventosAdapter.notifyItemInserted(0);
                                             eventosAdapter.notifyDataSetChanged();
-                                           // Toast.makeText(context, evento.toString(), Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -502,10 +506,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         if(listaAlarmas.size()!=cuentasAlarmas){
                                             alarmasAdapter.notifyItemInserted(0);
                                             alarmasAdapter.notifyDataSetChanged();
-                                            Toast toast = Toast.makeText(getApplicationContext(), alarma.toString(), Toast.LENGTH_LONG);
-                                            View view = toast.getView();
-                                            view.setBackgroundColor(holo_orange_light);
-                                            toast.show();
+                                            Toast.makeText(getApplicationContext(), alarma.toString(), Toast.LENGTH_LONG);
                                         }
                                     }
                                 });
@@ -640,7 +641,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setPositiveButton("Volver a la pantalla de Login", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     }
                 })

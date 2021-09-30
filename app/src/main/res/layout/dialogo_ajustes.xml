@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/odometroAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/combustibleAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -47,6 +49,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/temperaturaAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -55,6 +58,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/ralentiAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -63,6 +67,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/combralentiAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -71,6 +76,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/frenadasAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -79,6 +85,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/sobrefrenadasAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -87,6 +94,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/sobrevelocidadAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
         <CheckBox
@@ -95,6 +103,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/sobreaceleraAjustes"
+            android:buttonTint="@color/white"
             android:textColor="@color/white" />
 
     </LinearLayout>
@@ -117,15 +126,28 @@
             android:layout_weight="1"
             android:backgroundTint="@color/gris_oscuro"
             android:text="@string/confirmar"
+            android:textSize="12sp"
             android:translationX="-5dp" />
 
         <Button
-            android:id="@+id/btnCancelaDatos"
+            android:id="@+id/btnSeleccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/gris_oscuro"
+            android:text="@string/todo"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnCancelaSel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/gris_oscuro"
             android:text="@string/cancela"
+            android:textSize="12sp"
             android:translationX="5dp" />
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="350dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bluefondo"
     android:orientation="vertical"
@@ -14,7 +14,7 @@
     <TextView
         android:id="@+id/tvMatricula"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:background="@color/green"
         android:drawablePadding="10dp"
         android:gravity="center"
@@ -52,6 +52,7 @@
         android:textSize="18sp" />
 
     <LinearLayout
+        android:id="@+id/llFuera1"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_marginTop="5dp"
@@ -95,6 +96,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llFuera2"
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:background="@color/black"
@@ -132,6 +134,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llFuera3"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:background="@color/black"
@@ -174,6 +177,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llFuera4"
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:background="@color/black"
@@ -215,6 +219,7 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:background="@color/red"
         android:text="@string/datosCan"
         android:textAlignment="center"
@@ -231,8 +236,8 @@
 
         <TextView
             android:id="@+id/tvTitle1"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/odometro"
@@ -242,8 +247,8 @@
 
         <TextView
             android:id="@+id/tvTitle2"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/combustibleUsado"
@@ -253,8 +258,8 @@
 
         <TextView
             android:id="@+id/tvTitle3"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/tempMotor"
@@ -279,7 +284,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDato2"
@@ -288,7 +293,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDato3"
@@ -297,7 +302,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -306,39 +311,36 @@
         android:layout_height="45dp"
         android:background="@color/black"
         android:orientation="horizontal"
-        android:paddingLeft="5dp"
+        android:paddingLeft="10dp"
         android:paddingRight="5dp">
 
         <TextView
             android:id="@+id/tvTitle4"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/ralentiAjustes"
-            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvTitle5"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/combralentiAjustes"
-            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvTitle6"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/frenadasAjustes"
-            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </LinearLayout>
@@ -359,7 +361,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDato5"
@@ -368,7 +370,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDato6"
@@ -377,7 +379,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -391,8 +393,8 @@
 
         <TextView
             android:id="@+id/tvTitle7"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/sobrefrenadasAjustes"
@@ -401,8 +403,8 @@
 
         <TextView
             android:id="@+id/tvTitle8"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/sobrevelocidadAjustes"
@@ -411,8 +413,8 @@
 
         <TextView
             android:id="@+id/tvTitle9"
-            android:layout_width="57dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/sobreaceleraAjustes"
@@ -436,7 +438,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDato8"
@@ -445,7 +447,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDato9"
@@ -454,7 +456,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/teal_200"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout

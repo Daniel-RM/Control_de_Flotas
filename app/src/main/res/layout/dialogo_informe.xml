@@ -45,8 +45,7 @@
             android:id="@+id/listViewCoches"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@color/white"
-            android:divider="@color/gris_oscuro"
+            android:divider="@color/black"
             android:dividerHeight="0.5dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

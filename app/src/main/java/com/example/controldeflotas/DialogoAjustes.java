@@ -16,7 +16,7 @@ public class DialogoAjustes {
     CheckBox chkOdometro, chkCombustible, chkTemp, chkRalenti, chkCombustibleRalenti, chkFrenadas, chkSobrefrenadas, chkVelocidad, chkAceleracion;
 
 
-    Button btnGuardaDatos, btnCancelaDatos;
+    Button btnGuardaDatos, btnSeleccion, btnCancelaSel;
 
     public DialogoAjustes(Context context){
         dialogo = new Dialog(context);
@@ -37,14 +37,47 @@ public class DialogoAjustes {
         chkVelocidad = dialogo.findViewById(R.id.chkVelocidad);
         chkAceleracion = dialogo.findViewById(R.id.chkAceleracion);
         btnGuardaDatos = dialogo.findViewById(R.id.btnGuardaDatos);
-        btnCancelaDatos = dialogo.findViewById(R.id.btnCancelaDatos);
+        btnSeleccion = dialogo.findViewById(R.id.btnSeleccion);
+        btnCancelaSel = dialogo.findViewById(R.id.btnCancelaSel);
 
-        btnCancelaDatos.setOnClickListener(new View.OnClickListener() {
+
+        btnCancelaSel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogo.dismiss();
             }
         });
+
+
+        btnSeleccion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!chkOdometro.isChecked()) {
+                    chkOdometro.setChecked(true);
+                    chkCombustible.setChecked(true);
+                    chkTemp.setChecked(true);
+                    chkRalenti.setChecked(true);
+                    chkCombustibleRalenti.setChecked(true);
+                    chkFrenadas.setChecked(true);
+                    chkSobrefrenadas.setChecked(true);
+                    chkVelocidad.setChecked(true);
+                    chkAceleracion.setChecked(true);
+                    btnSeleccion.setText("Quitar selección");
+                }else{
+                    chkOdometro.setChecked(false);
+                    chkCombustible.setChecked(false);
+                    chkTemp.setChecked(false);
+                    chkRalenti.setChecked(false);
+                    chkCombustibleRalenti.setChecked(false);
+                    chkFrenadas.setChecked(false);
+                    chkSobrefrenadas.setChecked(false);
+                    chkVelocidad.setChecked(false);
+                    chkAceleracion.setChecked(false);
+                    btnSeleccion.setText("Seleccionar todo");
+                }
+            }
+        });
+
 
         btnGuardaDatos.setOnClickListener(new View.OnClickListener() {
             @Override

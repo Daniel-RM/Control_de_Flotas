@@ -41,6 +41,7 @@ public class DialogoInforme extends Activity{
 
     public DialogoInforme(Context context, ArrayList<Vehiculo> lista, ArrayList<Evento> listaEv, ArrayList<Alarma> listaAl, Activity activity){
 
+
         dialogo = new Dialog(context);
         dialogo.setCancelable(true);
         dialogo.setContentView(R.layout.dialogo_informe);

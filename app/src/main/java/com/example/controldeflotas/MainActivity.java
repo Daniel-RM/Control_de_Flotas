@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         conexiones.put("UNIFOR","ControlFlotasUnifor");
         conexiones.put("PREMON","ControlFlotasPremon");
         conexiones.put("CANARY","ControlFlotasCanary");
-        conexiones.put("LLUCBETON","ControlFlotasLlucbeton");
+        conexiones.put("LLUCBETON","ControlFlotasLlucBeton");
     }
 
 

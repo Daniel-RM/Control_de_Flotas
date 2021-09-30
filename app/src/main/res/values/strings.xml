@@ -107,16 +107,17 @@
     <!--Pantalla de Diálogo Ajustes-->
     <string name="datos_mostrar">SELECCIONE LOS DATOS A MOSTRAR</string>
     <string name="odometroAjustes">Odómetro</string>
-    <string name="combustibleAjustes">Combustible total usado</string>
+    <string name="combustibleAjustes">Combustible total:</string>
     <string name="temperaturaAjustes">Temperatura del motor</string>
     <string name="ralentiAjustes">Tiempo en ralentí</string>
-    <string name="combralentiAjustes">Combustible durante ralentí</string>
+    <string name="combralentiAjustes">Combustible en ralentí</string>
     <string name="frenadasAjustes">Nº aplicaciones freno</string>
     <string name="sobrefrenadasAjustes">Nº frenadas con sobrefrenado</string>
     <string name="sobrevelocidadAjustes">Duración sobre velocidad</string>
     <string name="sobreaceleraAjustes">Duración sobre aceleración</string>
     <string name="confirmar">Confirmar</string>
     <string name="cancela">Cancelar</string>
+    <string name="todo">Seleccionar Todo</string>
 
 
 </resources>
