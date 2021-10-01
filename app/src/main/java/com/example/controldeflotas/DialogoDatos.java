@@ -19,7 +19,8 @@ import java.util.ArrayList;
 //Clase que maneja el cuadro de diálogo de los datos del coche sin los datos del CAN
 public class DialogoDatos {
 
-    boolean sacado = false;
+    boolean sacadoAlertas = false;
+    boolean sacadoEventos = false;
 
     @SuppressLint("ResourceAsColor")
     public DialogoDatos(Context context, Vehiculo vehiculo, ArrayList<Evento> listaEv, ArrayList<Alarma> listaAl){
@@ -199,44 +200,65 @@ public class DialogoDatos {
             }
         });
 
+//        btnEventos.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(sacado){
+//                    if(vehiculo.getIdviaje()!=null) {
+//                        llViaje.setVisibility(View.VISIBLE);
+//                    }
+//                    rvEventos.setVisibility(View.GONE);
+//                    sacado = false;
+//                }else {
+//                    llViaje.setVisibility(View.GONE);
+//                    rvEventos.setVisibility(View.VISIBLE);
+//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
+//                    rvEventos.setAdapter(adapter);
+//                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
+//                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
+//                    rvEventos.addItemDecoration(dividerItemDecoration);
+//                    if (listaEventoVehiculo.size() != cuentas) {
+//                        adapter.notifyItemInserted(0);
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                    sacado = true;
+//                }
+//            }
+//        });
+
         btnEventos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(sacado){
-                    if(vehiculo.getIdviaje()!=null) {
-                        llViaje.setVisibility(View.VISIBLE);
-                    }
-                    rvEventos.setVisibility(View.GONE);
-                    sacado = false;
-                }else {
-                    llViaje.setVisibility(View.GONE);
-                    rvEventos.setVisibility(View.VISIBLE);
-                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
-                    rvEventos.setAdapter(adapter);
-                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
-                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
-                    rvEventos.addItemDecoration(dividerItemDecoration);
-                    if (listaEventoVehiculo.size() != cuentas) {
-                        adapter.notifyItemInserted(0);
-                        adapter.notifyDataSetChanged();
-                    }
-                    sacado = true;
-                }
+               if(!sacadoEventos){
+                   llViaje.setVisibility(View.GONE);
+                   rvEventos.setVisibility(View.VISIBLE);
+                   rvEventos.setLayoutManager(new LinearLayoutManager(context));
+                   rvEventos.setAdapter(adapter);
+                   DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
+                   dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
+                   rvEventos.addItemDecoration(dividerItemDecoration);
+                   if (listaEventoVehiculo.size() != cuentas) {
+                       adapter.notifyItemInserted(0);
+                       adapter.notifyDataSetChanged();
+                   }
+
+                   sacadoEventos = true;
+                   sacadoAlertas = false;
+               }else{
+                   rvEventos.setVisibility(View.GONE);
+                   sacadoEventos = false;
+                   if(vehiculo.getIdviaje()!=null) {
+                       llViaje.setVisibility(View.VISIBLE);
+                   }
+               }
             }
         });
-
 
 
         btnAlertas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(sacado){
-                    if(vehiculo.getIdviaje()!=null) {
-                        llViaje.setVisibility(View.VISIBLE);
-                    }
-                    rvEventos.setVisibility(View.GONE);
-                    sacado = false;
-                }else {
+                if(!sacadoAlertas){
                     llViaje.setVisibility(View.GONE);
                     rvEventos.setVisibility(View.VISIBLE);
                     rvEventos.setLayoutManager(new LinearLayoutManager(context));
@@ -245,10 +267,93 @@ public class DialogoDatos {
                         adapterAl.notifyItemInserted(0);
                         adapterAl.notifyDataSetChanged();
                     }
-                    sacado = true;
+                    sacadoAlertas = true;
+                    sacadoEventos = false;
+                }else{
+                    rvEventos.setVisibility(View.GONE);
+                    sacadoAlertas = false;
+                    if(vehiculo.getIdviaje()!=null) {
+                        llViaje.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
+
+
+//        btnEventos.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(sacadoAlertas){
+//                    rvEventos.setVisibility(View.GONE);
+//                    sacadoAlertas = false;
+//
+//                    llViaje.setVisibility(View.GONE);
+//                    rvEventos.setVisibility(View.VISIBLE);
+//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
+//                    rvEventos.setAdapter(adapter);
+//                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
+//                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
+//                    rvEventos.addItemDecoration(dividerItemDecoration);
+//                    if (listaEventoVehiculo.size() != cuentas) {
+//                        adapter.notifyItemInserted(0);
+//                        adapter.notifyDataSetChanged();
+//                    }
+//
+//                    sacadoEventos = true;
+//                }
+//
+//                if(sacadoEventos){
+//                    rvEventos.setVisibility(View.GONE);
+//                    sacadoEventos = false;
+//                    if(vehiculo.getIdviaje()!=null) {
+//                        llViaje.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//
+//                if(!sacadoEventos && !sacadoAlertas){
+//                    llViaje.setVisibility(View.GONE);
+//                    rvEventos.setVisibility(View.VISIBLE);
+//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
+//                    rvEventos.setAdapter(adapter);
+//                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
+//                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
+//                    rvEventos.addItemDecoration(dividerItemDecoration);
+//                    if (listaEventoVehiculo.size() != cuentas) {
+//                        adapter.notifyItemInserted(0);
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                    sacadoEventos = true;
+//                }
+//
+//            }
+//        });
+
+
+
+//        btnAlertas.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(sacado){
+//                    if(vehiculo.getIdviaje()!=null) {
+//                        llViaje.setVisibility(View.VISIBLE);
+//                    }
+//                    rvEventos.setVisibility(View.GONE);
+//                    sacado = false;
+//                }else {
+//                    llViaje.setVisibility(View.GONE);
+//                    rvEventos.setVisibility(View.VISIBLE);
+//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
+//                    rvEventos.setAdapter(adapterAl);
+//                    if (listaAlarmaVehiculo.size() != cuentasAl) {
+//                        adapterAl.notifyItemInserted(0);
+//                        adapterAl.notifyDataSetChanged();
+//                    }
+//                    sacado = true;
+//                }
+//            }
+//        });
+
+
 
         dialogo.show();
 
@@ -259,7 +364,6 @@ public class DialogoDatos {
         switch (tipo){
 
             case 6:
-
                 tipoV = "Descargando en obra";
                 break;
             case 13:
@@ -276,5 +380,6 @@ public class DialogoDatos {
         }
         return tipoV;
     }
+
 
 }

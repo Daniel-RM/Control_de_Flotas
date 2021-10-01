@@ -8,17 +8,21 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Picture;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,14 +44,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.BuildConfig;
+import com.lowagie.text.Font;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,15 +64,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+
 public class DetallesActivity extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener {
 
     //static Context context;
+
+    Activity activity;
 
     private GoogleMap mMap;
     static Vehiculo vehiculo;
@@ -99,17 +107,21 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     private ArrayList<Datos> datosList;
     ListViewAdapter adapter;
 
+    Drawable imagen;
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalles);
 
+
         listView = findViewById(R.id.listView);
 
         datosList = new ArrayList<Datos>();
 
         tvCoche = findViewById(R.id.tvCoche);
+
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -136,7 +148,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         fecha = format.format(currentDate);
         fechaRuta = formatRuta.format(currentDate);
         editText.setText(fecha);
-
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,8 +219,11 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onBackPressed() {}
 
+
     //Creo el PDF con su formato
     public void crearPDF(boolean envio, String cuando) {
+
+
 
         File file = null;
 
@@ -230,37 +244,51 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,}, 1000);
         }
 
-        android.graphics.pdf.PdfDocument miDocumento = new PdfDocument();
+        PdfDocument miDocumento = new PdfDocument();
         Paint myPaint = new Paint();
+
 
         do {
             for (int x = 0; x < paginas; x++) {
                 //Preparo la primera página
-                android.graphics.pdf.PdfDocument.PageInfo myPageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(500, 792, x + 1).create();
-                android.graphics.pdf.PdfDocument.Page myPage = miDocumento.startPage(myPageInfo);
+                PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(500, 792, x + 1).create();
+                PdfDocument.Page myPage = miDocumento.startPage(myPageInfo);
                 Canvas canvas = myPage.getCanvas();
 
+                myPaint.setTypeface(Typeface.MONOSPACE);
+
+                myPaint.setColor(Color.rgb(81, 164, 157));
                 myPaint.setTextAlign(Paint.Align.CENTER);
                 myPaint.setTextSize(12.0f);
-                canvas.drawText("ARCOELECTRÓNICA", myPageInfo.getPageWidth() / 2, 30, myPaint);
+                canvas.drawText("Informe de " + vehiculo.getMatricula(),  myPageInfo.getPageWidth() / 2, 60, myPaint);
 
-                myPaint.setTextSize(6.0f);
+
+                //////////////////////////////////Insertar logo Arco en el PDF
+                imagen = getApplicationContext().getResources().getDrawable(R.drawable.logotipo_arco);
+                int ancho = 480;
+                int alto = 40;
+                imagen.setBounds(410,10, ancho, alto);
+                imagen.draw(canvas);
+                ///////////////////////////////////////////////////////////////
+                ////////////////////////////////////////Insertar mapa en el PDF
+                ///////////////////////////////////////////////////////////////
+
+                myPaint.setTextAlign(Paint.Align.LEFT);
+                myPaint.setTextSize(10.0f);
                 myPaint.setColor(Color.rgb(122, 119, 119));
-                canvas.drawText("Pol. Ind. La Cuesta, c/ Castilla y León, 5 ; La Almunia de Dª Godina", myPageInfo.getPageWidth() / 2, 40, myPaint);
-
+                canvas.drawText("Fecha: " + cuando, 10, 85, myPaint);
 
 
                 myPaint.setTextAlign(Paint.Align.LEFT);
-                myPaint.setTextSize(9.0f);
+                myPaint.setTextSize(8.0f);
                 myPaint.setColor(Color.rgb(81, 164, 157));
-                canvas.drawText("Informe de " + vehiculo.getMatricula(), 10, 70, myPaint);
-                canvas.drawText("Fecha: " + cuando, 400, 70, myPaint);
 
 
-                canvas.drawText("Hora:", 10, 90, myPaint);
-                canvas.drawText("| Dirección:", 55, 90, myPaint);
-                canvas.drawText("| Comportamiento:", 225, 90, myPaint);
-                canvas.drawLine(10, 93, myPageInfo.getPageWidth() - 10, 93, myPaint);
+                String formatTitulo = String.format("%1$-10s %2$-65s %3$-20s", "Hora ","Dirección ","Status");
+
+                canvas.drawText(formatTitulo, 10, 120, myPaint);
+                canvas.drawLine(10, 123, myPageInfo.getPageWidth() - 10, 123, myPaint);
+
 
                 myPaint.setTextAlign(Paint.Align.LEFT);
                 myPaint.setTextSize(8.0f);
@@ -268,7 +296,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
                 int startXPosition = 10;
                 int endXPosition = myPageInfo.getPageWidth() - 10;
-                int startYPosition = 110;
+                int startYPosition = 140;
+
 
                 if (lineas > 30) {
                     if (vueltas != 0) {
@@ -279,10 +308,15 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                             } else {
                                 myPaint.setColor(Color.BLACK);
                             }
-                            canvas.drawText(informacionArray[i], startXPosition, startYPosition, myPaint);
+
+                            String formatDato = String.format("%1$-10s %2$-65s %3$-20s", informacionArray[i].split("/")[0].trim(),informacionArray[i].split("/")[1].trim(),informacionArray[i].split("/")[2].trim());
+                            canvas.drawText(formatDato, startXPosition, startYPosition, myPaint);
+                            myPaint.setAlpha(50);
                             canvas.drawLine(startXPosition, startYPosition + 3, endXPosition, startYPosition + 3, myPaint);
+                            myPaint.setAlpha(255);
                             startYPosition += 20;
                         }
+                        canvas.drawText("Página " + (vueltas+1), 440,780, myPaint);
                     } else {
 
                         for (int i = 0; i <= 30; i++) {
@@ -291,10 +325,14 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                             } else {
                                 myPaint.setColor(Color.BLACK);
                             }
-                            canvas.drawText(informacionArray[i], startXPosition, startYPosition, myPaint);
+                            String formatDato = String.format("%1$-10s %2$-65s %3$-20s", informacionArray[i].split("/")[0].trim(),informacionArray[i].split("/")[1].trim(),informacionArray[i].split("/")[2].trim());
+                            canvas.drawText(formatDato, startXPosition, startYPosition, myPaint);
+                            myPaint.setAlpha(50);
                             canvas.drawLine(startXPosition, startYPosition + 3, endXPosition, startYPosition + 3, myPaint);
+                            myPaint.setAlpha(255);
                             startYPosition += 20;
                         }
+                        canvas.drawText("Página " + (vueltas+1), 440,780, myPaint);
                     }
                     vueltas++;
                     lineas = lineas - 30;
@@ -306,10 +344,15 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                         } else {
                             myPaint.setColor(Color.BLACK);
                         }
-                        canvas.drawText(informacionArray[i], startXPosition, startYPosition, myPaint);
+
+                        String formatDato = String.format("%1$-10s %2$-65s %3$-20s", informacionArray[i].split("/")[0].trim(),informacionArray[i].split("/")[1].trim(),informacionArray[i].split("/")[2].trim());
+                        canvas.drawText(formatDato, startXPosition, startYPosition, myPaint);
+                        myPaint.setAlpha(50);
                         canvas.drawLine(startXPosition, startYPosition + 3, endXPosition, startYPosition + 3, myPaint);
+                        myPaint.setAlpha(255);
                         startYPosition += 20;
                     }
+                    canvas.drawText("Página " + (vueltas+1), 440,780, myPaint);
                     lineas = lineas - 30;
                     miDocumento.finishPage(myPage);
                 }
@@ -354,8 +397,21 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             emailIntent.setType("application/pdf");
             emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(emailIntent, "Enviar email usando:"));
+        }else{
+            Uri uri = FileProvider.getUriForFile(getApplicationContext(), DetallesActivity.this.getApplicationContext().getPackageName() + ".provider", file);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try{
+                startActivity(intent);
+            }catch(ActivityNotFoundException e){
+                Toast.makeText(getApplicationContext(), "No existe una aplicación para abrir el PDF", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
+
 
     //Método que recoge los datos de un vehículo en una fecha concreta, los muestra en la listView y muestra la ruta en el mapa
     public void recogeDatos(String fecha) {

@@ -84,8 +84,9 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         btnCancela.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ZonasActivity.class);
-                startActivity(intent);
+
+                finish();
+                startActivity(getIntent());
             }
         });
 
