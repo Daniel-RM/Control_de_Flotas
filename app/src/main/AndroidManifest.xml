@@ -47,6 +47,7 @@
             android:configChanges="orientation"
             android:label="@string/title_activity_edicion"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ZonasActivity"
             android:configChanges="orientation"

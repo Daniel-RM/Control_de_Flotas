@@ -8,21 +8,22 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,8 +51,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.lowagie.text.Font;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -64,7 +68,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -74,9 +77,8 @@ import java.util.regex.Pattern;
 
 public class DetallesActivity extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener {
 
-    //static Context context;
-
-    Activity activity;
+    Bitmap bmp;
+    InputStream in;
 
     private GoogleMap mMap;
     static Vehiculo vehiculo;
@@ -91,7 +93,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
     ListView listView;
     ArrayList<Datos> listaDatos = new ArrayList<>();
-    ArrayAdapter<Datos> adaptador;
     List<Datos> listaPuntos = new ArrayList<>();
 
     Marker punto, marcaRuta, puntoFinal;
@@ -109,19 +110,16 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
     Drawable imagen;
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalles);
 
-
+        tvCoche = findViewById(R.id.tvCoche);
         listView = findViewById(R.id.listView);
 
         datosList = new ArrayList<Datos>();
-
-        tvCoche = findViewById(R.id.tvCoche);
-
 
         //Mantengo la aplicación fija en vertical
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -138,8 +136,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         btnVuelve = findViewById(R.id.btnVuelve);
         pbDetalles = findViewById(R.id.pbDetalles);
         btnVisual = findViewById(R.id.btnVisuali);
-
-        //editText.setTextColor(getResources().getColor(R.color.black));
 
 
         Date currentDate = Calendar.getInstance().getTime();
@@ -197,7 +193,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View v) {
                 lineas = listaDatos.size();
                 crearPDF(true, editText.getText().toString());
-                //Toast.makeText(getApplicationContext(), "Ha pulsado enviar", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -223,8 +218,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     //Creo el PDF con su formato
     public void crearPDF(boolean envio, String cuando) {
 
-
-
         File file = null;
 
         //Establezco el número de páginas
@@ -247,7 +240,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         PdfDocument miDocumento = new PdfDocument();
         Paint myPaint = new Paint();
 
-
         do {
             for (int x = 0; x < paginas; x++) {
                 //Preparo la primera página
@@ -262,7 +254,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 myPaint.setTextSize(12.0f);
                 canvas.drawText("Informe de " + vehiculo.getMatricula(),  myPageInfo.getPageWidth() / 2, 60, myPaint);
 
-
                 //////////////////////////////////Insertar logo Arco en el PDF
                 imagen = getApplicationContext().getResources().getDrawable(R.drawable.logotipo_arco);
                 int ancho = 480;
@@ -271,6 +262,34 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                 imagen.draw(canvas);
                 ///////////////////////////////////////////////////////////////
                 ////////////////////////////////////////Insertar mapa en el PDF
+
+                        String latEiffelTower = "48.858235";
+                        String lngEiffelTower = "2.294571";
+                        String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=200x200&sensor=false&key=AIzaSyC0xfrl2TKnA33pGZNhE1Njn2a2r1EiPmU";
+                        bmp = null;
+                        HttpClient httpClient = new DefaultHttpClient();
+                        HttpGet request = new HttpGet(url);
+                        in = null;
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    in = httpClient.execute(request).getEntity().getContent();
+                                    bmp = BitmapFactory.decodeStream(in);
+                                    in.close();
+                                }catch(IllegalStateException e){
+                                    e.printStackTrace();
+                                }catch(ClientProtocolException e){
+                                    e.printStackTrace();
+                                }catch(IOException e){
+                                    e.printStackTrace();
+                                }
+                                Drawable mapa = new BitmapDrawable(getResources(), bmp);
+                                //mapa.setBounds(10,10,480,60);
+                                mapa.draw(canvas);
+
+                            }
+                        });
                 ///////////////////////////////////////////////////////////////
 
                 myPaint.setTextAlign(Paint.Align.LEFT);
@@ -386,7 +405,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
         if(envio == true){
 
-            //Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), BuildConfig.APPLICATION_ID + ".provider", file);
             Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), "com.example.controldeflotas" + ".provider", file);
 
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -397,6 +415,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             emailIntent.setType("application/pdf");
             emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(emailIntent, "Enviar email usando:"));
+            Toast.makeText(getApplicationContext(), "E-mail enviado correctamente", Toast.LENGTH_SHORT).show();
         }else{
             Uri uri = FileProvider.getUriForFile(getApplicationContext(), DetallesActivity.this.getApplicationContext().getPackageName() + ".provider", file);
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -410,7 +429,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
     }
-
 
 
     //Método que recoge los datos de un vehículo en una fecha concreta, los muestra en la listView y muestra la ruta en el mapa
@@ -496,7 +514,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                         dato.setZona(datos[16]);
                     }else{
                         dato.setZona(dato.getLatitud() + "/" + dato.getLongitud());
-                        //dato.setZona(Datos.obtenerDireccion(dato.getLatitud(),dato.getLongitud()));// Este método consume muchísimo tiempo
                     }
 
                     if(datos[7].equals("Arranque motor") || datos[7].equals("Paro motor") || datos[7].equals("Reinicio módulo") || datos[7].equals("Inicio Descarga") || datos[7].equals("Final Descarga") || contador == partes.length){
@@ -544,7 +561,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
                     //Dibujo la línea de la ruta
                     if (!adapter.isEmpty()) {
-                    //if (!adaptador.isEmpty()) {
                         LatLng puntoA, puntoB;
                         for (int x = 0; x < (listaPuntos.size() - 1); x++) {
                             LatLng posicion = new LatLng(listaPuntos.get(x).getLatitud(), listaPuntos.get(x).getLongitud());
@@ -577,12 +593,8 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
 
                         LatLngBounds limites = centraCamara.build();
 
-                        int ancho = getResources().getDisplayMetrics().widthPixels;
-                        int alto = getResources().getDisplayMetrics().heightPixels;
                         int padding = 150;
 
-
-                        //CameraUpdate centrarmarcadores = CameraUpdateFactory.newLatLngBounds(limites, ancho, alto, padding);
                         CameraUpdate centrarmarcadores = CameraUpdateFactory.newLatLngBounds(limites, padding);
                         mMap.animateCamera(centrarmarcadores);
                     }
@@ -599,7 +611,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        String marcha = vehiculo.getEstado();
 
         if(MenuActivity.modo_normal == false){
             mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);

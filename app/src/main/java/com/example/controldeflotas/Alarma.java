@@ -1,6 +1,5 @@
 package com.example.controldeflotas;
 
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class Alarma {
@@ -82,18 +81,6 @@ public class Alarma {
         return partes;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Alarma{" +
-//                "fecha='" + fecha + '\'' +
-//                ", tipo=" + tipo +
-//                ", opcion='" + opcion + '\'' +
-//                ", idmodulo='" + idmodulo + '\'' +
-//                ", cantidad=" + cantidad +
-//                ", albaran='" + albaran + '\'' +
-//                ", partes=" + Arrays.toString(partes) +
-//                '}';
-//    }
 
     @Override
     public String toString() {

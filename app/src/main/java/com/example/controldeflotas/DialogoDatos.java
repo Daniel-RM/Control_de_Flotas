@@ -71,7 +71,6 @@ public class DialogoDatos {
         adapter = new RecyclerEventosVehiculosAdapter(listaEventoVehiculo, context);
         adapterAl = new RecyclerAlarmasVehiculosAdapter(listaAlarmaVehiculo, context);
 
-
         btnDetalle = dialogo.findViewById(R.id.btnDetalle);
         btnCancel = dialogo.findViewById(R.id.btnCancel);
 
@@ -195,36 +194,10 @@ public class DialogoDatos {
             @Override
             public void onClick(View v) {
                 dialogo.dismiss();
-                //new DialogoDatosCan(context, vehiculo, listaEventos, listaAlarmas);
                 new DialogoDatosCanPrueba(context, vehiculo, listaEventos, listaAlarmas);
             }
         });
 
-//        btnEventos.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(sacado){
-//                    if(vehiculo.getIdviaje()!=null) {
-//                        llViaje.setVisibility(View.VISIBLE);
-//                    }
-//                    rvEventos.setVisibility(View.GONE);
-//                    sacado = false;
-//                }else {
-//                    llViaje.setVisibility(View.GONE);
-//                    rvEventos.setVisibility(View.VISIBLE);
-//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
-//                    rvEventos.setAdapter(adapter);
-//                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
-//                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
-//                    rvEventos.addItemDecoration(dividerItemDecoration);
-//                    if (listaEventoVehiculo.size() != cuentas) {
-//                        adapter.notifyItemInserted(0);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                    sacado = true;
-//                }
-//            }
-//        });
 
         btnEventos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,85 +252,9 @@ public class DialogoDatos {
             }
         });
 
-
-//        btnEventos.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(sacadoAlertas){
-//                    rvEventos.setVisibility(View.GONE);
-//                    sacadoAlertas = false;
-//
-//                    llViaje.setVisibility(View.GONE);
-//                    rvEventos.setVisibility(View.VISIBLE);
-//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
-//                    rvEventos.setAdapter(adapter);
-//                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
-//                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
-//                    rvEventos.addItemDecoration(dividerItemDecoration);
-//                    if (listaEventoVehiculo.size() != cuentas) {
-//                        adapter.notifyItemInserted(0);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//
-//                    sacadoEventos = true;
-//                }
-//
-//                if(sacadoEventos){
-//                    rvEventos.setVisibility(View.GONE);
-//                    sacadoEventos = false;
-//                    if(vehiculo.getIdviaje()!=null) {
-//                        llViaje.setVisibility(View.VISIBLE);
-//                    }
-//                }
-//
-//                if(!sacadoEventos && !sacadoAlertas){
-//                    llViaje.setVisibility(View.GONE);
-//                    rvEventos.setVisibility(View.VISIBLE);
-//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
-//                    rvEventos.setAdapter(adapter);
-//                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,new LinearLayoutManager(context).getOrientation());
-//                    dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.line_divider));
-//                    rvEventos.addItemDecoration(dividerItemDecoration);
-//                    if (listaEventoVehiculo.size() != cuentas) {
-//                        adapter.notifyItemInserted(0);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                    sacadoEventos = true;
-//                }
-//
-//            }
-//        });
-
-
-
-//        btnAlertas.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(sacado){
-//                    if(vehiculo.getIdviaje()!=null) {
-//                        llViaje.setVisibility(View.VISIBLE);
-//                    }
-//                    rvEventos.setVisibility(View.GONE);
-//                    sacado = false;
-//                }else {
-//                    llViaje.setVisibility(View.GONE);
-//                    rvEventos.setVisibility(View.VISIBLE);
-//                    rvEventos.setLayoutManager(new LinearLayoutManager(context));
-//                    rvEventos.setAdapter(adapterAl);
-//                    if (listaAlarmaVehiculo.size() != cuentasAl) {
-//                        adapterAl.notifyItemInserted(0);
-//                        adapterAl.notifyDataSetChanged();
-//                    }
-//                    sacado = true;
-//                }
-//            }
-//        });
-
-
-
         dialogo.show();
-
     }
+
 
     public String trataViaje(int tipo){
         String tipoV = "";

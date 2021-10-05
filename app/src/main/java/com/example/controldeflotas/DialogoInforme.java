@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //Clase que maneja el cuadro de diálogo que muestra los vehículos de la flota, para seleccionar uno de ellos. Saldrá un cuadro de diálogo con los datos del vehículo seleccionado
 public class DialogoInforme extends Activity{
@@ -26,11 +27,9 @@ public class DialogoInforme extends Activity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     ListViewVehiculosAdapter adapter;
-    ArrayAdapter<Vehiculo> adaptador;
     ListView listViewCoches;
     TextView texto;
     final Dialog dialogo;
@@ -38,9 +37,9 @@ public class DialogoInforme extends Activity{
     ArrayList<Alarma> listaAlarmas;
     EditText etBuscarV;
 
+    public static List<String> zonasList = new ArrayList<>();
 
     public DialogoInforme(Context context, ArrayList<Vehiculo> lista, ArrayList<Evento> listaEv, ArrayList<Alarma> listaAl, Activity activity){
-
 
         dialogo = new Dialog(context);
         dialogo.setCancelable(true);
@@ -66,7 +65,6 @@ public class DialogoInforme extends Activity{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 adapter.getFilter().filter(s);
-                //adaptador.getFilter().filter(s);
             }
 
             @Override

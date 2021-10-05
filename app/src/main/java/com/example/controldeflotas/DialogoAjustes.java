@@ -15,7 +15,6 @@ public class DialogoAjustes {
 
     CheckBox chkOdometro, chkCombustible, chkTemp, chkRalenti, chkCombustibleRalenti, chkFrenadas, chkSobrefrenadas, chkVelocidad, chkAceleracion;
 
-
     Button btnGuardaDatos, btnSeleccion, btnCancelaSel;
 
     public DialogoAjustes(Context context){
@@ -78,7 +77,7 @@ public class DialogoAjustes {
             }
         });
 
-
+        //Recojo los datos CAN seleccionados por el usuario para mostrar
         btnGuardaDatos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

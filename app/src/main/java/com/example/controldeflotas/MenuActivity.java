@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.ImageDecoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +26,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -144,10 +149,12 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         eventosAdapter = new RecyclerEventosAdapter(listaEventos, context);
         alarmasAdapter = new RecyclerAlarmasAdapter(listaAlarmas, context);
 
+
         trataDatos();
         eventos();
         alarmas();
         viajes();
+
 
         borraDatos = false;
 
@@ -205,8 +212,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
             }
         });
-
     }
+
 
     //Evito que puedan pulsar la tecla "hacia atrás"
     @Override
@@ -221,6 +228,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+
 
     private void iniciarlizarWS() {
         try {
@@ -239,6 +247,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         JSONObject objeto = new JSONObject(s);
                         JSONObject mensaje = new JSONObject(objeto.getString("mensaje"));
+                        int x = 0;
 
                         for (Iterator<String> it = mensaje.keys(); it.hasNext(); ) {
                             Vehiculo vehiculo;
@@ -261,15 +270,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             vehiculo.setTemperatura(String.valueOf(jVehiculo.getDouble("temperatura")));
                             vehiculo.setPresion(String.valueOf(jVehiculo.getDouble("presion")));
                             vehiculo.setFecha(jVehiculo.getString("ultima_trama"));
+                            vehiculo.setZona(jVehiculo.getString("zona"));
                             if(jVehiculo.has("descripcion")) {
                                 vehiculo.setDescripcion(jVehiculo.getString("descripcion"));
                             }
                             if(jVehiculo.has("tipoVehiculo")){
                                 vehiculo.setTipoVehiculo(jVehiculo.getString("tipoVehiculo"));
                             }
-//                            else{
-//                                vehiculo.setTipoVehiculo("HORMIGONERA");
-//                            }
 
                             ////////////////////   DATOS VIAJE   ////////////////////////////////////
                             if(jVehiculo.has("viaje")){
@@ -383,6 +390,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    int x = 0;
                 }
 
                 @Override
@@ -573,6 +581,8 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
     //////////////////////////////////////////////////////////////////////////
 
+
+
     //Método que añade opciones al menú
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -682,7 +692,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
 //        alerta.setMessage("Qué tipo de informe quiere?")
 //                .setCancelable(false)
-//                .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener() {
+//                .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener(
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
 //                        new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas);
@@ -741,6 +751,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         iniciarlizarWS();
 
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
@@ -762,8 +773,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .bearing(0)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        int x = 0;
 
     }
+
 
     public void sacaListView(){
         btnEvento.setVisibility(View.INVISIBLE);

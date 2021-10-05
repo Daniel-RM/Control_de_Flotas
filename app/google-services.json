@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "836410314733",
+    "project_id": "control-de-flotas-f89ed",
+    "storage_bucket": "control-de-flotas-f89ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836410314733:android:54711b2ab07d604c9221e4",
+        "android_client_info": {
+          "package_name": "com.example.controldeflotas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836410314733-pq6l77g0t8m9kgugd39eklq0l7123k2f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfzYJ5b3C8-E83ZW4LtSHEl8PpAwVaSUY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836410314733-pq6l77g0t8m9kgugd39eklq0l7123k2f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

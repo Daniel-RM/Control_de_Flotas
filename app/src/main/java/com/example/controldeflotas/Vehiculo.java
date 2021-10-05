@@ -22,6 +22,7 @@ public class Vehiculo implements Serializable {
     private String horasMotor;
     private String combustibleNivel;
     private String distanciaServicio;
+    private String zona;
 
     ////////////////////Datos CAN
     private String odometro;
@@ -134,6 +135,10 @@ public class Vehiculo implements Serializable {
     public void setRpm(String rpm) {
         this.rpm = rpm;
     }
+
+    public String getZona() {return zona;}
+
+    public void setZona(String zona) {this.zona = zona;}
 
     public String getTemperatura() {
         return temperatura;

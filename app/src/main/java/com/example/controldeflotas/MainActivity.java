@@ -16,11 +16,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.HashMap;
 import java.util.Map;
 
 //Clase que maneja la pantalla que seleccionará una flota u otra
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     Button btnEntrada;
     EditText etCodigoEmpresa;
@@ -51,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnEntrada = findViewById(R.id.btnEntrada);
         etCodigoEmpresa = findViewById(R.id.etCodigoEmpresa);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
