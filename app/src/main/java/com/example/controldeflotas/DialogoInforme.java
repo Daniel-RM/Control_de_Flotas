@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,7 +36,6 @@ public class DialogoInforme extends Activity{
     ArrayList<Alarma> listaAlarmas;
     EditText etBuscarV;
 
-    public static List<String> zonasList = new ArrayList<>();
 
     public DialogoInforme(Context context, ArrayList<Vehiculo> lista, ArrayList<Evento> listaEv, ArrayList<Alarma> listaAl, Activity activity){
 
@@ -54,13 +52,13 @@ public class DialogoInforme extends Activity{
         this.contexto = context;
         this.activity = activity;
 
+        //Muestro la lista de vehículos
         muestraCoches(lista);
 
+        //Filtro que buscará vehículos filtrando por el campo de búsqueda
         etBuscarV.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -68,9 +66,7 @@ public class DialogoInforme extends Activity{
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         dialogo.show();
@@ -81,24 +77,10 @@ public class DialogoInforme extends Activity{
         adapter = new ListViewVehiculosAdapter(lista, activity);
         listViewCoches.setAdapter(adapter);
 
-//        adaptador = new ArrayAdapter<Vehiculo>(MenuActivity.context, R.layout.lista_coche,lista ){
-//            @NonNull
-//            @Override
-//            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//                return super.getView(position, convertView, parent);
-//            }
-//        };
-        listViewCoches.setAdapter(adapter);
-
         listViewCoches.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if(MenuActivity.datosCAN){
-                    new DialogoDatosCan(MenuActivity.context, (Vehiculo) adapter.getItem(position), listaEventos, listaAlarmas);
-                }else{
-                    new DialogoDatos(MenuActivity.context, (Vehiculo)adapter.getItem(position), listaEventos, listaAlarmas);
-                }
+                new DialogoDatos(MenuActivity.context, (Vehiculo)adapter.getItem(position), listaEventos, listaAlarmas);
                 dialogo.dismiss();
             }
         });

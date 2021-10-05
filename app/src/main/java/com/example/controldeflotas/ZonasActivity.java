@@ -1,6 +1,5 @@
 package com.example.controldeflotas;
 
-
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
@@ -50,7 +49,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ZonasActivity extends FragmentActivity implements OnMapReadyCallback {
 
     URL url = null;
@@ -63,7 +61,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     ListView listViewZonas;
     ArrayList<Zona> listaZonas = new ArrayList<>();
-    ArrayAdapter<Zona> adaptador;
 
     List<Marker> listaMarcas = new ArrayList<>();
     LatLng[] latLngs ;
@@ -120,7 +117,6 @@ public class ZonasActivity extends FragmentActivity implements OnMapReadyCallbac
                 cargaDatos();
             }
         });
-
 
         btnUpdate.setEnabled(false);
         btnDelete.setEnabled(false);

@@ -66,6 +66,4 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-
-
 }

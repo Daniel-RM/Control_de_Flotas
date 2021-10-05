@@ -9,13 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.ImageDecoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,9 +24,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +41,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,8 +50,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static android.R.color.*;
 
 //Clase que muestra un mapa con la flota entera y maneja el menú de opciones principal
 public class MenuActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -81,8 +73,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean showDownloadMenu = false;
 
     private boolean primeraEjecucion = false;
-
-    public static boolean datosCAN = false;
 
     final String ESTADO_MARCHA = "En Marcha";
     final String ESTADO_PARADO = "Parado";
@@ -134,7 +124,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        String fecha = format.format(currentDate);
 
         btnAlarma = findViewById(R.id.btnAlarma);
         btnEvento = findViewById(R.id.btnEvento);
@@ -149,12 +138,10 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         eventosAdapter = new RecyclerEventosAdapter(listaEventos, context);
         alarmasAdapter = new RecyclerAlarmasAdapter(listaAlarmas, context);
 
-
+        //Cargo toda la información necesaria para la pantalla central de la aplicación
         trataDatos();
         eventos();
         alarmas();
-        viajes();
-
 
         borraDatos = false;
 
@@ -162,7 +149,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         editorBorrado = prefBorrado.edit();
         editorBorrado.putBoolean("borrar", borraDatos);
         editorBorrado.commit();
-
 
         btnEvento.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +206,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onBackPressed() {}
 
     private void trataDatos(){
-
         for (Flota flota : flotas){
             for(Vehiculo vehiculo : flota.vehiculos){
                 mapaVehiculos.put(vehiculo.getIdentificador(),vehiculo);
@@ -241,13 +226,12 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 @Override
                 public void onMessage(String s) {
-
                     //Tratar la información aquí. Rellenar el map para después mostrarlo en el mapa
                     try {
 
                         JSONObject objeto = new JSONObject(s);
                         JSONObject mensaje = new JSONObject(objeto.getString("mensaje"));
-                        int x = 0;
+
 
                         for (Iterator<String> it = mensaje.keys(); it.hasNext(); ) {
                             Vehiculo vehiculo;
@@ -326,7 +310,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Double lati = vehiculo.getLatitud();
                             Double longi = vehiculo.getLongitud();
                             String ident = vehiculo.getIdentificador();
-                            String matricula = vehiculo.getMatricula();
 
                             if (primeraEjecucion){
                                 runOnUiThread(new Runnable() {
@@ -363,9 +346,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             marca = mMap.addMarker(new MarkerOptions().position(posicion).title(vehiculo.getIdentificador()));
 
                                             if (vehiculo.getEstado() != null) {
-
                                                 DetallesActivity.dibujaIcono(vehiculo, marca);
-
                                             } else {
                                                 marca.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.coche_paro));
                                             }
@@ -390,16 +371,13 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    int x = 0;
                 }
 
                 @Override
-                public void onClose(int i, String s, boolean b) {
-                }
+                public void onClose(int i, String s, boolean b) { }
 
                 @Override
-                public void onError(Exception e) {
-                }
+                public void onError(Exception e) { }
             };
 
             webSocket.connect();
@@ -414,7 +392,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //////////////////////////////////////////////////////////
     public void eventos()  {
-
         try {
             WebSocketClient webSocketEvento = new WebSocketClient(new URI("ws://" + LoginActivity.urlFinalLocal + "/ws/comunicaciones/1")) {
                 @Override
@@ -430,7 +407,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         JSONArray mensaje = new JSONArray(objeto.getString("mensaje"));
 
                         listaEventos.clear();
-
 
                         for(int x = 0;x<mensaje.length();x++){
                             Evento evento = new Evento();
@@ -458,7 +434,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                         cuentas = listaEventos.size();
                         primerEvento = false;
-
 
                     }catch(JSONException e){
                         e.printStackTrace();
@@ -546,42 +521,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //////////////////////////////////////////////////////////////////////////
-    public void viajes() {
-        try {
-            WebSocketClient webSocketViaje = new WebSocketClient(new URI("ws://" + LoginActivity.urlFinalLocal + "/ws/comunicaciones/1")) {
-                @Override
-                public void onOpen(ServerHandshake serverHandshake) {
-                    this.send("latidoViajesFlotas");
-                }
-
-                @Override
-                public void onMessage(String s) {
-                    try{
-                        JSONObject objeto = new JSONObject(s);
-                        JSONObject mensaje = new JSONObject(objeto.getString("mensaje"));
-                        int x = 0;
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onClose(int i, String s, boolean b) {}
-
-                @Override
-                public void onError(Exception e) {}
-
-            };
-
-            webSocketViaje.connect();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    //////////////////////////////////////////////////////////////////////////
-
-
 
     //Método que añade opciones al menú
     @Override
@@ -689,55 +628,11 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Icono informes - abro cuadro de diálogo con las distintas opciones: informes, albaranes o cancelar.
     public void informes(View view){
         new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas, MenuActivity.this);
-//        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuActivity.this);
-//        alerta.setMessage("Qué tipo de informe quiere?")
-//                .setCancelable(false)
-//                .setPositiveButton("Informes y detalles", new DialogInterface.OnClickListener(
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        new DialogoInforme(MenuActivity.this, listaVehiculos, listaEventos, listaAlarmas);
-//                    }
-//                })
-////                .setNegativeButton("Albaranes", new DialogInterface.OnClickListener() {
-////                    @Override
-////                    public void onClick(DialogInterface dialog, int which) {
-////                        Toast.makeText(getApplicationContext(),"Ver albaranes", Toast.LENGTH_SHORT).show();
-////                    }
-////                })
-//                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                });
-//        AlertDialog titulo = alerta.create();
-//        titulo.setTitle("Informes y albaranes");
-//        titulo.show();
     }
 
     //El usuario podrá seleccionar los datos a mostrar en el cuadro de diálogo
     public void ajustes(View view){
-
         new DialogoAjustes(context);
-
-//        AlertDialog.Builder alert = new AlertDialog.Builder(MenuActivity.this);
-//        alert.setMessage("Elija los datos a mostrar:")
-//                .setCancelable(false)
-//                .setPositiveButton("Datos del vehículo", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        datosCAN = false;
-//                    }
-//                })
-//                .setNegativeButton("Datos del vehículo y su estado", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        datosCAN = true;
-//                    }
-//                });
-//        AlertDialog titulo = alert.create();
-//        titulo.setTitle("Datos a mostrar");
-//        titulo.show();
     }
 
     public void toggleMenu(View view){
@@ -749,19 +644,15 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap){
         mMap = googleMap;
 
+        //Cargo los datos de los vehículos y los muestro al cargar el mapa
         iniciarlizarWS();
-
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
                 marker.showInfoWindow();
                 Vehiculo vehi = mapaVehiculos.get(marker.getTitle());
-                if(datosCAN){
-                    new DialogoDatosCan(MenuActivity.this, vehi, listaEventos, listaAlarmas);
-                }else {
-                    new DialogoDatos(MenuActivity.this, vehi, listaEventos, listaAlarmas);
-                }
+                new DialogoDatos(MenuActivity.this, vehi, listaEventos, listaAlarmas);
                 return true;
             }
         });
@@ -773,8 +664,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .bearing(0)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        int x = 0;
-
     }
 
 

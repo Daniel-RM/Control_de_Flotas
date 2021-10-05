@@ -52,10 +52,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 
     CheckBox tvCheck;
 
-    String nombre, password;
+    String nombre, password, cookieMaestra;
     boolean correcto = false;
-
-    String cookieMaestra;
 
     static List<Flota> myObjects = null;
 
@@ -86,6 +84,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         String flota = extra.getString("url");
 
         urlFinalLocal = "flotas.arcoelectronica.net:8083/" + flota;
+        //PARA PRUEBAS CON EL TELÉFONO PEQUEÑO
         //urlFinalLocal = "arco06server:8083/" + flota ;//Servidor de Arco
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -97,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
 
         int tipoConexion = networkInfo.getType();
 
+        //Si está en Arco. Comprueba si la conexión es por wifi o datos
         if(flota.equals("visorarco")) {
             if (tipoConexion == 1) {
                 urlFinalLocal = "arco06server:8083/visorarco";
@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         etPass.setTypeface(Typeface.DEFAULT);
         etPass.setTransformationMethod(new PasswordTransformationMethod());
 
+        //Si hay guardadas credenciales, las muestro
         credenciales();
 
 

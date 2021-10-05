@@ -18,7 +18,6 @@ public class ListViewZonasAdapter extends BaseAdapter implements Filterable {
     Activity activity;
 
     private ItemFilter mFilter = new ItemFilter();
-    private LayoutInflater mInflater;
     private ArrayList<Zona>filteredData = null;
     private ArrayList<Zona>originalData = null;
 
@@ -27,7 +26,6 @@ public class ListViewZonasAdapter extends BaseAdapter implements Filterable {
         this.filteredData = zonasList;
         this.zonasList = zonasList;
         this.activity = activity;
-
     }
 
 

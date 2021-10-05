@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+//Clase "maestra" para mostar los mapas
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static GoogleMap mMap;
@@ -41,7 +42,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        // Añade marca en España
         LatLng spain = new LatLng(41, -1.36);
         mMap.addMarker(new MarkerOptions().position(spain).title("Marker in Spain"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40,-3.5),5.7f));

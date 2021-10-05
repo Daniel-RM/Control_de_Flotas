@@ -85,17 +85,6 @@ public class Evento {
         return partes;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Evento{" +
-//                "fecha='" + fecha + '\'' +
-//                ", tipo='" + tipo + '\'' +
-//                ", opcion='" + opcion + '\'' +
-//                ", idmodulo='" + idmodulo + '\'' +
-//                ", cantidad='" + cantidad + '\'' +
-//                ", albaran='" + albaran + '\'' +
-//                '}';
-//    }
 
     @Override
     public String toString() {

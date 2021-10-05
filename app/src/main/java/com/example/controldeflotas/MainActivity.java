@@ -1,19 +1,16 @@
 package com.example.controldeflotas;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -56,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         btnEntrada = findViewById(R.id.btnEntrada);
         etCodigoEmpresa = findViewById(R.id.etCodigoEmpresa);
 
-        // Obtain the FirebaseAnalytics instance.
+        // Obtener la instancia de FirebaseAnalytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 

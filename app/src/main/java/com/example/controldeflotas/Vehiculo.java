@@ -1,7 +1,5 @@
 package com.example.controldeflotas;
 
-import com.google.android.gms.maps.model.Marker;
-
 import java.io.Serializable;
 
 public class Vehiculo implements Serializable {

@@ -21,7 +21,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 
-
 //Clase que maneja el cuadro de diálogo que recoge los datos necesarios para crear una zona o editarla y guarda los datos en el servidor
 public class DialogoZonas {
 
@@ -39,24 +38,11 @@ public class DialogoZonas {
     public DialogoZonas(Context context, Zona zona, List<LatLng> listaPuntos, boolean edicion){
         final Dialog dialogo = new Dialog(context);
         dialogo.setCancelable(false);
-        //dialogo.setContentView(R.layout.dialogo_zonas);
-        dialogo.setContentView(R.layout.dialogo_zonas_prueba);
-
-//        Button btnCancelar, btnGuardar;
-//        EditText etCodigo, etDescripcion, etDireccion;
-//        Spinner spTipo;
+        dialogo.setContentView(R.layout.dialogo_zonas);
 
         Button btnSalir, btnNueva;
         EditText edtCodigo, edtDescripcion, edtDireccion;
         Spinner spiTipo;
-
-//        btnCancelar = dialogo.findViewById(R.id.btnCancelar);
-//        btnGuardar = dialogo.findViewById(R.id.btnGuardar);
-//
-//        etCodigo = dialogo.findViewById(R.id.etCodigo);
-//        etDescripcion = dialogo.findViewById(R.id.etDescripcion);
-//        etDireccion = dialogo.findViewById(R.id.etDireccion);
-//        spTipo = dialogo.findViewById(R.id.spTipo);
 
         btnSalir = dialogo.findViewById(R.id.btnSalir);
         btnNueva = dialogo.findViewById(R.id.btnNueva);
@@ -70,8 +56,6 @@ public class DialogoZonas {
         edtDescripcion.setTextColor(context.getResources().getColor(R.color.black));
         edtDireccion.setTextColor(context.getResources().getColor(R.color.black));
 
-
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,R.array.tiposZonas, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,R.array.tiposZonas, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spiTipo.setAdapter(adapter);

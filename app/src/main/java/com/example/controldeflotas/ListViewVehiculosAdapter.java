@@ -17,7 +17,6 @@ public class ListViewVehiculosAdapter extends BaseAdapter implements Filterable 
     Activity activity;
 
     private ItemFilter mFilter = new ItemFilter();
-    private LayoutInflater mInflater;
     private ArrayList<Vehiculo> filteredData = null;
     private ArrayList<Vehiculo> originalData = null;
 
@@ -77,9 +76,7 @@ public class ListViewVehiculosAdapter extends BaseAdapter implements Filterable 
     }
 
 
-
     private class ItemFilter extends Filter{
-
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 

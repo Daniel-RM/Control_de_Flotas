@@ -3,7 +3,6 @@ package com.example.controldeflotas;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -195,14 +194,10 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         //Método que maneja el arrastre de las marcas, para acotar la zona
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
-            public void onMarkerDragStart(@NonNull Marker marker) {
-
-            }
+            public void onMarkerDragStart(@NonNull Marker marker) {}
 
             @Override
-            public void onMarkerDrag(@NonNull Marker marker) {
-
-            }
+            public void onMarkerDrag(@NonNull Marker marker) {}
 
             @Override
             public void onMarkerDragEnd(@NonNull Marker marker) {
@@ -232,6 +227,4 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
             }
         });
     }
-
-
 }

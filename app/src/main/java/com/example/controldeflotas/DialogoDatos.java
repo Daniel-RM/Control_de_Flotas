@@ -194,7 +194,7 @@ public class DialogoDatos {
             @Override
             public void onClick(View v) {
                 dialogo.dismiss();
-                new DialogoDatosCanPrueba(context, vehiculo, listaEventos, listaAlarmas);
+                new DialogoDatosCan(context, vehiculo, listaEventos, listaAlarmas);
             }
         });
 
