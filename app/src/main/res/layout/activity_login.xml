@@ -98,12 +98,3 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--<EditText
-            android:id="@+id/etPass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/contraseña"
-            android:inputType="textPassword"
-            app:passwordToggleEnabled = "true"
-            android:textColorHint="@color/gris_oscuro" />-->

@@ -97,13 +97,13 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
         int tipoConexion = networkInfo.getType();
 
         //Si está en Arco. Comprueba si la conexión es por wifi o datos
-        if(flota.equals("visorarco")) {
-            if (tipoConexion == 1) {
-                urlFinalLocal = "arco06server:8083/visorarco";
-            } else {
-                urlFinalLocal = "flotas.arcoelectronica.net:8083/visorarco";
-            }
-        }
+//        if(flota.equals("visorarco")) {
+//            if (tipoConexion == 1) {
+//                urlFinalLocal = "arco06server:8083/visorarco";
+//            } else {
+//                urlFinalLocal = "flotas.arcoelectronica.net:8083/visorarco";
+//            }
+//        }
 
         etPass.setTypeface(Typeface.DEFAULT);
         etPass.setTransformationMethod(new PasswordTransformationMethod());
@@ -211,7 +211,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
     public List recogerDatos(){
 
         String url = "http://" + urlFinalLocal + "/vehiculosFlota.action";
-        //String url = "http://" + urlFinalLocal + "/Panel.action";
 
         Response response = null;
 
@@ -239,6 +238,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable{
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             myObjects = mapper.readValue(prueba.trim(), new TypeReference<List<Flota>>(){});
+
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -103,7 +103,7 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
     String NOMBRE_DOCUMENTO  = "MiPDF.pdf";
     String[] informacionArray;
     String[] partes;
-    int lineas;
+    int lineas, tipoMapa;
 
     private ArrayList<Datos> datosList;
     ListViewAdapter adapter;
@@ -200,14 +200,29 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
         btnVisual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID){
-                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                }else{
-                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                switch (tipoMapa){
+                    case 0:
+                        mMap.setTrafficEnabled(true);
+                        tipoMapa=1;
+                        break;
+                    case 1:
+                        mMap.setTrafficEnabled(false);
+                        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                        tipoMapa = 2;
+                        break;
+                    case 2:
+                        mMap.setTrafficEnabled(true);
+                        tipoMapa=3;
+                        break;
+                    case 3:
+                        mMap.setTrafficEnabled(false);
+                        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        tipoMapa = 0;
+                        break;
+
                 }
             }
         });
-
     }
 
     //Evito que puedan pulsar la tecla "hacia atrás"
@@ -415,7 +430,6 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
             emailIntent.setType("application/pdf");
             emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(emailIntent, "Enviar email usando:"));
-            Toast.makeText(getApplicationContext(), "E-mail enviado correctamente", Toast.LENGTH_SHORT).show();
         }else{
             Uri uri = FileProvider.getUriForFile(getApplicationContext(), DetallesActivity.this.getApplicationContext().getPackageName() + ".provider", file);
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -500,9 +514,9 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                     if(dato==null){
                         continue;
                     }
-                    if(partes.length == 1){
-                        continue;
-                    }
+//                    if(partes.length == 1){
+//                        continue;
+//                    }
                     String hora = datos[2].substring(0,2) + ":" + datos[2].substring(2,4) + ":" + datos[2].substring(4,6);
                     dato.setLatitud(Double.parseDouble(datos[0]));
                     dato.setLongitud(Double.parseDouble(datos[1]));
@@ -516,14 +530,14 @@ public class DetallesActivity extends AppCompatActivity implements OnMapReadyCal
                         dato.setZona(dato.getLatitud() + "/" + dato.getLongitud());
                     }
 
-                    if(datos[7].equals("Arranque motor") || datos[7].equals("Paro motor") || datos[7].equals("Reinicio módulo") || datos[7].equals("Inicio Descarga") || datos[7].equals("Final Descarga") || contador == partes.length){
+                    if(datos[7].equals("Arranque motor") || datos[7].equals("Paro motor") || datos[7].equals("Reinicio módulo") || datos[7].equals("Inicio Descarga") || datos[7].equals("Final Descarga") || datos[7].equals("Sin codificar") || contador == partes.length){
                         listaDatos.add(dato);
                         informacionArray[posic] = dato.toString();
                         posic++;
                     }
 
                     listaPuntos.add(dato);
-
+                    
                 }
             }
 

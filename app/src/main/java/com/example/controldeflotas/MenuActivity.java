@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -41,7 +42,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,7 +99,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
     RecyclerView recyclerEventos;
     RecyclerEventosAdapter eventosAdapter;
     RecyclerAlarmasAdapter alarmasAdapter;
-    int cuentas, cuentasAlarmas;
+    int cuentas, cuentasAlarmas, tipoMapa;
 
     public static List<String> datos = new ArrayList<>();
 
@@ -122,9 +130,6 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         listaVehiculos = new ArrayList<>();
 
-        Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-
         btnAlarma = findViewById(R.id.btnAlarma);
         btnEvento = findViewById(R.id.btnEvento);
         btnEsconde = findViewById(R.id.btnEsconde);
@@ -142,6 +147,14 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         trataDatos();
         eventos();
         alarmas();
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                asignaPlanta();
+            }
+        });
+
 
         borraDatos = false;
 
@@ -216,6 +229,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void iniciarlizarWS() {
+
         try {
 
             WebSocketClient webSocket = new WebSocketClient(new URI("ws://" + LoginActivity.urlFinalLocal + "/ws/comunicaciones/1")) {
@@ -231,7 +245,7 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         JSONObject objeto = new JSONObject(s);
                         JSONObject mensaje = new JSONObject(objeto.getString("mensaje"));
-
+                        int j = 0;
 
                         for (Iterator<String> it = mensaje.keys(); it.hasNext(); ) {
                             Vehiculo vehiculo;
@@ -390,6 +404,51 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.e("ArrayList:", mapaVehiculos.toString());
     }
 
+    //////////////////////////////////////////////////////////
+    public void asignaPlanta(){
+        URL url = null;
+        URLConnection connection = null;
+        BufferedReader reader = null;
+        StringBuffer response = new StringBuffer();
+        String linea, devuelve = "";
+
+        try {
+            url = new URL("http://" + LoginActivity.urlFinalLocal + "/listaVehiculo.action");
+            connection = url.openConnection();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Object respuesta = connection.getContent();
+
+            if(respuesta instanceof InputStream){
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                while ((linea = reader.readLine())!=null){
+                    response.append(linea);
+                }
+                devuelve = response.toString();
+
+                JSONArray mensaje = new JSONArray(devuelve);
+
+                for(int i=0;i<mensaje.length();i++){
+                    JSONObject objeto = mensaje.getJSONObject(i);
+                    for(int j=0;j<listaVehiculos.size();j++){
+                        if(listaVehiculos.get(j).getMatricula().trim().equals(objeto.getString("matricula").trim())){
+                            listaVehiculos.get(j).setPlanta(objeto.getString("desc_flota").trim());
+                        }
+                    }
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     //////////////////////////////////////////////////////////
     public void eventos()  {
         try {
@@ -616,12 +675,27 @@ public class MenuActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //Cambio el modo del mapa al pusar el botón
     public void visualizar(View view){
-        if(mMap.getMapType()==GoogleMap.MAP_TYPE_HYBRID){
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            modo_normal = true;
-        }else{
-            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            modo_normal = false;
+
+        switch (tipoMapa){
+            case 0:
+                mMap.setTrafficEnabled(true);
+                tipoMapa=1;
+                break;
+            case 1:
+                mMap.setTrafficEnabled(false);
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                tipoMapa = 2;
+                break;
+            case 2:
+                mMap.setTrafficEnabled(true);
+                tipoMapa=3;
+                break;
+            case 3:
+                mMap.setTrafficEnabled(false);
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                tipoMapa = 0;
+                break;
+
         }
     }
 

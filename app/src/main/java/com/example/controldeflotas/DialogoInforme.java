@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 //Clase que maneja el cuadro de diálogo que muestra los vehículos de la flota, para seleccionar uno de ellos. Saldrá un cuadro de diálogo con los datos del vehículo seleccionado
 public class DialogoInforme extends Activity{
@@ -52,6 +52,7 @@ public class DialogoInforme extends Activity{
         this.contexto = context;
         this.activity = activity;
 
+
         //Muestro la lista de vehículos
         muestraCoches(lista);
 
@@ -85,4 +86,6 @@ public class DialogoInforme extends Activity{
             }
         });
     }
-}
+
+    }
+

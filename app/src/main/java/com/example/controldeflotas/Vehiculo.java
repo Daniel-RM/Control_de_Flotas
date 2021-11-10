@@ -22,6 +22,8 @@ public class Vehiculo implements Serializable {
     private String distanciaServicio;
     private String zona;
 
+    private String planta;
+
     ////////////////////Datos CAN
     private String odometro;
     private String combustibleTotalUsado;
@@ -349,6 +351,10 @@ public class Vehiculo implements Serializable {
     public void setSobreaceleracion(String sobreaceleracion) {
         this.sobreaceleracion = sobreaceleracion;
     }
+
+    public String getPlanta() {return planta;}
+
+    public void setPlanta(String planta) {this.planta = planta;}
 
     @Override
     public String toString() {

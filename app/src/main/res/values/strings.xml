@@ -107,7 +107,7 @@
     <!--Pantalla de Diálogo Ajustes-->
     <string name="datos_mostrar">SELECCIONE LOS DATOS A MOSTRAR</string>
     <string name="odometroAjustes">Odómetro</string>
-    <string name="combustibleAjustes">Combustible total:</string>
+    <string name="combustibleAjustes">Combustible total</string>
     <string name="temperaturaAjustes">Temperatura del motor</string>
     <string name="ralentiAjustes">Tiempo en ralentí</string>
     <string name="combralentiAjustes">Combustible en ralentí</string>

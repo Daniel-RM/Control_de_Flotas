@@ -3,6 +3,7 @@ package com.example.controldeflotas;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
 
     Button btnFinaliza, btnCancela;
 
-    ImageButton btnVisualiza;
+    ImageButton btnVisualiza, imgVuelve;
 
     TextView tvCode, tvDesc, tvZone;
 
@@ -65,6 +66,7 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
         tvCode = findViewById(R.id.tvCode);
         tvDesc = findViewById(R.id.tvDesc);
         tvZone = findViewById(R.id.tvZone);
+        imgVuelve = findViewById(R.id.imgVuelve);
 
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
@@ -94,6 +96,14 @@ public class EdicionActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 new DialogoZonas(EdicionActivity.this, zonaElegida, listaCoordenadasEditadas, true);
+            }
+        });
+
+        imgVuelve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intento = new Intent(getApplicationContext(), ZonasActivity.class);
+                startActivity(intento);
             }
         });
 
